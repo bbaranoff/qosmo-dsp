@@ -1,1 +1,0 @@
-/root/qosmo-dsp/subprojects/dtc/libfdt/fdt.h

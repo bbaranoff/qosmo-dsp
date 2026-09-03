@@ -1,0 +1,81 @@
+# ---------------------------------------------------------------------------
+# qosmo-dsp — fichiers à ne jamais commiter
+# Base : .gitignore de QEMU upstream + artefacts propres au projet.
+# Les sous-projets meson ont leur propre règle : subprojects/.gitignore
+# ---------------------------------------------------------------------------
+
+# --- Arborescences de build (meson / ninja / configure) --------------------
+/build/
+/build-*/
+/GNUmakefile
+/.cache/
+/compile_commands.json
+/.git-submodule-status
+/.stgit-*
+/.sdk
+config-host.*
+config-target.*
+config-all-*.mak
+
+# --- Objets compilés, bibliothèques, binaires ------------------------------
+*.o
+*.lo
+*.a
+*.la
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.gcda
+*.gcno
+*.pcm
+# vDSO précompilés livrés avec QEMU (linux-user) : à garder
+!linux-user/**/vdso*.so
+# binaires produits par les Makefile de tools/
+tools/calypso-ipc-device/calypso-ipc-device
+tools/qosmo-launch/qosmo-dsp
+tools/qosmo-launch/qosmo-grgsm
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.tox/
+
+# --- Éditeurs / indexeurs --------------------------------------------------
+*~
+*.swp
+*.swo
+*.orig
+*.rej
+.gdb_history
+cscope.*
+tags
+TAGS
+GPATH
+GRTAGS
+GTAGS
+.vscode/
+.idea/
+.clangd/
+.ccls-cache/
+.DS_Store
+
+# --- Traces d'exécution ----------------------------------------------------
+*.log
+*.pcap
+*.pcapng
+*.pid
+*.sock
+core.[0-9]*
+vgcore.*
+*.tmp
+*.bak
+
+# --- Claude Code -----------------------------------------------------------
+/.claude/

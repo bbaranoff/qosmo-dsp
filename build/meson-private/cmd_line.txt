@@ -1,9 +1,0 @@
-[options]
-prefix = /opt/GSM/qemu-install
-werror = false
-docs = disabled
-plugins = true
-
-[properties]
-native_file = ['/root/qosmo-dsp/build/config-meson.cross']
-
