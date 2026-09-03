@@ -1,0 +1,1 @@
+/root/qosmo-dsp/subprojects/dtc/libfdt/libfdt_env.h

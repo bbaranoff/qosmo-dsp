@@ -33,7 +33,6 @@
 
 extern CalypsoUARTState *g_uart_modem;
 extern CalypsoUARTState *g_uart_irda;
-/* calypso_dsp_shunt_record_rach() : prototype dans calypso_dsp_shunt.h */
 
 #include "hw/arm/calypso/calypso_debug.h"
 #define TRX_LOG(fmt, ...) \
@@ -103,8 +102,6 @@ typedef struct CalypsoTRX {
 static CalypsoTRX *g_trx;
 
 #include "qemu/atomic.h"
-#include "calypso_dsp_shunt.h"
-#include "calypso_layer1.h"   /* CALYPSO_L1=c : HLE L1 scaffold (FB via corrélation host) */
 
 /* FBSB host-side orchestration. Reintroduced after preNoCell refactor
  * (28 Apr) accidentally removed the wire. The bridge delivers I/Q from
@@ -329,16 +326,136 @@ uint32_t calypso_trx_get_fn(void)
  * page : [0]=write off 0x0002 (wp p0), [1]=off 0x002A (wp p1). resp(b) (prio -4)
  * lit AVANT cmd(b+2) (prio 0) dans la meme trame -> le latch tient le burst
  * courant -> echo 0,1,2,3 exact, sans jitter, sans OFS. */
-uint32_t shunt_l1s_fn(void);   /* decl (calypso_dsp_internal.h) */
 /* [2026-07-26 camp] FIFO des burst_id commandes par l'ARM (db_w->d_burst_d) :
  * push sur write WP (calypso_dsp_write), pop sur lecture d_task_d (1x/nb_resp),
- * reset au debut de bloc BCCH (gap shunt_l1s_fn). Distingue burst 0 de burst 2
+ * reset au debut de bloc BCCH (gap trx_l1s_fn). Distingue burst 0 de burst 2
  * (une latch/parite ne le peut pas) + immunise le double-read (pop 1x/nb_resp,
  * valeur figee s_burst_cur). Deterministe, sans OFS/FN/ECHO. */
 static uint8_t  s_bd_ring[8];
 static unsigned s_bd_w = 0, s_bd_r = 0;
 static uint16_t s_burst_cur = 0;
 static uint32_t s_bd_last_wfn = 0xFFFFFFFF;
+
+/* ==========================================================================
+ * Introspection du firmware ARM — rapatriee de calypso_dsp_helper.c le
+ * 2026-09-03. Rien de shunt la-dedans : on resout un symbole dans l'ELF passe
+ * a `-kernel` et on lit la memoire invitee. Seul consommateur restant : le
+ * reset de l'anneau de burst-id ci-dessous, qui a besoin du FN que le firmware
+ * lui-meme croit courant (l1s.current_time.fn) pour distinguer « bursts d'un
+ * meme bloc BCCH » de « nouveau bloc ».
+ * ========================================================================== */
+static const char *trx_fw_elf_path(void)
+{
+    static char path[1024];
+    static int done;
+    if (done) {
+        return path[0] ? path : NULL;
+    }
+    done = 1;
+    const char *env = getenv("CALYPSO_FIRMWARE_ELF");
+    if (env && *env) {
+        snprintf(path, sizeof(path), "%s", env);
+        return path;
+    }
+    FILE *cf = fopen("/proc/self/cmdline", "rb");
+    if (cf) {
+        static char cl[16384];
+        size_t nr = fread(cl, 1, sizeof(cl) - 1, cf);
+        fclose(cf);
+        cl[nr] = 0;
+        for (size_t i = 0; i < nr; ) {
+            size_t l = strlen(cl + i);
+            if (!strcmp(cl + i, "-kernel") && i + l + 1 < nr) {
+                snprintf(path, sizeof(path), "%s", cl + i + l + 1);
+                break;
+            }
+            i += l + 1;
+        }
+    }
+    return path[0] ? path : NULL;
+}
+
+/* Adresse d'un symbole de l'ELF firmware (SHT_SYMTAB, ELF32 LE). 0 si absent. */
+static uint32_t trx_fw_sym(const char *want)
+{
+    const char *p = trx_fw_elf_path();
+    if (!p) {
+        return 0;
+    }
+    FILE *f = fopen(p, "rb");
+    if (!f) {
+        return 0;
+    }
+    fseek(f, 0, SEEK_END);
+    long sz = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    if (sz < 52 || sz > (64L << 20)) {
+        fclose(f);
+        return 0;
+    }
+    uint8_t *b = g_malloc((size_t)sz);
+    size_t got = fread(b, 1, (size_t)sz, f);
+    fclose(f);
+    uint32_t ret = 0;
+    if (got == (size_t)sz && b[0] == 0x7f && b[1] == 'E' && b[2] == 'L'
+        && b[3] == 'F' && b[4] == 1) {
+#define R16(o) ((uint32_t)b[o] | ((uint32_t)b[(o)+1] << 8))
+#define R32(o) ((uint32_t)b[o] | ((uint32_t)b[(o)+1] << 8) | \
+                ((uint32_t)b[(o)+2] << 16) | ((uint32_t)b[(o)+3] << 24))
+        uint32_t shoff = R32(0x20), shent = R16(0x2e), shnum = R16(0x30);
+        for (uint32_t si = 0; si < shnum; si++) {
+            uint32_t sh = shoff + si * shent;
+            if ((long)(sh + 40) > sz) {
+                break;
+            }
+            if (R32(sh + 4) == 2) {   /* SHT_SYMTAB */
+                uint32_t symoff = R32(sh + 0x10), symsz = R32(sh + 0x14);
+                uint32_t link = R32(sh + 0x18), entsz = R32(sh + 0x24);
+                uint32_t strsh = shoff + link * shent;
+                if ((long)(strsh + 40) > sz || entsz < 16) {
+                    break;
+                }
+                uint32_t stroff = R32(strsh + 0x10), strsz = R32(strsh + 0x14);
+                for (uint32_t o = 0;
+                     o + 16 <= symsz && (long)(symoff + o + 16) <= sz;
+                     o += entsz) {
+                    uint32_t ni = R32(symoff + o);
+                    uint32_t val = R32(symoff + o + 4);
+                    if (ni < strsz &&
+                        !strcmp((const char *)(b + stroff + ni), want)) {
+                        ret = val;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+#undef R16
+#undef R32
+    }
+    g_free(b);
+    return ret;
+}
+
+/* l1s.current_time.fn — le FN que le firmware ARM croit courant. */
+static uint32_t trx_l1s_fn(void)
+{
+    static uint32_t addr;
+    if (!addr) {
+        const char *e = getenv("CALYPSO_L1S_FN_ADDR");
+        if (e && *e) {
+            addr = (uint32_t)strtoul(e, NULL, 0);
+        } else {
+            addr = trx_fw_sym("l1s");
+            if (!addr) {
+                addr = 0x836508;   /* fallback : valeur relevee au nm */
+            }
+        }
+    }
+    uint32_t v = 0;
+    cpu_physical_memory_read(addr, &v, sizeof(v));
+    return le32_to_cpu(v);
+}
 
 static uint64_t calypso_dsp_read(void *opaque, hwaddr offset, unsigned size)
 {
@@ -435,64 +552,32 @@ static uint64_t calypso_dsp_read(void *opaque, hwaddr offset, unsigned size)
               (size == 4) ? ((uint32_t)src[0] | ((uint32_t)src[1] << 16)) :
               ((uint8_t *)src)[offset & 1];
     }
-    /* CALYPSO_FORCE_TOA=<N> (env gated, rigolo) : force une détection FB
-     * complète vue par l'ARM, sans toucher le DSP. osmocom prim_fbsb.c
-     * n'atteint read_fb_result (lecture TOA dans ndb->a_sync_demod[D_TOA]
-     * @0x01F4) QU'APRÈS que d_fb_det (@0x01F0) = "FOUND". Donc forcer le TOA
-     * seul ne suffit pas : on force tout le bloc résultat FB sur le read ARM.
-     *   0x01F0 d_fb_det = 1 (FOUND)   0x01F4 a_sync_TOA  = N (23 = on-time)
-     *   0x01F8 a_sync_ANGLE = 0 (AFC ne diverge pas)  0x01FA a_sync_SNR = haut */
-    /* Étendu 2026-06-02 : FORCE_TOA force le bloc FB (a_sync_demod @0x01F0-FA,
-     * NDB) ET le bloc SB (a_serv_demod[D_TOA], db_r). Sinon le SB lit du garbage
-     * → l1s_sbdet_resp calcule "SB N bits in the future?!?" → sync rejeté →
-     * BSIC=0, pas de sysinfo. Forcer a_serv_demod[D_TOA]=force_toa (=23) fait
-     * `toa-=23 → 0` → passe le check `toa > bits_delta`. db_r page0=0xFFD00050
-     * (off 0x50) / page1=0xFFD00078 (off 0x78), struct DSP33-36 a_serv_demod
-     * @word8 → D_TOA = off 0x60 (p0) / 0x88 (p1). */
-    /* [2026-07-22] Injection READ-SIDE REAL_FB/SB : PRECEDE (et court-circuite)
-     * le FORCE_TOA canned. Livre la derniere detection FCCH reelle (g_shunt.rx_*)
-     * sur le read MMIO ARM -> immunise d_fb_det/a_sync_demod/SB-TOA contre
-     * l'ordonnancement intra-trame. Gate CALYPSO_SHUNT_REAL_FB. */
-    bool real_fb_hit = false;
-    if (size == 2) {
-        uint16_t rv;
-        if (calypso_dsp_shunt_real_fb_read((uint32_t)offset, &rv)) {
-            val = rv;
-            real_fb_hit = true;
-        }
-    }
+    /* [2026-09-03] INJECTION READ-SIDE REAL_FB/SB SUPPRIMEE. Elle interceptait le
+     * read MMIO ARM pour y servir la detection FCCH calculee cote HOTE (coherence
+     * + dphi sur l'I/Q, resultat dans g_shunt.rx_*), court-circuitant le
+     * correlateur du DSP sur 0x01F0/F4/F6/F8/FA et 0x0060/0x0088. C'etait LE
+     * mecanisme du mode shunt — « ce que SHUNT_LEGIT fait n'est pas d'ecrire un
+     * faux resultat dans data[], c'est d'intercepter la lecture ARM ».
+     * L'ARM lit desormais ce que le DSP a reellement ecrit. */
     /* [2026-07-26 camp] db_r->d_task_d (read page 0 @off 0x50 / page 1 @off 0x78,
      * word 0) : le DSP clear la commande NB -> l1s_nb_resp lit 0 -> puts("EMPTY")
-     * et bail avant a_cd. Sous SHUNT_LEGIT + si_valid (a_cd rempli), si le firmware
-     * lit d_task_d=0, retourner ALLC_DSP_TASK(24) -> il continue vers a_cd. d_burst_d
-     * (off 0x52/0x7A) reste la valeur du firmware (db_r==db_w) -> match burst_id. */
+     * et bail avant a_cd. */
     if (size == 2 && (offset == 0x0050 || offset == 0x0078)) {
-        static int _cl = -1;
-        if (_cl < 0) { const char *l = getenv("CALYPSO_SHUNT_LEGIT"); const char *nl = getenv("CALYPSO_SHUNT_NO_LEGIT"); _cl = ((l && *l=='1') || (nl && *nl=='1')) ? 1 : 0; }
-        /* [2026-07-30] DEUX CHOSES DE NATURES DIFFERENTES, separees.
+        /* [2026-07-30] POP de l'anneau de burst-id : c'est de la MODELISATION.
+         * `d_task_d` est lu une fois par nb_resp (prim_rx_nb.c:77), donc c'est le
+         * bon moment pour avancer d'un burst. Sans ce pop, `s_burst_cur` reste a 0
+         * et la lecture sert `(0+3)&3 = 3` — un burst-id CONSTANT, que le firmware
+         * rejette 3 fois sur 4. Meme gate que le push et la lecture :
+         * CALYPSO_BURST_ID_DEALIAS, defaut ON.
          *
-         * (a) le POP de l'anneau : c'est de la MODELISATION. `d_task_d` est lu une
-         *     fois par nb_resp (prim_rx_nb.c:77), donc c'est le bon moment pour
-         *     avancer d'un burst. Sans ce pop, `s_burst_cur` reste a 0 et la
-         *     lecture sert `(0+3)&3 = 3` — un burst-id CONSTANT, que le firmware
-         *     rejette 3 fois sur 4. Mesure du 30/07 : la valeur servie est passee
-         *     de 2 (desaliasage eteint) a 3 (desaliasage allume, anneau jamais
-         *     depile) — meme symptome, cause deplacee d'un cran. Meme gate que le
-         *     push et la lecture : CALYPSO_BURST_ID_DEALIAS, defaut ON.
-         *
-         * (b) `val = 24` : c'est une BEQUILLE — on fabrique ALLC_DSP_TASK quand le
-         *     firmware lit d_task_d=0, pour lui eviter le « EMPTY » et le faire
-         *     continuer vers a_cd. Ca reste sous le parapluie, c'est du shunt.
-         */
-        {
-            static int _cbp = -1;
-            if (_cbp < 0) _cbp = calypso_gate("CALYPSO_BURST_ID_DEALIAS", 1);
-            if (_cbp) {
-                s_burst_cur = s_bd_ring[s_bd_r++ & 7u];   /* (a) modelisation */
-            }
-        }
-        if (_cl && calypso_dsp_shunt_si_valid()) {
-            if (val == 0) val = 24;   /* (b) BEQUILLE : ALLC_DSP_TASK, evite EMPTY */
+         * [2026-09-03] La bequille jumelle est SUPPRIMEE : sous le parapluie
+         * SHUNT_LEGIT, lire d_task_d=0 renvoyait un ALLC_DSP_TASK(24) FABRIQUE
+         * pour eviter le « EMPTY » et pousser le firmware vers a_cd. Son propre
+         * commentaire la qualifiait : « c'est du shunt ». */
+        static int _cbp = -1;
+        if (_cbp < 0) _cbp = calypso_gate("CALYPSO_BURST_ID_DEALIAS", 1);
+        if (_cbp) {
+            s_burst_cur = s_bd_ring[s_bd_r++ & 7u];
         }
     }
     /* [2026-07-26 camp] db_r->d_burst_d (read page @off 0x52 / 0x7A) : le pipeline
@@ -532,71 +617,19 @@ static uint64_t calypso_dsp_read(void *opaque, hwaddr offset, unsigned size)
             val = (uint16_t)((s_burst_cur + 3) & 3);   /* FIFO -1 (phase) */
         }
     }
-    if (!real_fb_hit && size == 2) {
-        /* @BEQUILLE — FORCE_TOA  (CALYPSO_FORCE_TOA, VALEUR, defaut -1/OFF)
-         *   masque  : tout le bloc resultat FB/SB (d_fb_det, a_sync_demod TOA/ANGLE/SNR,
-         *             a_serv_demod[D_TOA]) : oracle canne cote read MMIO ARM.
-         *   retirer : quand d_fb_det natif est ecrit par le DSP.
-         *   PIEGE   : "0" ACTIVE le gate (TOA force a 0) ; seul unset/absent coupe.
-         *   NB      : deja court-circuitee par SHUNT_REAL_FB/DECAN (garde !real_fb_hit).
-         */
-        static int force_toa = -2;  /* -2 = uninit, -1 = off */
-        if (force_toa == -2) {
-            const char *e = getenv("CALYPSO_FORCE_TOA");
-            force_toa = (e && *e) ? (int)strtol(e, NULL, 0) : -1;
-            if (force_toa >= 0)
-                fprintf(stderr, "[calypso-trx] CALYPSO_FORCE_TOA=%d (FB a_sync_demod + SB a_serv_demod[D_TOA] forcés)\n", force_toa);
-        }
-        if (force_toa >= 0) {
-            switch (offset) {
-            /* --- bloc FB (a_sync_demod, NDB @0x01F0) --- */
-            case 0x01F0: val = 1;                       break; /* d_fb_det = FOUND */
-            case 0x01F4: val = (uint16_t)force_toa;      break; /* a_sync_TOA */
-            case 0x01F8: val = 0;                        break; /* a_sync_ANGLE = 0 */
-            case 0x01FA: val = 0x7000;                   break; /* a_sync_SNR high */
-            /* --- bloc SB (a_serv_demod[D_TOA], db_r page 0 et 1) --- */
-            case 0x0060: case 0x0088:
-                val = (uint16_t)force_toa;               break; /* SB TOA → 23 : passe le check "future" */
-            default: break;                                     /* 0x01F2/0x01F6 + reste inchangés */
-            }
-        }
-    }
-    /* CALYPSO_FORCE_NB=1 (gate NB demod, 2026-06-02) : l1s_nb_resp bail "EMPTY"
-     * si db_r->d_task_d==0 (le DSP NB demod ne tourne pas) → jamais de DATA_IND
-     * BCCH → pas de SI. Force d_task_d≠0 (word 0 du db_r : page0 off 0x50 /
-     * page1 off 0x78) pour passer "EMPTY" → le firmware émet le DATA_IND (que
-     * CALYPSO_FORCE_AGCH remplit ensuite avec un SI/IMM-ASS). Révèle ensuite le
-     * check d_burst_d (offset 0x52/0x7A). */
-    if (size == 2 && (offset == 0x0050 || offset == 0x0078 ||
-                      offset == 0x0052 || offset == 0x007A)) {
-        /* @BEQUILLE — FORCE_NB  (CALYPSO_FORCE_NB, EQ1, defaut OFF)
-         *   masque  : la publication DSP de db_r->d_task_d / d_burst_d. On falsifie le
-         *             read ARM (d_task_d 0->1, d_burst_d recopie de db_w) pour passer
-         *             le bail "EMPTY" de l1s_nb_resp.
-         *   retirer : quand le DSP NB demod ecrit lui-meme la read-page.
-         *   NB      : les memes offsets sont deja traites plus haut par le bloc
-         *             SHUNT_LEGIT/NO_LEGIT + si_valid — conflit potentiel.
-         */
-        static int force_nb = -1;
-        if (force_nb < 0) {
-            const char *e = getenv("CALYPSO_FORCE_NB");
-            force_nb = (e && *e == '1') ? 1 : 0;
-        }
-        if (force_nb) {
-            if ((offset == 0x0050 || offset == 0x0078) && val == 0) {
-                val = 1;   /* d_task_d → non-zéro : passe le "EMPTY" */
-            } else if (offset == 0x0052 || offset == 0x007A) {
-                /* d_burst_d ← db_w->d_burst_d (= le burst_id que le firmware a
-                 * commandé via dsp_load_rx_task) → passe le check
-                 * d_burst_d != burst_id. db_w d_burst_d : p0 DSP word 0x801,
-                 * p1 0x815 (db_w p0=0xFFD00000 off0x02, p1=0xFFD00028 off0x2A). */
-                if (s->dsp && s->dsp->data)
-                    val = s->dsp->data[(offset == 0x0052) ? 0x801 : 0x815];
-                else
-                    val = s->dsp_ram[(offset == 0x0052) ? 0x01 : 0x15];
-            }
-        }
-    }
+    /* [2026-09-03] BEQUILLES FORCE_TOA et FORCE_NB SUPPRIMEES.
+     *
+     * FORCE_TOA (CALYPSO_FORCE_TOA=<N>) fabriquait TOUT le bloc resultat FB/SB
+     * cote read MMIO ARM — d_fb_det=1 (FOUND), a_sync_demod TOA/ANGLE/SNR,
+     * a_serv_demod[D_TOA] — sans toucher au DSP. Un oracle canne, dont
+     * l'annotation disait « retirer quand d_fb_det natif est ecrit par le DSP » :
+     * c'est le cas depuis le 2026-08-24. Piege associe : l'idiome VALEUR faisait
+     * que « =0 » l'ACTIVAIT (TOA force a 0), seul unset coupait.
+     *
+     * FORCE_NB (CALYPSO_FORCE_NB=1) falsifiait db_r->d_task_d (0 -> 1) et
+     * recopiait d_burst_d depuis la write-page, pour passer le bail « EMPTY » de
+     * l1s_nb_resp. Meme nature : on maquillait la read-page pour que le firmware
+     * croie a une demodulation qui n'avait pas eu lieu. */
     /* DSP boot handshake: firmware polls DL_STATUS until it reads BOOT */
     if (offset == DSP_DL_STATUS_ADDR && !s->dsp_booted) {
         if (++s->boot_frame > 3) {
@@ -811,18 +844,19 @@ static void calypso_dsp_write(void *opaque, hwaddr offset, uint64_t value, unsig
                     (unsigned)value, size, s->fn);
         }
     }
-    /* [2026-07-22] de-alias burst-ID : mirror d_burst_d par commande */
-    calypso_dsp_shunt_wp_burst_write((uint32_t)offset, (uint16_t)value);
+    /* [2026-09-03] Mirror d_burst_d par commande SUPPRIME : il n'alimentait que
+     * le latch d'echo du shunt (shunt_burst_echo), dont il ne reste aucun
+     * consommateur — la read-page sert s_burst_cur, l'anneau ci-dessous. */
     /* [2026-07-26 camp] PUSH FIFO du burst_id commande (db_w->d_burst_d, word1 :
      * page0 @0x0002 / page1 @0x002A). Reset au debut d'un bloc BCCH : les cmd0..3
-     * sont a frames L1 CONSECUTIVES (shunt_l1s_fn +1) ; gros trou avant cmd0 du
+     * sont a frames L1 CONSECUTIVES (trx_l1s_fn +1) ; gros trou avant cmd0 du
      * bloc suivant -> fn != last+1 => reset FIFO -> alignement 0,1,2,3 sans OFS. */
     if (size == 2 && ((uint32_t)offset == 0x0002 || (uint32_t)offset == 0x002A)) {
         /* [2026-07-30] Meme decouplage cote push : l'anneau doit se remplir des
          * que l'ARM commande un burst, independamment des SI. Sinon le
          * desaliasage lit un anneau vide. */
         {
-            uint32_t wfn = shunt_l1s_fn();
+            uint32_t wfn = trx_l1s_fn();
             if (wfn != s_bd_last_wfn + 1) { s_bd_w = 0; s_bd_r = 0; }  /* nouveau bloc */
             s_bd_last_wfn = wfn;
             s_bd_ring[s_bd_w++ & 7u] = (uint8_t)(value & 3);
@@ -1143,7 +1177,6 @@ static void calypso_dsp_write(void *opaque, hwaddr offset, uint64_t value, unsig
         if (offset == dr_byte && value != 0 && (size == 2 || size == 4)) {
             uint8_t ra = (uint8_t)((value >> 8) & 0xFF);
             calypso_rach_publish(ra, (uint8_t)((value & 0xFF) >> 2), s->fn);
-            calypso_dsp_shunt_record_rach(ra);   /* SONDE B : l1s.current_time.fn par RA */
             /* [2026-07-26 PORT LU] SHUNT_LEGIT avale d_task_ra -> le poll UL natif
              * ne tire jamais (RACH encode #0). On emet l'access-burst depuis le
              * signal FIABLE = l'ecriture d_rach. 1 write = 1 burst (pas de sticky). */
@@ -1199,11 +1232,6 @@ static void calypso_dsp_write(void *opaque, hwaddr offset, uint64_t value, unsig
         hwaddr w1_d  = DSP_API_W_PAGE1 + DB_W_D_TASK_D * 2;
         if ((offset == w0_md || offset == w1_md ||
              offset == w0_d  || offset == w1_d) && value != 0) {
-            /* CALYPSO_L1=c : latch le d_task_md écrit par l'ARM (le poll tick-time
-             * rate ce transient, l1s efface la write-page chaque frame). */
-            if (calypso_l1_c_active() && (offset == w0_md || offset == w1_md)) {
-                calypso_layer1_on_task_write((uint16_t)value);
-            }
             static unsigned task_log = 0;
             /* Always log non-PM tasks (value != 1) so FB_TASK=5 / SB=6
              * surfaces no matter when it occurs. PM=1 thinned. */
@@ -1290,7 +1318,7 @@ static void calypso_dsp_write(void *opaque, hwaddr offset, uint64_t value, unsig
              * Skip if dsp-blob fixture is active: another reset would
              * re-run the PROM→DARAM auto-copy and overwrite the loaded
              * blob plus the PC override. */
-            if (s->dsp && calypso_dsp_shunt_early_booted()) {
+            if (s->dsp && c54x_early_booted()) {
                 /* revive c54x : DSP deja boote+parke a machine-init (early-boot).
                  * NE PAS re-reset : le re-boot re-ecrirait 0xb419 ST #1 = IDLE(1)
                  * PAR-DESSUS la cmd bootloader COPY_BLOCK(2)+entry de l'ARM. En la
@@ -1326,26 +1354,14 @@ static void calypso_dsp_done(void *opaque) {
      * Triggered by firmware writing TPU_CTRL with EN bit (dsp_end_scenario).
      * This is the ONLY place DMA happens — same as real Calypso.
      *
-     * GATED par CALYPSO_DSP_SHUNT : si le shunt est actif, on skip
-     * complètement cette DMA — le mock écrit les résultats directement
-     * dans NDB/read-page et le c54x est inactif (pas de consommateur).
-     * HYBRIDE (RANK2, CALYPSO_TPU_RX_WIRE=1) : on lève ce gate pour laisser la
-     * commande de tâche ARM (task_md=5 FB) atteindre le DSP DARAM 0x0586 même
-     * sous shunt, condition pour que le vrai corrélateur DSP soit dispatché.
-     * Réversible : sans l'env, comportement inchangé. */
-    /* @BEQUILLE — TPU_RX_WIRE (DMA de tache ARM->DARAM 0x0586)  (CALYPSO_TPU_RX_WIRE,
-     *              EXISTS, defaut OFF ; calypso_wire.env:=1)
-     *   masque  : sous shunt la DMA page-ecriture ARM->DSP est fermee, donc la
-     *             commande de tache (task_md=5 FB) n'atteint jamais le DSP et le
-     *             correlateur entre sans mission. Le meme gate pose plus bas le bit
-     *             tache FB d[0x3f92]|=0x0800 a la place de l'ORM natif 0xa539.
-     *   retirer : quand le shunt ne substitue plus le DSP (la DMA redevient legitime)
-     *             et que 0xa539 s'execute reellement.
-     */
-    static int trx_rxw = -1;
-    if (trx_rxw < 0) trx_rxw = calypso_gate("CALYPSO_TPU_RX_WIRE", 0);
-    if (s->dsp && s->dsp_ram[0x01A8/2] != 0 &&
-        (!calypso_dsp_shunt_active() || trx_rxw)) {
+     * [2026-09-03] GATE SHUNT SUPPRIME. Cette DMA etait fermee des que le shunt
+     * etait arme — donc en natif aussi, `calypso_dsp_shunt_active()` valant VRAI
+     * sous CALYPSO_DSP=c54x. Consequence : la commande de tache (task_md=5 FB)
+     * n'atteignait jamais la DARAM 0x0586 et le correlateur entrait SANS MISSION,
+     * sauf a poser CALYPSO_TPU_RX_WIRE. L'annotation disait « retirer quand le
+     * shunt ne substitue plus le DSP : la DMA redevient legitime ». C'est le cas :
+     * elle est le chemin normal, elle n'est plus conditionnee. */
+    if (s->dsp && s->dsp_ram[0x01A8/2] != 0) {
         uint16_t page = s->dsp_ram[0x01A8/2] & 1;
         uint16_t *wp = page ?
             &s->dsp_ram[DSP_API_W_PAGE1/2] : &s->dsp_ram[DSP_API_W_PAGE0/2];
@@ -1371,13 +1387,13 @@ static void calypso_dsp_done(void *opaque) {
             s->dsp->data[0x0586 + i] = wp[i];
         if (s->dsp->api_ram)
             s->dsp->api_ram[0x08D4 - C54X_API_BASE] = s->dsp_ram[0x01A8/2];
-        /* WIRE d[0x3f92] (RANK2, CALYPSO_TPU_RX_WIRE) : quand l'ARM commande la
-         * tâche FB (task_md=5), poser le bit tâche FB dans le task-word du
-         * scheduler DSP d[0x3f92]|=0x0800. Le setter natif (ORM 0xa539) est skippé
-         * car d[5a00]==0x88 -> sans ça d[3f92] reste 0 à vie. Fires à chaque DMA
-         * de commande FB (task_md=5), indépendant de BDLENA. */
-        if (trx_rxw && task_md == 5)
-            s->dsp->data[0x3f92] |= 0x0800;
+        /* [2026-09-03] WIRE d[0x3f92] SUPPRIME (etait sous CALYPSO_TPU_RX_WIRE,
+         * defaut OFF). Il posait a la main le bit tache FB du task-word du
+         * scheduler DSP (d[0x3f92] |= 0x0800) parce que le setter natif — l'ORM en
+         * 0xa539 — est skippe tant que d[0x5a00] vaut 0x88. Substituer le resultat
+         * d'une instruction que le DSP n'execute pas, c'est masquer le probleme :
+         * la question « pourquoi 0xa539 ne s'execute-t-il pas » reste ouverte, et
+         * elle se pose maintenant a decouvert. */
         qemu_mutex_unlock(&calypso_pcb_api_ram_lock);
         calypso_pcb_daram_lock_release();
     }
@@ -1661,10 +1677,6 @@ static void calypso_frame_irq_lower(void *o){
     }
     qemu_irq_lower(((CalypsoTRX*)o)->irqs[CALYPSO_IRQ_TPU_FRAME]);
 
-    /* DSP shunt service hook (no-op si shunt off). Servir APRÈS le lower
-     * pour que le mock écrive ses résultats entre deux ticks ARM. */
-    calypso_dsp_shunt_on_frame_tick();
-
     /* Per-frame work for this tick is done — park the vCPU if the guest is
      * back in its idle super-loop, so the host core sleeps until the next
      * interrupt instead of spinning at 100%. See calypso_cpu_idle_park(). */
@@ -1800,20 +1812,17 @@ static void calypso_tdma_tick(void *opaque) {
         TRX_LOG("CALYPSO_DSP_BUDGET = %d insn/c54x_run (default 256000)",
                 dsp_budget);
     }
-    /* GATE DSP_SHUNT : si le shunt est actif, le mock cote ARM remplace
-     * la DSP. Skip TOUS les c54x_run -> le c54x emule n'execute aucune
-     * instruction, ne touche pas a la DARAM, ne fabrique pas de d_dsp_page
-     * concurrent avec le mock. */
-    if (s->dsp && s->dsp->running && !s->dsp_init_done && !calypso_dsp_shunt_substitutes()) {
+    /* [2026-09-03] GATE DSP_SHUNT SUPPRIME : plus de mock cote ARM pour remplacer
+     * le DSP, donc plus de raison de sauter les c54x_run. Le c54x execute son
+     * firmware, point. La branche « on saute l'init DSP, le mock prend le relais »
+     * disparait avec. */
+    if (s->dsp && s->dsp->running && !s->dsp_init_done) {
         if (!s->dsp->idle)
             dsp_n_exec_2 = c54x_run(s->dsp, dsp_budget);
         if (s->dsp->idle) {
             s->dsp_init_done = true;
             TRX_LOG("DSP init complete (first IDLE reached)");
         }
-    } else if (calypso_dsp_shunt_substitutes() && !s->dsp_init_done) {
-        /* En shunt mode, on saute l'init DSP "boot" — le mock prend le relais. */
-        s->dsp_init_done = true;
     }
     t_dspboot = qemu_clock_get_ns(QEMU_CLOCK_VIRTUAL);
 
@@ -1826,30 +1835,33 @@ static void calypso_tdma_tick(void *opaque) {
      * in l1s_compl() which runs in the IRQ4 handler AFTER this tick). */
 
     /* ── 4. DSP frame interrupt ──
-     * Three conditions for periodic INT3 fire:
-     *   - INT_CTRL.ICTRL_DSP_FRAME (bit 2) = persistent enable at TPU,
-     *     polarity INVERTED (bit clear = enabled).
-     *   - DSP IMR bit 3 (C54X_INT_FRAME_BIT) = mask enable at DSP.
-     *     Empirically: firing INT3 while IMR bit 3 = 0 perturbs the
-     *     firmware boot path (DSP wakes from IDLE without expecting it,
-     *     takes wrong code path, never reaches IMR-init at PC=0x0810,
-     *     dead-locks). Respecting IMR matches the "hardware INT line
-     *     gated by IMR" model used on Calypso.
-     *   - TPU_CTRL.DSP_EN (bit 4) = one-shot force, alternative path.
-     *     Bypasses IMR (explicit hardware override). */
+     * La ligne frame du TPU est INT8n = vec 28 / IMR bit 12 (CAL207 §15.1,
+     * `vec = Location/4`), PAS vec 19 / bit 3 : celui-la est TINT, le timer du
+     * DSP, dont le ROM n'a qu'un stub `RETE`. Recoupement : l'IMR mesuree du ROM
+     * (0x52ed) n'a de sens que sous cette table, et le ROM arme le bit 12 seul.
+     * [2026-09-03] Emis ici A LA SOURCE sur 28/12 ; le remap d'execution
+     * 19/3 -> 28/12 de c54x_interrupt_ex() et ses gates CALYPSO_DSP_FRAME_VEC28 /
+     * CALYPSO_FRAME_IT_NATIVE sont supprimes.
+     *
+     * Trois conditions pour le tir periodique :
+     *   - INT_CTRL.ICTRL_DSP_FRAME (bit 2) = enable persistant au TPU,
+     *     polarite INVERSEE (bit a 0 = active).
+     *   - IMR bit 12 du DSP = enable de masque cote DSP. Tirer alors que le bit
+     *     est a 0 perturbe le boot du firmware (le DSP sort d'IDLE sans s'y
+     *     attendre, prend un mauvais chemin, n'atteint jamais l'init IMR en
+     *     PC=0x0810, se bloque). Respecter l'IMR colle au modele « ligne d'IT
+     *     materielle gatee par l'IMR » du Calypso.
+     *   - TPU_CTRL.DSP_EN (bit 4) = force one-shot, chemin alternatif.
+     *     Contourne l'IMR (override materiel explicite). */
     if (s->dsp && s->dsp->running) {
         bool was_idle = s->dsp->idle;
 
         bool tpu_armed = !(s->tpu_regs[TPU_INT_CTRL/2] & ICTRL_DSP_FRAME);
-        static int _natfr = -1; if (_natfr < 0) _natfr = (getenv("CALYPSO_FRAME_IT_NATIVE") || getenv("CALYPSO_DSP_FRAME_VEC28")) ? 1 : 0;
-        bool imr_armed = !!(s->dsp->imr & (1 << (_natfr ? 12 : C54X_INT_FRAME_BIT)));  /* [2026-07-23] bit12 en natif (remap) */
+        bool imr_armed = !!(s->dsp->imr & (1 << C54X_IT_TPU_FRAME_BIT));
         bool periodic_armed = tpu_armed && imr_armed;
         bool force_pulse    = !!(s->tpu_regs[TPU_CTRL/2] & TPU_CTRL_DSP_EN);
-        /* FIX DOUBLE-INT3 : quand la route c54x du shunt est active, c'est
-         * shunt_route_to_c54x() qui fire l'INT3 frame. Ne PAS le double-firer ici,
-         * sinon le c54x reçoit 2 IT frame/tick -> déraille -> crash qemu. */
-        if ((periodic_armed || force_pulse) && !calypso_dsp_shunt_route_c54x_active()) {
-            c54x_interrupt_ex(s->dsp, C54X_INT_FRAME_VEC, C54X_INT_FRAME_BIT);
+        if (periodic_armed || force_pulse) {
+            c54x_interrupt_ex(s->dsp, C54X_IT_TPU_FRAME_VEC, C54X_IT_TPU_FRAME_BIT);
             if (force_pulse)
                 s->tpu_regs[TPU_CTRL/2] &= ~TPU_CTRL_DSP_EN;
             /* periodic_armed: do NOT clear — hardware-persistent enable. */
@@ -1861,20 +1873,19 @@ static void calypso_tdma_tick(void *opaque) {
          * compute RX critique (Claude web review 2026-05-16).
          *
          * GATE DSP_SHUNT : skip si shunt actif (cf section 2 commentaire). */
-        if (!s->dsp->idle && !calypso_dsp_shunt_substitutes()) {
+        if (!s->dsp->idle) {
             dsp_n_exec_5 = c54x_run(s->dsp, dsp_budget);
         }
 
-        /* CALYPSO_L1=c : pilote le modèle L1 HLE APRÈS le c54x RX (qui ne produit
-         * rien d'exploitable) -> d_fb_det + a_sync_demod sont les dernières écritures
-         * de la frame. Lit l'I/Q injectée en DARAM 0x2a00 et corrèle le FCCH. */
-        /* Ne PAS piloter le modèle L1=c quand le shunt est actif : il écrirait
-         * d_fb_det=0 par-dessus le d_fb_det=1 du shunt (clobber -> FB perdu).
-         * Le shunt possède alors la réception (FB+SB+SI). Le modèle L1=c ne tourne
-         * que sans shunt (chemin HLE pur). */
-        if (calypso_l1_c_active() && !calypso_dsp_shunt_active()) {
-            calypso_layer1_tick(s->dsp, s->dsp_ram, s->fn);
-        }
+        /* [2026-09-03] MODELE L1 HLE (CALYPSO_L1=c) SUPPRIME. C'etait un
+         * correlateur FCCH cote HOTE qui lisait l'I/Q en DARAM 0x2a00 et ecrivait
+         * d_fb_det + a_sync_demod a la place du DSP — la meme substitution que le
+         * shunt, par une autre porte. Il etait de toute facon INEXECUTABLE : sa
+         * garde exigeait `l1_c_active() && !shunt_active()`, or l1_c_active()
+         * rendait shunt_active() vrai — les deux ne pouvaient pas etre vraies
+         * ensemble, et calypso_layer1_tick() n'avait aucun appelant atteignable
+         * (cf. ETAT_ACTUEL.md §1, « MODE MORT »). Le retirer plutot que le laisser
+         * revivre par accident maintenant que le shunt ne le bloque plus. */
 
         /* Do NOT clear tasks here — the firmware's l1s_compl() does
          * dsp_api_memset() on the write page at the start of each frame,

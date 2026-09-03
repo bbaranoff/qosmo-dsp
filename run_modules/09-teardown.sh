@@ -79,10 +79,8 @@ f:grgsm_fft_live
 f:bin/grgsm_decode
 f:grgsm_cfile
 f:gsmtap_relay
-f:si_bridge
 f:pont/pont.py
 f:relay_continu
-f:record_drain
 f:inject.py
 f:inject_si3
 f:validating.py

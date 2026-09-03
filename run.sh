@@ -221,7 +221,7 @@ _reset() {
     # 4. les traînards. On cible des PID, jamais « pkill -f » à l'aveugle :
     #    le motif attraperait le shell qui exécute ce script.
     local motifs="qemu-system-arm osmocon osmo-bts-trx osmo-trx-ipc \
-calypso-ipc-device fake_trx trxcon grgsm_decode si_bridge.py qemu_bcch_grgsm"
+calypso-ipc-device fake_trx trxcon"
     local m p pids
     for m in $motifs; do
         pids="$(pgrep -f -- "$m" 2>/dev/null || true)"

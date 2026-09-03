@@ -231,11 +231,33 @@ mod_qemu_start() {
         mod_say "  commandes -> $gin   |   sorties -> $gout"
         mod_say "  poignee : bsp.dsp (C54xState*) — ex : tools/gdbq.sh \"p bsp.dsp->ar[2]\""
     else
-        "$QEMU_BIN" -M "$mach" -cpu arm946 \
-            "${xflags[@]}" "${dflags[@]}" $gdbflag -serial pty -serial pty \
-            -monitor "unix:${RUN_DIR}/qemu-monitor.sock,server,nowait" \
-            -kernel "$FIRMWARE_ELF" >>"$qlog" 2>&1 &
-        qpid=$!
+        # [2026-09-03] LANCEUR C `qosmo-dsp` (tools/qosmo-launch, installe dans
+        # /usr/local/bin par `make install`). Il construit la meme ligne de
+        # commande que ci-dessous (machine + ROMs DSP depuis $DSP_PROM0.., -cpu,
+        # -gdb, -serial pty x2, -monitor, -kernel), lit l1s/last_rach dans l'ELF,
+        # relaie stdout+stderr de QEMU tels quels dans qemu.log (41-pty continue
+        # de lire « redirected to /dev/pts/N ») et publie deux liens stables :
+        #   $RUN_DIR/modem.pty  (serial0, celui d'osmocon)   $RUN_DIR/irda.pty
+        # Il transmet SIGTERM a QEMU et meurt avec lui : $qpid reste utilisable
+        # par kill -0 / kill. Sans lanceur installe : ligne historique.
+        local launcher="${QOSMO_LAUNCHER:-/usr/local/bin/qosmo-dsp}"
+        if [ -x "$launcher" ]; then
+            local gdbspec="${gdbflag#-gdb }"; gdbspec="${gdbspec#-gdb}"
+            [ -n "$gdbspec" ] || gdbspec=off
+            mod_say "lanceur  : $launcher (QOSMO_LAUNCHER)"
+            "$launcher" --qemu "$QEMU_BIN" -k "$FIRMWARE_ELF" --bin "$FIRMWARE_BIN" \
+                --cpu arm946 --gdb "$gdbspec" --rundir "$RUN_DIR" \
+                --monitor "${RUN_DIR}/qemu-monitor.sock" \
+                -- "${xflags[@]}" "${dflags[@]}" >>"$qlog" 2>&1 &
+            qpid=$!
+        else
+            mod_say "lanceur  : absent ($launcher) — ligne qemu-system-arm directe ; installez-le : make -C ${QEMU_TREE:-.}/tools/qosmo-launch install"
+            "$QEMU_BIN" -M "$mach" -cpu arm946 \
+                "${xflags[@]}" "${dflags[@]}" $gdbflag -serial pty -serial pty \
+                -monitor "unix:${RUN_DIR}/qemu-monitor.sock,server,nowait" \
+                -kernel "$FIRMWARE_ELF" >>"$qlog" 2>&1 &
+            qpid=$!
+        fi
     fi
     printf '%s\n' "$qpid" > "${RUN_DIR}/qemu.pid"
     [ -n "$asm_out" ] && _qemu_asm_ring "$asm_out" "$asm_mo" "$qpid" &

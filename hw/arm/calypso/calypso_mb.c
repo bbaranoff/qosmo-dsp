@@ -27,7 +27,7 @@
 #include "hw/arm/calypso/calypso_soc.h"
 #include "hw/arm/calypso/calypso_trx.h"   /* C54xState + calypso_trx_get_dsp()
                                              + calypso_trx_set_section_paths() */
-#include "calypso_dsp_shunt.h"
+#include "calypso_c54x.h"
 
 #define CALYPSO_XRAM_BASE     0x01000000
 #define CALYPSO_XRAM_SIZE     (8 * 1024 * 1024)
@@ -249,15 +249,11 @@ static void calypso_machine_init(MachineState *machine)
                 words, s->dsp_blob);
     }
 
-    /* ---- DSP shunt (mock côté ARM, skip c54x) ----
-     * Activé via env CALYPSO_DSP_SHUNT=1. Ne touche au c54x que via le
-     * gate calypso_dsp_shunt_active() utilisé dans calypso_bsp.c et
-     * calypso_trx.c pour stopper les écritures DMA vers DARAM.
-     * Cf hw/arm/calypso/calypso_dsp_shunt.c. */
-    calypso_dsp_shunt_init(sysmem, &address_space_memory);
-    /* CALYPSO_DSP=c54x : relie le VRAI DSP au shunt pour la route c54x + overlay NDB
-     * (sinon g_shunt.c54x reste NULL et la branche route_c54x est morte). */
-    calypso_dsp_shunt_set_c54x(calypso_trx_get_dsp());
+    /* [2026-09-03] Le shunt DSP est retire ; il ne reste que son early-boot, qui
+     * n'avait rien de shunt. Booter le c54x ICI, a machine-init, est ce qui evite
+     * que son init-IDLE ecrase la commande bootloader postee par l'ARM des fn=0
+     * (cf. c54x_early_boot). Gate : CALYPSO_DSP_RUN_C54X=1. */
+    c54x_early_boot(calypso_trx_get_dsp());
 
     fprintf(stderr, "[MB] === Machine ready ===\n");
     fprintf(stderr, "[MB]   Flash:  0x%08x–0x%08x (%d MiB pflash_cfi01)\n",

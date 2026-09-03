@@ -36,7 +36,7 @@
 #include "hw/arm/calypso/calypso_trx.h"
 #include "calypso_tint0.h"  /* GSM_HYPERFRAME */
 #include "calypso_full_pcb.h"  /* DARAM lock helpers — voir pcb.h gap #3 */
-#include "calypso_dsp_shunt.h"
+#include "calypso_trf6151.h"   /* calib RF du modele a_pm (calypso_bsp_rssi_apm) */
 
 int calypso_rxfb_fired = 0;   /* [probe golive] 1 des que RX-FBFLAGS pose 3fad bit15 */
 
@@ -56,6 +56,133 @@ unsigned calypso_daram_wr_count;
         fprintf(stderr, "[BSP] " fmt "\n", ##__VA_ARGS__); } while (0)
 
 #define BSP_TRXD_PORT  6702   /* bridge forwards DL bursts here (5702 is bridge's own) */
+
+/* ==========================================================================
+ * CHAINE I/Q DU DSP — rapatriee de calypso_dsp_shunt.c le 2026-09-03.
+ *
+ * Ces deux mecanismes vivaient dans le fichier du shunt mais n'ont rien de
+ * shunt : ils derivent du signal DL REEL que le BSP recoit, et le BSP est le
+ * bloc qui le recoit. Ils etaient alimentes par `calypso_dsp_shunt_feed_iq()`,
+ * appelee depuis ce fichier — un aller-retour inutile.
+ *
+ *  1. FB-STREAM — anneau d'echantillons I/Q FCCH decimes, servi au correlateur
+ *     natif par l'intercept de lecture data[0x9213]/[0x9215] de calypso_c54x.c.
+ *     C'est L'ENTREE du correlateur en mode natif (CALYPSO_FB_STREAM=1, pose par
+ *     environnement/calypso_native.env). Reste une bequille tant que la chaine
+ *     BSP -> DARAM n'alimente pas le tampon seule, mais c'est une bequille du
+ *     chemin NATIF, pas du shunt.
+ *
+ *  2. MAV / a_pm — magnitude moyenne du burst DL, d'ou est derive a_pm. Sur vrai
+ *     Calypso la tache PM ne calcule pas a_pm depuis les samples : le DSP
+ *     zero-remplit la page resultat et un integrateur lit un REGISTRE HW de
+ *     puissance cote ABB/RF. Ce registre n'est pas dans l'ADC modelise ; on le
+ *     MODELISE depuis la vraie magnitude du DL. L'ancrage MAV_REF -> RF_REF est
+ *     la calibration du frontend (comme le gain trf6151), pas une constante
+ *     decretee : deux signaux differents donnent deux a_pm differents.
+ * ========================================================================== */
+#define BSP_FBS_RING 16384              /* puissance de 2 */
+static int16_t  bsp_fbs[BSP_FBS_RING];
+static uint32_t bsp_fbs_wr, bsp_fbs_rd;
+static uint16_t bsp_last_mav;           /* MAV(|I|+|Q|) du dernier burst DL */
+
+/* Alimente l'anneau FB-STREAM et la mesure de magnitude depuis un burst DL brut
+ * (cs16, `n` int16 entrelaces I,Q). Appelee sur reception du burst. */
+static void bsp_iq_publish(const int16_t *iq, int n)
+{
+    if (!iq || n <= 0) {
+        return;
+    }
+
+    /* MAV du burst -> a_pm (cf. §2 de l'en-tete). Pas de sqrt : |I|+|Q| moyen. */
+    {
+        uint64_t acc = 0;
+        for (int i = 0; i < n; i++) {
+            int v = iq[i];
+            acc += (v < 0) ? (uint32_t)(-v) : (uint32_t)v;
+        }
+        uint32_t mav = (uint32_t)(acc / (uint32_t)n);
+        bsp_last_mav = (mav > 0xffff) ? 0xffff : (uint16_t)mav;
+    }
+
+    /* Anneau FB-STREAM (cf. §1). */
+    {
+        static int on = -1, decim = 4;
+        if (on < 0) {
+            const char *e = getenv("CALYPSO_FB_STREAM");
+            on = (e && atoi(e) > 0) ? 1 : 0;
+            const char *d = getenv("CALYPSO_FB_STREAM_DECIM");
+            if (d && *d) {
+                decim = atoi(d);
+            }
+            if (decim < 1) {
+                decim = 1;
+            }
+        }
+        if (!on) {
+            return;
+        }
+        /* Ignorer les trames tout-a-zero (fn 0..4 au demarrage) : elles polluent
+         * l'anneau que le demod lit au front, il tomberait sur des zeros au lieu
+         * de la vraie FCCH poussee juste apres. */
+        int nonzero = 0;
+        for (int i = 0; i < n && i < 64; i++) {
+            if (iq[i]) {
+                nonzero = 1;
+                break;
+            }
+        }
+        if (!nonzero) {
+            return;
+        }
+        for (int k = 0; 2 * (k * decim) + 1 < n; k++) {
+            bsp_fbs[bsp_fbs_wr++ & (BSP_FBS_RING - 1)] = iq[2 * (k * decim)];
+            bsp_fbs[bsp_fbs_wr++ & (BSP_FBS_RING - 1)] = iq[2 * (k * decim) + 1];
+        }
+    }
+}
+
+bool calypso_bsp_fb_stream_next(uint16_t *outI, uint16_t *outQ)
+{
+    if (bsp_fbs_rd + 1 >= bsp_fbs_wr) {
+        return false;
+    }
+    *outI = (uint16_t)bsp_fbs[bsp_fbs_rd++ & (BSP_FBS_RING - 1)];
+    *outQ = (uint16_t)bsp_fbs[bsp_fbs_rd++ & (BSP_FBS_RING - 1)];
+    return true;
+}
+
+uint16_t calypso_bsp_rssi_apm(void)
+{
+    static double mav_ref = 20929.0, rf_ref = -60.0;
+    static int init;
+    if (!init) {
+        init = 1;
+        const char *mr = getenv("CALYPSO_DECAN_PM_MAV_REF");
+        if (mr && *mr) {
+            mav_ref = atof(mr);
+        }
+        const char *rr = getenv("CALYPSO_DECAN_PM_RF_REF");
+        if (rr && *rr) {
+            rf_ref = atof(rr);
+        }
+        if (mav_ref < 1.0) {
+            mav_ref = 1.0;
+        }
+    }
+    double mav = (double)bsp_last_mav;
+    if (mav < 1.0) {
+        mav = 1.0;
+    }
+    double rf = 20.0 * log10(mav / mav_ref) + rf_ref;
+    if (rf < -100.0) {
+        rf = -100.0;   /* plancher : suit le signal faible sans rejeter la cellule */
+    }
+    if (rf > -30.0) {
+        rf = -30.0;
+    }
+    int rfi = (int)(rf >= 0 ? rf + 0.5 : rf - 0.5);
+    return calypso_trf6151_apm_for_rf(rfi);
+}
 
 /* Per-TN burst queue: FN-indexed ring so lookahead bursts from the BTS
  * (osmo-bts-trx schedules up to ~92 frames ahead) are preserved until the
@@ -452,42 +579,43 @@ static void bsp_trxd_readable(void *opaque)
         }
     }
 
-    /* Tee I/Q vers le bridge de démod (gr-gsm py) sous shunt : le BSP gate
-     * la livraison DARAM de toute façon (calypso_bsp.c ~990), donc on forwarde
-     * le burst brut (8 hdr + I/Q cs16) vers CALYPSO_IQ_TEE_PORT (défaut 6703).
-     * Le bridge démode → GSMTAP → 4730 → shunt feed_si → a_cd. ZÉRO hack :
-     * c'est le VRAI signal du BTS qui transite, juste copié hors-bande.
-     * Sert aussi au FFT live (lit le tee 6703). Gaté shunt only (diag). */
-    if (calypso_dsp_shunt_active()) {
-        static int tee_fd = -1;
-        static struct sockaddr_in tee_dst;
-        if (tee_fd == -1) {
-            tee_fd = socket(AF_INET, SOCK_DGRAM, 0);
-            const char *p = getenv("CALYPSO_IQ_TEE_PORT");
-            int port = (p && *p) ? atoi(p) : 6703;
-            /* Dest configurable : 127.0.0.1 (bridge in-container) par défaut,
-             * ou CALYPSO_IQ_TEE_HOST=172.20.0.1 (gateway gsm-inter) pour viser
-             * l'hôte → FFT live pop-up côté hôte (X natif, pas de X dans docker). */
-            const char *h = getenv("CALYPSO_IQ_TEE_HOST");
-            memset(&tee_dst, 0, sizeof(tee_dst));
-            tee_dst.sin_family = AF_INET;
-            tee_dst.sin_port = htons(port);
-            tee_dst.sin_addr.s_addr = (h && *h) ? inet_addr(h)
-                                                : htonl(INADDR_LOOPBACK);
-            BSP_LOG("IQ-TEE -> %s:%d (bridge/FFT)", (h && *h) ? h : "127.0.0.1", port);
-        }
-        if (tee_fd >= 0)
-            sendto(tee_fd, buf, n, MSG_DONTWAIT,
-                   (struct sockaddr *)&tee_dst, sizeof(tee_dst));
+    /* Publication de l'I/Q DL : alimente l'anneau FB-STREAM (entree du
+     * correlateur natif) et la mesure de magnitude d'ou derive a_pm.
+     * buf[8..] = int16 I/Q entrelaces (cs16, mode passthrough).
+     * [2026-09-03] Etait `calypso_dsp_shunt_feed_iq()` sous le gate
+     * `calypso_dsp_shunt_active()` — lequel valait VRAI en natif aussi
+     * (CALYPSO_DSP=c54x armait le shunt en mode « assist »). Le shunt retire, la
+     * publication devient inconditionnelle : c'est la chaine du DSP. */
+    if (n > 8) {
+        bsp_iq_publish((const int16_t *)(buf + 8), (int)((n - 8) / 2));
+    }
 
-        /* Buffer shm (pas UDP) : publie l'I/Q d'entree du DSP shunte pour
-         * gr-gsm. buf[8..] = int16 I/Q entrelaces (cs16, mode passthrough),
-         * comme le tee. gr-gsm lit ce buffer cote shm. */
-        if (n > 8) {
-            uint32_t _fn = ((uint32_t)buf[1] << 24) | ((uint32_t)buf[2] << 16) |
-                           ((uint32_t)buf[3] << 8)  |  (uint32_t)buf[4];
-            calypso_dsp_shunt_feed_iq(_fn, (const int16_t *)(buf + 8),
-                                      (int)((n - 8) / 2));
+    /* Tee I/Q hors-bande (observabilite) : copie du burst brut vers
+     * CALYPSO_IQ_TEE_HOST:CALYPSO_IQ_TEE_PORT. Lu par le FFT live d'osmo-operator.
+     * [2026-09-03] Devenu OPT-IN : il ne part que si l'une des deux variables est
+     * posee. Avant, il partait des que le shunt etait arme — c'est-a-dire tout le
+     * temps — vers le bridge de demod gr-gsm, qui n'existe plus ici. */
+    {
+        const char *tee_p = getenv("CALYPSO_IQ_TEE_PORT");
+        const char *tee_h = getenv("CALYPSO_IQ_TEE_HOST");
+        if ((tee_p && *tee_p) || (tee_h && *tee_h)) {
+            static int tee_fd = -1;
+            static struct sockaddr_in tee_dst;
+            if (tee_fd == -1) {
+                tee_fd = socket(AF_INET, SOCK_DGRAM, 0);
+                int port = (tee_p && *tee_p) ? atoi(tee_p) : 6703;
+                memset(&tee_dst, 0, sizeof(tee_dst));
+                tee_dst.sin_family = AF_INET;
+                tee_dst.sin_port = htons(port);
+                tee_dst.sin_addr.s_addr = (tee_h && *tee_h) ? inet_addr(tee_h)
+                                                            : htonl(INADDR_LOOPBACK);
+                BSP_LOG("IQ-TEE -> %s:%d (FFT live)",
+                        (tee_h && *tee_h) ? tee_h : "127.0.0.1", port);
+            }
+            if (tee_fd >= 0) {
+                sendto(tee_fd, buf, n, MSG_DONTWAIT,
+                       (struct sockaddr *)&tee_dst, sizeof(tee_dst));
+            }
         }
     }
 
@@ -510,40 +638,21 @@ static void bsp_trxd_readable(void *opaque)
                 inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
     }
 
-    /* "le shunt dsp ne doit pas shunt l'ipc" : shunt actif = le vrai DSP ne
-     * consomme JAMAIS la DARAM (gr-gsm decode via le shm feed_iq). On a deja
-     * draine l'UDP (recvfrom) + publie l'I/Q (feed_iq) + appris le peer UL.
-     * On NE remplit donc PAS la queue DARAM (bsp_enqueue) -> sinon elle sature
-     * (bursts_dropped_queue_full) -> backpressure qui remonte et TUE l'IPC/BTS.
-     * On rend la main : l'IPC continue de couler, le shm est nourri. */
-    {
-        /* Frontiere B (2026-07-20) : en mode revive c54x (DSP=c54x + RUN_C54X=1)
-         * le correlateur NATIF lit la DARAM 0x2a00 -> on NE return PAS, on remplit
-         * AUSSI la DARAM pour lui fournir de IQ (le DSP la consomme -> pas la
-         * saturation du shunt-only). Hors revive : comportement inchange. */
-        /* @BEQUILLE — BSP_DARAM_FORCE  (CALYPSO_BSP_DARAM_FORCE, idiome EXISTS, defaut OFF ; calypso_wire.env:=1)
-         *   masque  : calypso_dsp_shunt_route_c54x_active() ne devient jamais vrai sous
-         *             DSP_SHUNT=1, donc ce gate shunt fermerait la DARAM au correlateur
-         *             natif. Le forcage remplace la route DSP reelle, non modelisee.
-         *   retirer : quand route_c54x_active() reflete l'etat reel du c54x, ou quand
-         *             DSP_SHUNT et DSP_RUN_C54X cessent d'etre simultanement a 1.
-         *   NB      : EXISTS -> "=0" NE COUPE PAS, seul unset coupe. Sites solidaires :
-         *             rx_burst (rb_revive) et deliver_buffered (rxw).
-         */
-        static int bsp_revive = -1;
-        if (bsp_revive < 0) {
-            const char *e = getenv("CALYPSO_DSP_RUN_C54X");
-            /* [2026-07-25] read-path diag : sous shunt le buffer I/Q DARAM 0x2a00
-             * n'etait ecrit que 2x (route_c54x_active=faux) -> correlateur affame.
-             * CALYPSO_BSP_DARAM_FORCE=1 force le revive (ecrit 0x2a00) quand le vrai
-             * c54x tourne (RUN_C54X=1), independamment de route_c54x_active. */
-            bsp_revive = (e && *e == '1'
-                          && (calypso_dsp_shunt_route_c54x_active()
-                              || getenv("CALYPSO_BSP_DARAM_FORCE"))) ? 1 : 0;
-        }
-        if (calypso_dsp_shunt_active() && !bsp_revive)
-            return;
-    }
+    /* [2026-09-03] GATE DARAB/SHUNT SUPPRIME (1/3).
+     *
+     * Il disait : « shunt actif = le vrai DSP ne consomme JAMAIS la DARAM
+     * (gr-gsm decode via le shm) », donc ne pas remplir la queue DARAM, sinon
+     * elle sature et la backpressure tue l'IPC/BTS.
+     *
+     * Le piege : `calypso_dsp_shunt_active()` valait VRAI des que CALYPSO_DSP=c54x
+     * — donc EN MODE NATIF AUSSI. Ce gate fermait la DARAM au correlateur natif,
+     * et il fallait `CALYPSO_BSP_DARAM_FORCE` (idiome EXISTS : « =0 » ne coupait
+     * pas) pour la rouvrir. C'etait un des « 3 gates BSP » de TODO.md §P2.
+     *
+     * Le shunt retire, le vrai DSP consomme TOUJOURS la DARAM : le gate n'a plus
+     * d'objet, et `bsp_revive` / `CALYPSO_BSP_DARAM_FORCE` disparaissent avec lui.
+     * Sites solidaires egalement supprimes : rx_burst (rb_revive) et
+     * deliver_buffered (rxw). */
 
     /* TRXDv0 DL: tn(1) fn(4) rssi(1) toa(2) bits(148) = 156 bytes.
      * (Confirmed empirically 2026-05-07 — earlier "asymmetric 6-byte
@@ -1286,33 +1395,10 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
         rxb_n++;
     }
 
-    /* GATE DSP_SHUNT : si le shunt est actif, le c54x ne tourne pas et
-     * le mock écrit directement NDB/read-page. Toute écriture BSP vers
-     * DARAM écraserait les valeurs canned du mock. */
-    /* [2026-07-22] Exception revive : en c54x REEL (route_c54x + RUN_C54X=1) le
-     * vrai DSP LIT la DARAM 0x2a00 -> on DOIT ecrire (aucun mock canned a clobber).
-     * Meme condition que bsp_trxd_readable:416. Drop UNIQUEMENT en shunt-mock pur. */
-    {
-        /* @BEQUILLE — BSP_DARAM_FORCE (site rx_burst)  (CALYPSO_BSP_DARAM_FORCE, EXISTS, defaut OFF)
-         *   masque  : idem site bsp_revive — la route c54x reelle n'est pas modelisee,
-         *             on force l'ecriture DARAM sous shunt quand RUN_C54X=1.
-         *   retirer : avec le site bsp_revive (meme condition).
-         */
-        static int rb_revive = -1;
-        if (rb_revive < 0) {
-            const char *e = getenv("CALYPSO_DSP_RUN_C54X");
-            /* [2026-07-25] idem bsp_revive : CALYPSO_BSP_DARAM_FORCE force l'ecriture
-             * DARAM 0x2a00 (buffer correlateur) sous shunt quand RUN_C54X=1. */
-            rb_revive = (e && *e == '1'
-                         && (calypso_dsp_shunt_route_c54x_active()
-                             || getenv("CALYPSO_BSP_DARAM_FORCE"))) ? 1 : 0;
-        }
-        if (calypso_dsp_shunt_active() && !rb_revive) {
-            if (bsp.bursts_seen <= 3)
-                BSP_LOG("rx_burst: DSP_SHUNT active (no revive), dropping fn=%u tn=%u", fn, tn);
-            return;
-        }
-    }
+    /* [2026-09-03] GATE DARAM/SHUNT SUPPRIME (2/3) — site rx_burst.
+     * Il droppait le burst quand le mock possedait la DARAM. Plus de mock : le
+     * vrai DSP LIT la DARAM 0x2a00, il n'y a aucune valeur cannee a ecraser.
+     * `rb_revive` et son `CALYPSO_BSP_DARAM_FORCE` partent avec. */
 
     if (!bsp.dsp) {
         if (bsp.bursts_seen <= 3)
@@ -1378,13 +1464,26 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
     /* Gate INT3 fire : skip si IFR.bit3 déjà set = DSP pas encore servi
      * le précédent. Évite stacking d'IRQs quand DSP traite plus lentement
      * que BSP delivery rate. */
-    /* [2026-07-23] FIX namespace bit3/bit12 (diag horloges) : natif remappe vec19/bit3
-     * -> vec28/bit12 ; l anti-stack doit tester le bit REEL sinon gate tjrs ouvert -> flood. */
-    { static int _nat = -1; if (_nat < 0) _nat = (getenv("CALYPSO_FRAME_IT_NATIVE") || getenv("CALYPSO_DSP_FRAME_VEC28")) ? 1 : 0; int _fb = _nat ? 12 : 3;
-      if (bsp.dsp && bsp.dsp->running && !(bsp.dsp->ifr & (1 << _fb))) {
-        calypso_bsp_deliver(bsp.dsp, 19, 3);
+    /* [2026-09-03] ⚠️ CE FIL ANNONCE UN BURST RX, pas une nouvelle trame — le
+     * vecteur 28/12 (INT8n, IT trame TPU) n'est PAS sa semantique correcte.
+     * On l'y laisse parce que c'est EXACTEMENT ce que faisait le mode natif :
+     * l'ancien code livrait sur (19,3) et le remap de c54x_interrupt_ex, actif
+     * sous CALYPSO_FRAME_IT_NATIVE, le renvoyait sur (28,12) — d'ou le test
+     * anti-stacking qui portait deja sur le bit 12. Le remap etant supprime,
+     * livrer sur (19,3) tomberait desormais sur TINT (timer), un stub RETE : ce
+     * serait une REGRESSION par rapport au run ou d_fb_det est acquis 437 fois.
+     * Ecrire 28/12 en clair preserve donc le comportement mesure, sans indirection.
+     *
+     * LE BON VECTEUR RESTE A TRANCHER — CAL000 §3.7.1 en autorise deux pour le
+     * RIF, tous deux demasques dans l'IMR relevee (0x52ef) et emis par personne :
+     *   vec16 / bit 0  = INT0n  « RIF receive »   (mode XIO mot-a-mot)
+     *   vec30 / bit 14 = INT10n « DMA interrupt » (mode buffered, canal RIF-RX)
+     * Se departagent en un run chacun via CALYPSO_BSP_RX_VEC=16 puis 30. */
+    if (bsp.dsp && bsp.dsp->running &&
+        !(bsp.dsp->ifr & (1 << C54X_IT_TPU_FRAME_BIT))) {
+        calypso_bsp_deliver(bsp.dsp, C54X_IT_TPU_FRAME_VEC, C54X_IT_TPU_FRAME_BIT);
         if (bsp.dsp->idle) bsp.dsp->idle = false;
-      } }
+    }
 
     /* [2026-07-25] WIRE BSP->DSP BRINT0 (direct-feed) : le chemin direct-feed
      * (CALYPSO_BSP_DIRECT_FEED=1) livre l'I/Q en DARAM 0x2a00 mais ne levait QUE
@@ -1406,7 +1505,7 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
        * mission FB/SB (d_task_md), pas hors-mission -> le reveil correlateur
        * arrive au bon moment, comme le vrai "buffer recu" du silicium.
        * FB=5 SB=6 TCH_FB=8 TCH_SB=9 (osmo l1_environment.h). */
-      uint16_t _md = calypso_dsp_shunt_get_task_md();
+      uint16_t _md = c54x_task_md(bsp.dsp);
       int _fbsb = (_md == 5 || _md == 6 || _md == 8 || _md == 9);
       if (_db && _fbsb && bsp.dsp && bsp.dsp->running && !(bsp.dsp->ifr & (1 << 5))) {
         calypso_bsp_deliver(bsp.dsp, 21, 5);
@@ -1432,7 +1531,7 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
      *   NB      : conteneur de POKE_TASK_MD et POKE_DISPATCH ci-dessous.
      */
     { static int _fbf = -1; if (_fbf < 0) _fbf = calypso_gate("CALYPSO_RX_FBFLAGS", 0);
-      uint16_t _mdf = calypso_dsp_shunt_get_task_md();
+      uint16_t _mdf = c54x_task_md(bsp.dsp);
       int _fbsbf = (_mdf == 5 || _mdf == 6 || _mdf == 8 || _mdf == 9);
       if (_fbf && _fbsbf && bsp.dsp) {
           bsp.dsp->data[0x3fad] |= 0x8000;   /* MASTER kernel gate  @0x8754 */
@@ -1510,7 +1609,7 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
         * ONESHOT (diag user "pulse") : n'installe+leve BRINT0 qu'UNE fois, au lieu
         * de re-dispatcher chaque trame (= la congestion : correlateur re-entre en
         * boucle sans finir). Le pulse laisse le correlateur derouler une passe. */
-      uint16_t _md2 = calypso_dsp_shunt_get_task_md();
+      uint16_t _md2 = c54x_task_md(bsp.dsp);
       int _fb2 = (_md2 == 5 || _md2 == 6 || _md2 == 8 || _md2 == 9);
       if (_di && _fb2 && bsp.dsp && bsp.dsp->running && !(_os && _done)) {
         _done = 1;
@@ -1757,41 +1856,12 @@ void calypso_bsp_rx_burst(uint8_t tn, uint32_t fn,
  * current QEMU virtual FN and a BDLENA pulse is pending, deliver it. */
 void calypso_bsp_deliver_buffered(uint32_t current_fn)
 {
-    /* GATE DSP_SHUNT (cf calypso_bsp_rx_burst). Idem ici : si le shunt
-     * est actif, on ne livre aucun sample bufferisé — le mock owns la
-     * DARAM API region pour ses canned responses.
-     * HYBRIDE (RANK2, CALYPSO_TPU_RX_WIRE=1) : on lève ce gate pour laisser la
-     * chaîne RX native remplir DARAM 0x2a00 (+ d[3f92]) même sous shunt, afin
-     * d'alimenter le vrai corrélateur DSP. Réversible : sans l'env, inchangé. */
-    {
-        /* @BEQUILLE — TPU_RX_WIRE (gate de livraison)  (CALYPSO_TPU_RX_WIRE, EXISTS,
-         *              defaut OFF ; calypso_wire.env:=1)
-         *   masque  : la fenetre RX du TPU (scenario TPU -> MOVE TSP -> IOTA BDLENA)
-         *             n'est raccordee a rien, donc la livraison bufferisee reste fermee
-         *             sous shunt et le correlateur natif reste affame.
-         *   retirer : quand le sequenceur TPU produit le pulse BDLENA et que le BSP le
-         *             consomme sans gate.
-         *   NB      : ce gate se leve AUSSI via (DSP_RUN_C54X=1 && BSP_DARAM_FORCE) —
-         *             mesure du 2026-07-28 : deliver ouvert alors que le site du pulse
-         *             et la DMA de tache (calypso_trx.c) restent fermes = wire a moitie
-         *             leve (d[0x3f92] non pose).
-         */
-        static int rxw = -1;
-        if (rxw < 0) {
-            /* [2026-07-28] coherence avec les gates :474 et :997, qui se levent
-             * deja avec CALYPSO_BSP_DARAM_FORCE. Sans ca, DARAM_FORCE=1 ouvrait
-             * 2 verrous sur 3 et la livraison restait bloquee ici -> entree du
-             * correlateur (0x4c00) gelee (mesure corr_iq : 3 lectures identiques).
-             * Defaut inchange : sans env, comportement strictement identique. */
-            const char *rc = getenv("CALYPSO_DSP_RUN_C54X");
-            rxw = (getenv("CALYPSO_TPU_RX_WIRE")
-                   || (rc && *rc == '1' && getenv("CALYPSO_BSP_DARAM_FORCE"))) ? 1 : 0;
-            if (rxw)
-                fprintf(stderr, "[bsp] deliver: gate shunt LEVE (rxw=1) — "
-                        "livraison DARAM active\n");
-        }
-        if (calypso_dsp_shunt_active() && !rxw) return;
-    }
+    /* [2026-09-03] GATE DARAM/SHUNT SUPPRIME (3/3) — site deliver_buffered.
+     * C'etait le TROISIEME des « 3 gates BSP » de TODO.md §P2 : celui qui ne se
+     * levait qu'avec CALYPSO_TPU_RX_WIRE, si bien que CALYPSO_BSP_DARAM_FORCE=1
+     * ouvrait deux verrous sur trois et que RIEN n'arrivait au DSP. Les trois
+     * sont maintenant supprimes ensemble : la livraison bufferisee vers la DARAM
+     * est le chemin normal du DSP, elle n'a plus a etre autorisee. */
 
     if (!bsp.dsp || bsp.daram_addr == 0) return;
 
@@ -1859,12 +1929,14 @@ void calypso_bsp_deliver_buffered(uint32_t current_fn)
                 fflush(stderr);
             }
         }
-        /* Gate INT3 : skip si IFR.bit3 déjà set (cf rx_burst). */
-        { static int _nat = -1; if (_nat < 0) _nat = (getenv("CALYPSO_FRAME_IT_NATIVE") || getenv("CALYPSO_DSP_FRAME_VEC28")) ? 1 : 0; int _fb = _nat ? 12 : 3;
-          if (bsp.dsp && bsp.dsp->running && !(bsp.dsp->ifr & (1 << _fb))) {
-            calypso_bsp_deliver(bsp.dsp, 19, 3);
+        /* Gate anti-stacking : skip si IFR.bit12 déjà set. Meme reserve que dans
+         * rx_burst — 28/12 preserve le comportement natif mesure, le vecteur RX
+         * correct (16 ou 30) reste a departager. */
+        if (bsp.dsp && bsp.dsp->running &&
+            !(bsp.dsp->ifr & (1 << C54X_IT_TPU_FRAME_BIT))) {
+            calypso_bsp_deliver(bsp.dsp, C54X_IT_TPU_FRAME_VEC, C54X_IT_TPU_FRAME_BIT);
             if (bsp.dsp->idle) bsp.dsp->idle = false;
-          } }
+        }
 
         int n = sl->n < (int)bsp.daram_len ? sl->n : (int)bsp.daram_len;
 

@@ -15,7 +15,7 @@
 #include "calypso_dma.h"
 #include "calypso_arm2dsp.h"
 #include "hw/arm/calypso/calypso_invariants.h"
-#include "hw/arm/calypso/calypso_dsp_shunt.h"
+#include "hw/arm/calypso/calypso_bsp.h"
 #include "hw/arm/calypso/calypso_trf6151.h"
 #include "hw/arm/calypso/calypso_full_pcb.h"  /* daram_lock, api_ram_lock */
 #include <stdio.h>
@@ -1763,7 +1763,7 @@ static uint16_t data_read(C54xState *s, uint16_t addr)
         if (_fs < 0) _fs = calypso_gate("CALYPSO_FB_STREAM", 0);
         if (_fs) {
             static uint16_t _si, _sq; static int _hv = 0; uint16_t _rv;
-            if (addr == _fscI) { _hv = calypso_dsp_shunt_fb_stream_next(&_si, &_sq) ? 1 : 0; _rv = _hv ? _si : s->data[addr]; }
+            if (addr == _fscI) { _hv = calypso_bsp_fb_stream_next(&_si, &_sq) ? 1 : 0; _rv = _hv ? _si : s->data[addr]; }
             else { _rv = _hv ? _sq : s->data[addr]; }
             static unsigned _sl = 0;
             if (_sl++ < 24)
@@ -2960,68 +2960,48 @@ static void data_write(C54xState *s, uint16_t addr, uint16_t val)
         if (sent < 0) { const char *e = getenv("CALYPSO_FBDET_SENTINEL"); sent = e ? atoi(e) : 0;
             if (sent==1) fprintf(stderr, "[c54x] FBDET-SENTINEL=1 FORCE : data[0x08f8] forcé à 0xDEAD\n");
             else if (sent==2) fprintf(stderr, "[c54x] FBDET-SENTINEL=2 MONITOR : logge la vraie valeur écrite à 0x08f8 (pas de force)\n"); }
-        /* [2026-07-26] SHUNT_LEGIT : override le clobber natif de d_fb_det. Le DSP
-         * natif ecrit 0x08f8=0 (pas de detection, mur RANK3) et ecrase la detection
-         * gr-gsm transportee par le shunt. Quand SHUNT_LEGIT + gr-gsm a decode
-         * (sb_valid), on FORCE la valeur ecrite a 1 -> l ARM lit FB found -> vrai flux. */
+        /* [2026-09-03] FORCE d_fb_det SUPPRIMEE. Sous SHUNT_LEGIT, toute ecriture
+         * DSP de data[0x08f8] etait reecrite a 1 des que gr-gsm avait decode la
+         * SCH — le correlateur natif ecrivait 0, on transportait la detection de
+         * l'hote par-dessus. Son annotation disait « retirer quand le correlateur
+         * natif pose d_fb_det lui-meme » : c'est fait depuis le 2026-08-24
+         * (d_fb_det 0->1 mesure 437 fois, ecrit par la mask-ROM a PC=0x79e4).
+         * data[0x08f8] contient desormais ce que le DSP y met, point. */
         {
-            /* @BEQUILLE — SHUNT_LEGIT (force d_fb_det cote ecriture DSP)  (CALYPSO_SHUNT_LEGIT
-             *              ou CALYPSO_SHUNT_NO_LEGIT =1)
-             *   masque  : le mur RANK3 — le correlateur natif ecrit data[0x08f8]=0 et ecrase
-             *             la detection transportee depuis gr-gsm. On FORCE a 1 toute ecriture
-             *             DSP de d_fb_det des que sb_valid.
-             *   retirer : quand le correlateur natif pose d_fb_det lui-meme.
-             */
-            static int _lg = -1;
-            if (_lg < 0) { const char *e = getenv("CALYPSO_SHUNT_LEGIT"); const char *nl = getenv("CALYPSO_SHUNT_NO_LEGIT"); _lg = ((e && *e=='1') || (nl && *nl=='1')) ? 1 : 0; }
-            if (_lg && addr == 0x08f8 && calypso_dsp_shunt_sb_valid()) {
-                val = 1;
-            }
             /* [2026-07-26 RANK5] force a_pm (rxlev) sur le VRAI array lu par
              * l'ARM : calypso_trx.c lit s->dsp->data[off/2+0x800], PAS api_ram.
              * a_pm read page 0 = data[0x830..0x832], page 1 = data[0x844..0x846]
              * (ARM off 0x60/0x88 -> /2+0x800). Le DSP les ecrit a 0 (pas de vraie
              * mesure) -> on force la valeur calibree trf6151 -> rxlev stable. */
             {
-                /* @BEQUILLE — TRF_RXLEV + TRF_TARGET_RF  (CALYPSO_TRF_RXLEV=1, fallback
-                 *              CALYPSO_SHUNT_LEGIT=1 ; cible CALYPSO_TRF_TARGET_RF, defaut -60)
-                 *   masque  : a_pm que le DSP ecrit a 0 (aucune mesure de puissance). On substitue
-                 *             apm_for_rf(TARGET_RF) sur le tableau reellement lu par l'ARM
-                 *             (data[0x834-0x836] / [0x848-0x84A]). Le niveau RF cible est une
-                 *             constante decretee, pas une mesure.
-                 *   retirer : quand a_pm natif est non nul. Le modele trf6151 (gain suivi par TSP)
-                 *             reste legitime — seule la CIBLE figee est la bequille.
-                 *   NB      : ce site ne teste PAS SHUNT_NO_LEGIT ; c'est shunt_no_legit.env qui
-                 *             pose TRF_RXLEV=1 explicitement.
-                 */
-                static int _tp = -1, _tgt = -60, _rssi = -1;
-                if (_tp < 0) {
-                    /* [2026-08-03] `CALYPSO_TRF_RXLEV=0` ne coupait PAS sous SHUNT_LEGIT=1 :
-                 * l'idiome `(d=='1') || (l=='1')` laisse le parapluie ecraser un 0
-                 * explicite. Or la note de suivi dit « TRF_RXLEV est OFF en natif » —
-                 * ce qui etait infaisable des que le parapluie etait leve. calypso_gate :
-                 * le parapluie devient le DEFAUT, le 0 explicite gagne. */
-                    const char *l = getenv("CALYPSO_SHUNT_LEGIT");
-                    const char *t = getenv("CALYPSO_TRF_TARGET_RF");
-                    _tp = calypso_gate("CALYPSO_TRF_RXLEV", (l && *l == '1') ? 1 : 0);
-                    if (t && *t) _tgt = atoi(t);
-                    /* [2026-08-22] MODELE INTEGRATEUR RSSI HW = vrai pm_meas natif.
-                     * a_pm depuis la MAV reelle du DL (calypso_dsp_shunt_rssi_apm),
-                     * pas la cible -60 figee ni le 0x7000 canne. Defaut ON en natif ;
-                     * prime sur trf. CALYPSO_PM_RSSI=0 le coupe (retombe sur trf). */
-                    const char *r = getenv("CALYPSO_PM_RSSI");
-                    const char *m = getenv("CALYPSO_MODE");
-                    int native = (m && strstr(m, "native")) ? 1 : 0;
-                    _rssi = r ? (atoi(r) != 0) : native;
+                /* MODELE INTEGRATEUR RSSI HW — le vrai pm_meas natif.
+                 * Sur vrai Calypso la tache PM (md=1) ne calcule PAS a_pm depuis les
+                 * samples : le DSP zero-remplit la page resultat (PROM0 0xb446,
+                 * `stl *AR1+,A` en rptb 80), puis un integrateur lit un REGISTRE HW de
+                 * puissance cote ABB/RF et pose a_pm. Ce registre n'est pas dans l'ADC
+                 * modelise ; on le MODELISE depuis la magnitude reelle du DL mesuree
+                 * par le BSP. L'ancrage MAV_REF -> RF_REF est la calibration du
+                 * frontend (comme le gain trf6151), pas une valeur decretee : deux
+                 * signaux differents donnent deux a_pm differents.
+                 *
+                 * [2026-09-03] La branche concurrente `apm_for_rf(CALYPSO_TRF_TARGET_RF)`
+                 * est SUPPRIMEE : elle posait une cible RF figee (-60 dBm), une
+                 * constante decretee, et n'etait active que sous le parapluie
+                 * SHUNT_LEGIT — donc jamais en natif. CALYPSO_TRF_RXLEV et
+                 * CALYPSO_TRF_TARGET_RF disparaissent avec elle. Le modele de gain
+                 * trf6151 (suivi par les writes TSP), lui, reste : c'est lui qui
+                 * calibre la conversion ci-dessous. */
+                static int rssi_on = -1;
+                if (rssi_on < 0) {
+                    rssi_on = calypso_gate("CALYPSO_PM_RSSI", 1);
                 }
                 /* DSP 33-36 : db_r = {..d_task_ra(7), a_serv_demod[4](8..11),
                  * a_pm[3](12..14), a_sch[5](15..19)}. a_pm read page 0 = word 12
                  * = data[base0x28+12+0x800]=data[0x834..0x836] ; page 1 =
                  * data[0x3C+12+0x800]=data[0x848..0x84A]. (0x830/0x844 = a_serv_demod!) */
-                if ((_rssi || _tp) && ((addr >= 0x0834 && addr <= 0x0836) ||
+                if (rssi_on && ((addr >= 0x0834 && addr <= 0x0836) ||
                             (addr >= 0x0848 && addr <= 0x084A))) {
-                    val = _rssi ? calypso_dsp_shunt_rssi_apm()
-                                : calypso_trf6151_apm_for_rf(_tgt);
+                    val = calypso_bsp_rssi_apm();
                 }
             }
         }
@@ -6054,20 +6034,11 @@ static bool c54x_irq_level_check(C54xState *s)
         b = 12;
     }
     int vec = b + 16;                     /* C54x: maskable IMR bit b -> vector b+16 */
-    /* VEC28 remap (comme c54x_interrupt_ex/VEC28-EXP) : la frame IT tape sur
-     * vec19/bit3 = stub RETE ; le VRAI scheduler frame est vec28 (data[0xf0]->0x7234).
-     * Gated CALYPSO_DSP_FRAME_VEC28. On consomme le bit3 de l IFR mais on vectorise 28. */
-    {
-        /* @BEQUILLE — DSP_FRAME_VEC28 (chemin IRQ-LEVEL)  (CALYPSO_DSP_FRAME_VEC28, EXISTS)
-         *   masque  : le mapping ligne-frame-TPU -> vecteur DSP. Le modele livre l'IT frame
-         *             sur vec19/bit3 (= stub RETE) ; on la reroute vers vec28/bit12.
-         *   retirer : quand calypso_tpu.c cable la ligne frame sur le bon vecteur a la source.
-         *   PIEGE   : allumee sans etre demandee des que CALYPSO_DSP=c54x (test ci-dessous).
-         */
-        static int lv28 = -1;
-        if (lv28 < 0) { const char *_d = getenv("CALYPSO_DSP"); lv28 = (getenv("CALYPSO_DSP_FRAME_VEC28") || (_d && !strcmp(_d, "c54x"))) ? 1 : 0; }  /* natif revive */
-        if (lv28 && b == 3) vec = 28;
-    }
+    /* [2026-09-03] REMAP VEC28 SUPPRIME ici aussi. Ce site remappait `b == 3`
+     * (TINT) vers vec 28 des que CALYPSO_DSP=c54x — « allumee sans etre
+     * demandee », comme le disait son propre PIEGE. Maintenant que l'IT trame est
+     * emise sur 28/12 a la source, bit 3 redevient ce qu'il est (le timer du DSP)
+     * et `vec = b + 16` est correct sans exception. */
     c54x_ifr_clear(s, (uint16_t)(1u << b), "vector-level");
     if (b == 12) g_frame_it_level = false;   /* frame-IT vectorisee -> relache le LEVEL hold */
     s->sp--; data_write(s, s->sp, (uint16_t)s->pc);
@@ -6514,28 +6485,20 @@ static bool calypso_fix_enabled(const char *name)
  * la table SPRU131 (C54x generique) qui etait dans calypso_c54x.h : elle a QUATRE
  * lignes externes avant TINT, le Calypso n'en a que TROIS — d'ou un decalage de 1.
  *
- * SAS `CALYPSO_IT_TABLE_DOC` (defaut 0, comportement inchange) : ce site tourne sur
- * le chemin du shunt qui campe, et la correction n'est PAS inerte. L'IMR mesuree
- * (0x52ed) a le bit 3 DEMASQUE et le bit 4 MASQUE : aujourd'hui l'IT timer est
- * silencieusement jetee par c54x_interrupt_ex (qui respecte l'IMR), demain elle
- * sera reellement dispatchee sur vec19 a chaque underflow. Le handler ROM de vec19
- * est un stub RETE, donc l'effet attendu est benin — mais « attendu » n'est pas
- * « mesure », et la symetrie de pile RETE est deja un point sensible connu.
- * PROTOCOLE : tester sous charge (camp + LU + SMS), puis effacer LA CONDITION. */
+ * [2026-09-03] SAS `CALYPSO_IT_TABLE_DOC` VIDE. Sa seule justification etait que
+ * « ce site tourne sur le chemin du shunt qui campe » — le shunt est retire, la
+ * justification tombe. TINT est desormais emise sur vec19/bit3 sans condition.
+ *
+ * ⚠️ CHANGEMENT DE COMPORTEMENT NON MESURE. L'IMR relevee (0x52ed) a le bit 3
+ * DEMASQUE et le bit 4 MASQUE : jusqu'ici l'IT timer etait silencieusement jetee
+ * par c54x_interrupt_ex (qui respecte l'IMR) ; elle est maintenant reellement
+ * dispatchee sur vec19 a chaque underflow. Le handler ROM de vec19 est un stub
+ * RETE, donc l'effet attendu est benin — mais « attendu » n'est pas « mesure », et
+ * la symetrie de pile RETE est un point sensible connu. A verifier au premier run
+ * sous charge : si la pile derive, c'est ici. */
 static void c54x_fire_tint(C54xState *s)
 {
-    static int doc = -1;
-    if (doc < 0) {
-        doc = calypso_gate("CALYPSO_IT_TABLE_DOC", 0);
-        if (doc)
-            fprintf(stderr, "[c54x] IT_TABLE_DOC=1 : TINT emise sur vec%d/bit%d "
-                    "(CAL000 §5.1) au lieu de vec20/bit4 (= RINT/SPI receive)\n",
-                    C54X_IT_TINT_VEC, C54X_IT_TINT_BIT);
-    }
-    if (doc)
-        c54x_interrupt_ex(s, C54X_IT_TINT_VEC, C54X_IT_TINT_BIT);
-    else
-        c54x_interrupt_ex(s, C54X_IT_SPI_RX_VEC, C54X_IT_SPI_RX_BIT);  /* legacy */
+    c54x_interrupt_ex(s, C54X_IT_TINT_VEC, C54X_IT_TINT_BIT);
 }
 
 static int c54x_exec_one(C54xState *s)
@@ -20508,6 +20471,67 @@ void c54x_set_initial_pc(C54xState *s, uint32_t pc)
     C54_LOG("set_initial_pc: PC=0x%05x (blob_loaded=1)", pc);
 }
 
+/* ==========================================================================
+ * [c54x-earlyboot] — rapatrie de calypso_dsp_shunt.c le 2026-09-03.
+ *
+ * Ce code n'avait RIEN de shunt : il ne vit que sous CALYPSO_DSP_RUN_C54X et ne
+ * force aucune valeur de mailbox, seulement le QUAND du boot. Il vivait dans le
+ * shunt par accident d'historique (le shunt tenait le handle du c54x).
+ *
+ * FIX race d'ordre golive (2026-07-20). L'ARM poste sa commande bootloader
+ * (data[0x0fff] = cmd 2/4, data[0x0ffe] = entry) des fn=0 / +0,073 s. Si le DSP
+ * ne boote qu'ensuite, son init-IDLE en 0xb419 (`ST #1, *0xfff`) ECRASE ce
+ * 0x0002 -> spin eternel en 0xb41c. En bootant ici, a machine-init et donc AVANT
+ * que le vCPU ARM tourne, le DSP pose son IDLE et se parke en 0xb41c AVANT
+ * l'ecriture ARM : 0xb419 ne re-tourne plus (le PC persiste entre les reveils),
+ * la commande survit, et le premier reveil la consomme -> go-live natif.
+ * ========================================================================== */
+static bool g_c54x_early_booted;
+
+void c54x_early_boot(C54xState *s)
+{
+    static int run_c54x = -1;
+    if (run_c54x < 0) {
+        const char *e = getenv("CALYPSO_DSP_RUN_C54X");
+        run_c54x = (e && *e == '1') ? 1 : 0;
+    }
+    if (!s || !run_c54x) {
+        return;
+    }
+
+    uint16_t pc0 = s->pc;
+    s->running = true;
+    c54x_run(s, 2000);   /* reset(0xff80) -> 0xb419 (pose IDLE) -> park 0xb41c */
+    if (s->pc >= 0xb41c && s->pc <= 0xb428) {
+        g_c54x_early_booted = true;   /* gate le re-reset cote calypso_trx.c */
+        fprintf(stderr, "[c54x-earlyboot] PARK pc=0x%04x (de 0x%04x) insn=%u "
+                "data[0x0fff]=0x%04x data[0x0ffe]=0x%04x (attendu IDLE 0x0001)\n",
+                s->pc, pc0, s->insn_count, s->data[0x0fff], s->data[0x0ffe]);
+    } else {
+        fprintf(stderr, "[c54x-earlyboot] WARN pas parque pc=0x%04x insn=%u "
+                "-> execution continue\n", s->pc, s->insn_count);
+    }
+}
+
+bool c54x_early_booted(void)
+{
+    return g_c54x_early_booted;
+}
+
+/* Mission courante du DSP, lue dans l'API RAM. Rapatrie du shunt le 2026-09-03 :
+ * l'accesseur y renvoyait d'abord un latch alimente par le shunt, avec un
+ * fallback natif sur ces deux cellules. Le latch parti, seul le fallback reste —
+ * et c'est de la simple lecture d'API RAM, rien de shunt.
+ *   d_task_md page 0 = data[0x0804], page 1 = data[0x0818]. */
+uint16_t c54x_task_md(C54xState *s)
+{
+    if (!s || !s->data) {
+        return 0;
+    }
+    uint16_t md = s->data[0x0804];
+    return md ? md : s->data[0x0818];
+}
+
 int c54x_load_blob_daram(C54xState *s, const char *path, uint16_t daram_addr)
 {
     FILE *f = fopen(path, "rb");
@@ -20888,71 +20912,26 @@ void c54x_interrupt_ex(C54xState *s, int vec, int imr_bit)
 {
     if (vec < 0 || vec >= 32) return;
     if (imr_bit < 0 || imr_bit >= 16) return;
-    /* VEC28-EXP (2026-06-25, gated CALYPSO_DSP_FRAME_VEC28) : l'IT frame du modele
-     * tape sur vec19/bit3 = stub RETE. Le VRAI scheduler per-frame est vec28/bit12
-     * (0x7234 -> CALL 0xa4e4 -> LD d_dsp_page 0xa51c -> correlateur -> d_fb_det),
-     * arme dans l'IMR voulu du DSP (0x52fd, bit12=1, machine-verifie). On (a) remappe
-     * l'IT frame vers vec28/bit12, et (b) la force a VECTORISER (pas wake-only) quand
-     * une tache GSM est postee (d_dsp_page bit1 = B_GSM_TASK) : la 1ere vectorisation
-     * atteint go-live qui ARME IMR=0x52fd via 0xa582 -> ensuite tout vectorise seul.
-     * Garde d_dsp_page : seulement APRES que l'ARM a poste (boot DSP fini) -> pas de
-     * derail boot. Fidele : on corrige le mapping ligne-frame-TPU -> vecteur DSP +
-     * une ligne cablee vectorise ; aucun poke d'IMR/table/d_fb_det. */
-    bool frame_force = false;
-    {
-        /* @BEQUILLE — VEC28_REMAP / FRAME_IT_NATIVE  (CALYPSO_DSP_FRAME_VEC28 ou
-         *              CALYPSO_FRAME_IT_NATIVE ; le second est :=1 en native/native_helped/wire)
-         *   masque  : le mapping ligne-frame-TPU -> vecteur DSP. Le modele livre l'IT frame
-         *             sur vec19/bit3 (= stub RETE) ; on la reroute vers vec28/bit12, et le
-         *             mode non-natif va jusqu'a FORCER la vectorisation (frame_force).
-         *   retirer : quand calypso_tpu.c cable la ligne frame sur le bon vecteur a la
-         *             source et que la fenetre INTM du firmware suffit a la prendre.
-         *   NB      : CALYPSO_DSP_GOLIVE_BOOT lu plus bas (g_noforce) inhibe VEC28-FORCE.
-         */
-        static int g_v28 = -1, g_native = -1;
-        if (g_v28 < 0) g_v28 = calypso_gate("CALYPSO_DSP_FRAME_VEC28", 0);
-        if (g_native < 0) g_native = calypso_gate("CALYPSO_FRAME_IT_NATIVE", 0);
-        /* [2026-07-22] CALYPSO_FRAME_IT_NATIVE : livraison PROPRE du scheduler frame.
-         * Remap l IT frame (vec19/bit3 = stub RETE) vers vec28/bit12 (le vrai scheduler
-         * HW frame-sync) et pose SEULEMENT IFR bit12 -> prise naturelle par
-         * c54x_irq_level_check quand INTM=0. Remplace le frame_force crade de VEC28. */
-        if ((g_v28 || g_native) && vec == C54X_INT_FRAME_VEC && imr_bit == C54X_INT_FRAME_BIT) {
-            vec = 28; imr_bit = 12;
-            static int g_noforce = -1;
-            if (g_noforce < 0) g_noforce = calypso_gate("CALYPSO_DSP_GOLIVE_BOOT", 0);
-            /* [2026-07-22] FRAME-IT-PROBE (gated CALYPSO_FRAME_IT_PROBE) : d_dsp_page
-             * au moment de CHAQUE frame IT -> bit1 (B_GSM_TASK) set ici ou pas ? */
-            {
-                static unsigned fitlog = 0, fithit = 0;
-                int btask = !!(s->data[0x08E2] & 2);
-                if (getenv("CALYPSO_FRAME_IT_PROBE") &&
-                    (fitlog < 20 || btask || (fitlog % 8000) == 0)) {
-                    if (btask) fithit++;
-                    fprintf(stderr, "[c54x] FRAME-IT#%u d_dsp_page=0x%04x (B_GSM_TASK=%d hits=%u) "
-                            "IMR=0x%04x INTM=%d idle=%d insn=%u\n",
-                            fitlog, s->data[0x08E2], btask, fithit,
-                            s->imr, !!(s->st1 & ST1_INTM), s->idle, s->insn_count);
-                }
-                fitlog++;
-            }
-            if (!g_native && (s->data[0x08E2] & 0x0002) && !g_noforce) {   /* B_GSM_TASK pending, hors mode golive (frame_force = VEC28 crade, PAS en mode natif) */
-                frame_force = true;
-                static unsigned fvlog = 0;
-                if (fvlog++ < 30)
-                    fprintf(stderr, "[c54x] VEC28-FORCE frame->vec28 d_dsp_page=0x%04x "
-                            "IMR=0x%04x idle=%d insn=%u\n", s->data[0x08E2], s->imr,
-                            s->idle, s->insn_count);
-            }
-        }
-    }
+    /* [2026-09-03] REMAP VEC28 SUPPRIME. Ce bloc remappait a l'execution
+     * vec19/bit3 -> vec28/bit12 sous les gates CALYPSO_DSP_FRAME_VEC28 /
+     * CALYPSO_FRAME_IT_NATIVE (defaut OFF tous les deux), et allait jusqu'a
+     * FORCER la vectorisation (frame_force) quand une tache GSM etait postee.
+     * Son annotation @BEQUILLE demandait exactement ce qui est fait maintenant :
+     * « retirer quand la ligne frame est cablee sur le bon vecteur a la source ».
+     * calypso_trx.c emet desormais C54X_IT_TPU_FRAME_VEC/BIT (28/12) directement,
+     * donc plus rien a remapper — et plus de force : la fenetre INTM du firmware
+     * suffit, l'IMR du ROM (0x52ed) arme le bit 12 elle-meme. */
     s->ifr |= (1 << imr_bit);
     if (imr_bit == 12 && frame_it_level_on()) g_frame_it_level = true;  /* arme le LEVEL hold frame */
 
-    /* SONDE INT3-RATE (2026-06-24 diag sur-delivrance) : chaque dispatch INT3
-     * (vec 19 = FRAME) avec le delta insn depuis le precedent. delta ~130 =
+    /* SONDE FRAME-IT-RATE (2026-06-24 diag sur-delivrance) : chaque dispatch de
+     * l'IT trame avec le delta insn depuis le precedent. delta ~130 =
      * sur-delivrance (BSP per-rafale) qui noie le DSP ; ~256000 = per trame
-     * (correct). Cap 80. */
-    if (vec == 19) {
+     * (correct). Cap 80.
+     * [2026-09-03] Recablee sur vec 28 : la sonde disait « vec 19 = FRAME », ce
+     * qui etait faux (19 = TINT). Sur vec 19 elle ne mesurait plus rien depuis
+     * que l'IT trame est emise sur 28/12. */
+    if (vec == C54X_IT_TPU_FRAME_VEC) {
         static uint64_t last_i3 = 0;
         static unsigned i3n = 0;
         bool post_fb = s->insn_count > 160000u;   /* ~fn 1206 : ordre FB livre */
@@ -20975,7 +20954,6 @@ void c54x_interrupt_ex(C54xState *s, int vec, int imr_bit)
      * Whack-a-mole démontré, pas supposé. cf [[feedback_debug_gate_heisenbug]]. */
 
     bool unmasked = (s->imr & (1 << imr_bit)) != 0;
-    if (frame_force) unmasked = true;   /* VEC28-EXP : ligne frame cablee -> vectorise */
     /* @BEQUILLE — FIX_BRINT0_UNMASK  (CALYPSO_FIXES=FIX_BRINT0_UNMASK, defaut OFF)
      *   masque  : l absence d armement natif de l IMR bit 5 (BRINT0 / vec 21).
      *   retirer : des que la vraie branche d armement est implementee, OU
@@ -21114,8 +21092,8 @@ void c54x_interrupt_ex(C54xState *s, int vec, int imr_bit)
                         s->pc, s->insn_count);
             }
         }
-        /* INT3-CYCLE-TRACE : hook cycle start for vec=19 (INT3 FRAME) */
-        if (vec == 19) {
+        /* FRAME-IT-CYCLE-TRACE : hook cycle start sur l'IT trame (vec 28) */
+        if (vec == C54X_IT_TPU_FRAME_VEC) {
             int3_cycle_start(s, s->pc);
         }
     }
@@ -21145,7 +21123,7 @@ void c54x_wake(C54xState *s)
 extern void calypso_twl3025_apply_phase(int16_t *iq_samples, int n_samples,
                                         uint32_t fn, uint8_t tn);
 extern uint32_t calypso_trx_get_fn(void);
-/* calypso_dsp_shunt_get_task_md() : déjà déclaré via calypso_dsp_shunt.h inclus. */
+/* c54x_task_md() : declare dans calypso_c54x.h, defini plus haut dans ce fichier. */
 
 void c54x_bsp_load(C54xState *s, const uint16_t *samples, int n)
 {
@@ -21259,7 +21237,7 @@ void c54x_bsp_load(C54xState *s, const uint16_t *samples, int n)
              * que le DERNIER burst poussé ; si on laisse passer les bursts non-FCCH
              * de l'idle (87% du temps), le DMA FB draine un burst pollué. On ne
              * filtre PAS en SB (6) / NB : ces tâches ont besoin de LEUR trame. */
-            uint16_t _md = calypso_dsp_shunt_get_task_md();   /* FB=5, TCH_FB=8, SB=6 */
+            uint16_t _md = c54x_task_md(s);   /* FB=5, TCH_FB=8, SB=6 */
             if (_md == 5 || _md == 8 || _md == 0) {
                 int _p = (int)(calypso_trx_get_fn() % 51u);
                 /* [2026-08-22] verrou 2 (workflow) : en natif la mission ne bascule

@@ -1,0 +1,894 @@
+{"version":{"major":1,"minor":1}}
+{"args":["VERSION","3.22.1"],"cmd":"cmake_minimum_required","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":2,"time":1788439926.9009919}
+{"args":["MesonTemp","LANGUAGES","C"],"cmd":"project","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":3,"time":1788439926.9010401}
+{"args":["CMAKE_HOST_UNIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":35,"time":1788439926.901341}
+{"args":["CMAKE_UNAME","uname","/bin","/usr/bin","/usr/local/bin"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":36,"time":1788439926.9013729}
+{"args":["CMAKE_UNAME"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":37,"time":1788439926.9014549}
+{"args":["CMAKE_HOST_SYSTEM_NAME","STREQUAL","AIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":38,"time":1788439926.901475}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":1,"line":44,"time":1788439926.901495}
+{"args":["/usr/bin/uname","ARGS","-r","OUTPUT_VARIABLE","CMAKE_HOST_SYSTEM_VERSION"],"cmd":"exec_program","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":45,"time":1788439926.9015081}
+{"args":["CMAKE_HOST_SYSTEM_NAME","MATCHES","Linux|CYGWIN.*|MSYS.*|^GNU$|Android"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":47,"time":1788439926.9044139}
+{"args":["/usr/bin/uname","ARGS","-m","OUTPUT_VARIABLE","CMAKE_HOST_SYSTEM_PROCESSOR","RETURN_VALUE","val"],"cmd":"exec_program","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":48,"time":1788439926.904479}
+{"args":["0","GREATER","0"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":97,"time":1788439926.9075119}
+{"args":["CMAKE_UNAME","/usr/bin/uname","CACHE","INTERNAL","uname command"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":100,"time":1788439926.9075639}
+{"args":["REPLACE","\"","","CMAKE_HOST_SYSTEM_PROCESSOR","x86_64"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":102,"time":1788439926.9075911}
+{"args":["REPLACE","/","_","CMAKE_HOST_SYSTEM_PROCESSOR","x86_64"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":103,"time":1788439926.907635}
+{"args":["CMAKE_TOOLCHAIN_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":119,"time":1788439926.907661}
+{"args":["/root/qosmo-dsp/build/meson-private/cmake_SDL2//root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","OPTIONAL","RESULT_VARIABLE","_INCLUDED_TOOLCHAIN_FILE"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":121,"time":1788439926.907686}
+{"args":["NOT","_INCLUDED_TOOLCHAIN_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":122,"time":1788439926.9077401}
+{"args":["/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","OPTIONAL","RESULT_VARIABLE","_INCLUDED_TOOLCHAIN_FILE"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":124,"time":1788439926.907763}
+{"args":["DEFINED","MESON_PRELOAD_FILE"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":9,"time":1788439926.9079299}
+{"args":["CMAKE_C_COMPILER","/usr/bin/cc"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":15,"time":1788439926.907954}
+{"args":["CMAKE_C_COMPILER_ARG1","-m64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":16,"time":1788439926.9079709}
+{"args":["CMAKE_C_COMPILER_ID","GNU"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":17,"time":1788439926.907985}
+{"args":["CMAKE_C_COMPILER_VERSION","11.4.0"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":18,"time":1788439926.907999}
+{"args":["CMAKE_C_STANDARD_COMPUTED_DEFAULT","17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":19,"time":1788439926.9080141}
+{"args":["CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT","ON"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":20,"time":1788439926.9080279}
+{"args":["CMAKE_C_PLATFORM_ID","Linux"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":21,"time":1788439926.908042}
+{"args":["CMAKE_AR","/usr/bin/ar"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":22,"time":1788439926.908056}
+{"args":["CMAKE_C_COMPILER_AR","/usr/bin/gcc-ar-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":23,"time":1788439926.9080689}
+{"args":["CMAKE_RANLIB","/usr/bin/ranlib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":24,"time":1788439926.9080839}
+{"args":["CMAKE_C_COMPILER_RANLIB","/usr/bin/gcc-ranlib-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":25,"time":1788439926.908097}
+{"args":["CMAKE_LINKER","/usr/bin/ld"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":26,"time":1788439926.9081111}
+{"args":["CMAKE_COMPILER_IS_GNUCC","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":27,"time":1788439926.908129}
+{"args":["CMAKE_C_COMPILER_LOADED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":28,"time":1788439926.9081421}
+{"args":["CMAKE_C_COMPILER_ENV_VAR","CC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":29,"time":1788439926.908155}
+{"args":["CMAKE_C_COMPILER_ID_RUN","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":30,"time":1788439926.908169}
+{"args":["CMAKE_C_SOURCE_FILE_EXTENSIONS","c","m"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":31,"time":1788439926.9081819}
+{"args":["CMAKE_C_IGNORE_EXTENSIONS","h","H","o","O","obj","OBJ","def","DEF","rc","RC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":32,"time":1788439926.9082041}
+{"args":["CMAKE_C_LINKER_PREFERENCE","10"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":33,"time":1788439926.908222}
+{"args":["CMAKE_C_COMPILE_FEATURES","c_std_90","c_function_prototypes","c_std_99","c_restrict","c_variadic_macros","c_std_11","c_static_assert","c_std_17","c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":34,"time":1788439926.9082389}
+{"args":["CMAKE_C90_COMPILE_FEATURES","c_std_90","c_function_prototypes"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":35,"time":1788439926.908262}
+{"args":["CMAKE_C99_COMPILE_FEATURES","c_std_99","c_restrict","c_variadic_macros"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":36,"time":1788439926.9082849}
+{"args":["CMAKE_C11_COMPILE_FEATURES","c_std_11","c_static_assert"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":37,"time":1788439926.9083021}
+{"args":["CMAKE_C17_COMPILE_FEATURES","c_std_17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":38,"time":1788439926.908375}
+{"args":["CMAKE_C23_COMPILE_FEATURES","c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":39,"time":1788439926.9083929}
+{"args":["CMAKE_C_COMPILER_WORKS","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":40,"time":1788439926.908407}
+{"args":["CMAKE_C_ABI_COMPILED","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":41,"time":1788439926.908421}
+{"args":["CMAKE_C_SIZEOF_DATA_PTR","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":42,"time":1788439926.9084351}
+{"args":["CMAKE_C_COMPILER_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":43,"time":1788439926.9084489}
+{"args":["CMAKE_C_BYTE_ORDER","LITTLE_ENDIAN"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":44,"time":1788439926.9084649}
+{"args":["CMAKE_C_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":45,"time":1788439926.908479}
+{"args":["CMAKE_SIZEOF_VOID_P","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":46,"time":1788439926.9084921}
+{"args":["CMAKE_INTERNAL_PLATFORM_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":47,"time":1788439926.908505}
+{"args":["CMAKE_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":48,"time":1788439926.9085181}
+{"args":["CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11/include","/usr/local/include","/usr/include/x86_64-linux-gnu","/usr/include"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":49,"time":1788439926.9085369}
+{"args":["CMAKE_C_IMPLICIT_LINK_LIBRARIES","gcc","gcc_s","c","gcc","gcc_s"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":50,"time":1788439926.908555}
+{"args":["CMAKE_C_IMPLICIT_LINK_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11","/usr/lib/x86_64-linux-gnu","/usr/lib","/lib/x86_64-linux-gnu","/lib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":51,"time":1788439926.908576}
+{"args":["CMAKE_C_COMPILER_FORCED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":52,"time":1788439926.9085929}
+{"args":["CMAKE_SIZEOF_VOID_P","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":56,"time":1788439926.9086061}
+{"args":["CMAKE_C_COMPILER","/usr/bin/cc","-m64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":57,"time":1788439926.9086189}
+{"args":["_INCLUDED_TOOLCHAIN_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":127,"time":1788439926.908643}
+{"args":["CMAKE_TOOLCHAIN_FILE","/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","CACHE","FILEPATH","The CMake toolchain file","FORCE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":128,"time":1788439926.9086621}
+{"args":["CMAKE_SYSTEM_NAME"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":139,"time":1788439926.908684}
+{"args":["CMAKE_VS_WINCE_VERSION"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":1,"line":144,"time":1788439926.9087009}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":1,"line":150,"time":1788439926.9087141}
+{"args":["CMAKE_SYSTEM_NAME","Linux"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":151,"time":1788439926.9087269}
+{"args":["NOT","DEFINED","CMAKE_SYSTEM_VERSION"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":152,"time":1788439926.908742}
+{"args":["CMAKE_SYSTEM_VERSION","6.8.0-138-generic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":153,"time":1788439926.9087591}
+{"args":["CMAKE_SYSTEM_PROCESSOR","x86_64"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":155,"time":1788439926.9087751}
+{"args":["CMAKE_CROSSCOMPILING","FALSE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":156,"time":1788439926.9087889}
+{"args":["PRESET_CMAKE_SYSTEM_NAME","FALSE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":157,"time":1788439926.908802}
+{"args":["Platform/Linux-Determine","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":160,"time":1788439926.9088161}
+{"args":["CMAKE_SYSTEM","Linux"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":162,"time":1788439926.908848}
+{"args":["CMAKE_SYSTEM_VERSION"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":163,"time":1788439926.9088621}
+{"args":["APPEND","CMAKE_SYSTEM","-6.8.0-138-generic"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":164,"time":1788439926.9088781}
+{"args":["CMAKE_HOST_SYSTEM","Linux"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":166,"time":1788439926.9088931}
+{"args":["CMAKE_HOST_SYSTEM_VERSION"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":167,"time":1788439926.9089069}
+{"args":["APPEND","CMAKE_HOST_SYSTEM","-6.8.0-138-generic"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":168,"time":1788439926.908921}
+{"args":["CMAKE_BINARY_DIR"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":173,"time":1788439926.908936}
+{"args":["PRESET_CMAKE_SYSTEM_NAME"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":175,"time":1788439926.9089501}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":1,"line":180,"time":1788439926.908963}
+{"args":["APPEND","/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/CMakeOutput.log","The system is: Linux - 6.8.0-138-generic - x86_64\n"],"cmd":"file","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":181,"time":1788439926.908978}
+{"args":["INCLUDE_CMAKE_TOOLCHAIN_FILE_IF_REQUIRED"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":187,"time":1788439926.909085}
+{"args":["CMAKE_TOOLCHAIN_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":188,"time":1788439926.9091029}
+{"args":["INCLUDE_CMAKE_TOOLCHAIN_FILE_IF_REQUIRED","include(\"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake\")"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":189,"time":1788439926.9091189}
+{"args":["/usr/share/cmake-3.22/Modules/CMakeSystem.cmake.in","/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","@ONLY"],"cmd":"configure_file","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake","frame":2,"line":193,"time":1788439926.9091389}
+{"args":["CMAKE_HOST_SYSTEM","Linux-6.8.0-138-generic"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":1,"time":1788439926.9095149}
+{"args":["CMAKE_HOST_SYSTEM_NAME","Linux"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":2,"time":1788439926.9095371}
+{"args":["CMAKE_HOST_SYSTEM_VERSION","6.8.0-138-generic"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":3,"time":1788439926.9095509}
+{"args":["CMAKE_HOST_SYSTEM_PROCESSOR","x86_64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":4,"time":1788439926.909565}
+{"args":["/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake"],"cmd":"include","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":6,"time":1788439926.9095781}
+{"args":["DEFINED","MESON_PRELOAD_FILE"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":9,"time":1788439926.909688}
+{"args":["CMAKE_C_COMPILER","/usr/bin/cc"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":15,"time":1788439926.909708}
+{"args":["CMAKE_C_COMPILER_ARG1","-m64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":16,"time":1788439926.9097221}
+{"args":["CMAKE_C_COMPILER_ID","GNU"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":17,"time":1788439926.909735}
+{"args":["CMAKE_C_COMPILER_VERSION","11.4.0"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":18,"time":1788439926.9097481}
+{"args":["CMAKE_C_STANDARD_COMPUTED_DEFAULT","17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":19,"time":1788439926.909761}
+{"args":["CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT","ON"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":20,"time":1788439926.9097741}
+{"args":["CMAKE_C_PLATFORM_ID","Linux"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":21,"time":1788439926.9097869}
+{"args":["CMAKE_AR","/usr/bin/ar"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":22,"time":1788439926.9097991}
+{"args":["CMAKE_C_COMPILER_AR","/usr/bin/gcc-ar-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":23,"time":1788439926.909812}
+{"args":["CMAKE_RANLIB","/usr/bin/ranlib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":24,"time":1788439926.9098251}
+{"args":["CMAKE_C_COMPILER_RANLIB","/usr/bin/gcc-ranlib-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":25,"time":1788439926.909837}
+{"args":["CMAKE_LINKER","/usr/bin/ld"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":26,"time":1788439926.9098511}
+{"args":["CMAKE_COMPILER_IS_GNUCC","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":27,"time":1788439926.909863}
+{"args":["CMAKE_C_COMPILER_LOADED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":28,"time":1788439926.9098761}
+{"args":["CMAKE_C_COMPILER_ENV_VAR","CC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":29,"time":1788439926.909888}
+{"args":["CMAKE_C_COMPILER_ID_RUN","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":30,"time":1788439926.9099}
+{"args":["CMAKE_C_SOURCE_FILE_EXTENSIONS","c","m"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":31,"time":1788439926.9099131}
+{"args":["CMAKE_C_IGNORE_EXTENSIONS","h","H","o","O","obj","OBJ","def","DEF","rc","RC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":32,"time":1788439926.90993}
+{"args":["CMAKE_C_LINKER_PREFERENCE","10"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":33,"time":1788439926.9099469}
+{"args":["CMAKE_C_COMPILE_FEATURES","c_std_90","c_function_prototypes","c_std_99","c_restrict","c_variadic_macros","c_std_11","c_static_assert","c_std_17","c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":34,"time":1788439926.9099629}
+{"args":["CMAKE_C90_COMPILE_FEATURES","c_std_90","c_function_prototypes"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":35,"time":1788439926.9099801}
+{"args":["CMAKE_C99_COMPILE_FEATURES","c_std_99","c_restrict","c_variadic_macros"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":36,"time":1788439926.9099939}
+{"args":["CMAKE_C11_COMPILE_FEATURES","c_std_11","c_static_assert"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":37,"time":1788439926.9100089}
+{"args":["CMAKE_C17_COMPILE_FEATURES","c_std_17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":38,"time":1788439926.910022}
+{"args":["CMAKE_C23_COMPILE_FEATURES","c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":39,"time":1788439926.9100339}
+{"args":["CMAKE_C_COMPILER_WORKS","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":40,"time":1788439926.9100461}
+{"args":["CMAKE_C_ABI_COMPILED","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":41,"time":1788439926.910059}
+{"args":["CMAKE_C_SIZEOF_DATA_PTR","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":42,"time":1788439926.9100721}
+{"args":["CMAKE_C_COMPILER_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":43,"time":1788439926.910084}
+{"args":["CMAKE_C_BYTE_ORDER","LITTLE_ENDIAN"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":44,"time":1788439926.9100959}
+{"args":["CMAKE_C_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":45,"time":1788439926.910109}
+{"args":["CMAKE_SIZEOF_VOID_P","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":46,"time":1788439926.9101219}
+{"args":["CMAKE_INTERNAL_PLATFORM_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":47,"time":1788439926.9101341}
+{"args":["CMAKE_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":48,"time":1788439926.910147}
+{"args":["CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11/include","/usr/local/include","/usr/include/x86_64-linux-gnu","/usr/include"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":49,"time":1788439926.910161}
+{"args":["CMAKE_C_IMPLICIT_LINK_LIBRARIES","gcc","gcc_s","c","gcc","gcc_s"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":50,"time":1788439926.910193}
+{"args":["CMAKE_C_IMPLICIT_LINK_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11","/usr/lib/x86_64-linux-gnu","/usr/lib","/lib/x86_64-linux-gnu","/lib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":51,"time":1788439926.910212}
+{"args":["CMAKE_C_COMPILER_FORCED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":52,"time":1788439926.910228}
+{"args":["CMAKE_SIZEOF_VOID_P","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":56,"time":1788439926.9102399}
+{"args":["CMAKE_C_COMPILER","/usr/bin/cc","-m64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeMesonToolchainFile.cmake","frame":3,"line":57,"time":1788439926.910254}
+{"args":["CMAKE_SYSTEM","Linux-6.8.0-138-generic"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":8,"time":1788439926.910275}
+{"args":["CMAKE_SYSTEM_NAME","Linux"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":9,"time":1788439926.910296}
+{"args":["CMAKE_SYSTEM_VERSION","6.8.0-138-generic"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":10,"time":1788439926.91031}
+{"args":["CMAKE_SYSTEM_PROCESSOR","x86_64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":11,"time":1788439926.9103229}
+{"args":["CMAKE_CROSSCOMPILING","FALSE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":13,"time":1788439926.910336}
+{"args":["CMAKE_SYSTEM_LOADED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeSystem.cmake","frame":2,"line":15,"time":1788439926.9103479}
+{"args":["CMAKE_MAKE_PROGRAM","NAMES","gmake","make","smake"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake","frame":2,"line":5,"time":1788439926.910599}
+{"args":["CMAKE_MAKE_PROGRAM"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake","frame":2,"line":6,"time":1788439926.910718}
+{"args":["NOT","CMAKE_MAKE_PROGRAM","AND","CMAKE_HOST_APPLE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeUnixFindMake.cmake","frame":2,"line":9,"time":1788439926.9107411}
+{"args":["CMAKE_EFFECTIVE_SYSTEM_NAME","Linux"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake","frame":2,"line":19,"time":1788439926.910826}
+{"args":["Platform/Linux-Initialize","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake","frame":2,"line":21,"time":1788439926.9108469}
+{"args":["CMAKE_SYSTEM_SPECIFIC_INITIALIZE_LOADED","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake","frame":2,"line":23,"time":1788439926.9108729}
+{"args":["/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":24,"time":1788439926.9111309}
+{"args":["_cmake_find_compiler","lang"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":5,"time":1788439926.911375}
+{"args":["_cmake_find_compiler_path","lang"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":116,"time":1788439926.9114051}
+{"args":["_cmake_find_compiler_sysroot","lang"],"cmd":"function","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":150,"time":1788439926.9115579}
+{"args":["Platform/Linux-Determine-C","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":27,"time":1788439926.911629}
+{"args":["Platform/Linux-C","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":28,"time":1788439926.9116621}
+{"args":["NOT","CMAKE_C_COMPILER_NAMES"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":29,"time":1788439926.9116809}
+{"args":["CMAKE_C_COMPILER_NAMES","cc"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":30,"time":1788439926.9116981}
+{"args":["Unix Makefiles","MATCHES","Visual Studio"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":33,"time":1788439926.9117141}
+{"args":["Unix Makefiles","MATCHES","Green Hills MULTI"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":34,"time":1788439926.911736}
+{"args":["Unix Makefiles","MATCHES","Xcode"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":35,"time":1788439926.9117501}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":38,"time":1788439926.911761}
+{"args":["NOT","CMAKE_C_COMPILER"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":39,"time":1788439926.9117701}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":67,"time":1788439926.9117839}
+{"args":["C"],"cmd":"_cmake_find_compiler_path","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":68,"time":1788439926.9117949}
+{"args":["CMAKE_C_COMPILER"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":117,"time":1788439926.9118099}
+{"args":["CMAKE_C_COMPILER_ARG1","/usr/bin/cc;-m64"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":122,"time":1788439926.9118371}
+{"args":["POP_FRONT","CMAKE_C_COMPILER_ARG1","CMAKE_C_COMPILER"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":123,"time":1788439926.91185}
+{"args":["JOIN","CMAKE_C_COMPILER_ARG1"," ","CMAKE_C_COMPILER_ARG1"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":124,"time":1788439926.9118769}
+{"args":["_CMAKE_USER_C_COMPILER_PATH","/usr/bin/cc","PATH"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":128,"time":1788439926.9118919}
+{"args":["NOT","_CMAKE_USER_C_COMPILER_PATH"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":129,"time":1788439926.911906}
+{"args":["EXISTS","/usr/bin/cc"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":140,"time":1788439926.9119201}
+{"args":["_CMAKE_C_COMPILER_CACHED","CACHE","CMAKE_C_COMPILER","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":141,"time":1788439926.9119389}
+{"args":["_CMAKE_C_COMPILER_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":142,"time":1788439926.9119551}
+{"args":["_CMAKE_C_COMPILER_CACHED"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake","frame":3,"line":145,"time":1788439926.911967}
+{"args":["CMAKE_C_COMPILER"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":70,"time":1788439926.9119821}
+{"args":["CMAKE_C_COMPILER_ID_TEST_FLAGS_FIRST"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":75,"time":1788439926.911994}
+{"args":["CMAKE_C_COMPILER_ID_TEST_FLAGS","-c","-Aa","-D__CLASSIC_C__","--target=arm-arm-none-eabi -mcpu=cortex-m3","-c -I__does_not_exist__"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":76,"time":1788439926.9120071}
+{"args":["CMAKE_C_COMPILER_TARGET"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":95,"time":1788439926.912046}
+{"args":["NOT","CMAKE_C_COMPILER_ID_RUN"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":99,"time":1788439926.9120581}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":131,"time":1788439926.912071}
+{"args":["NOT","DEFINED","CMAKE_C_COMPILER_FRONTEND_VARIANT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":132,"time":1788439926.912082}
+{"args":["CMAKE_C_COMPILER_ID","STREQUAL","Clang","OR","xGNU","STREQUAL","xIntelLLVM"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":137,"time":1788439926.9121001}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":144,"time":1788439926.912118}
+{"args":["CMAKE_C_COMPILER_FRONTEND_VARIANT",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":145,"time":1788439926.912128}
+{"args":["NOT","_CMAKE_TOOLCHAIN_LOCATION"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":150,"time":1788439926.9121399}
+{"args":["_CMAKE_TOOLCHAIN_LOCATION","/usr/bin/cc","PATH"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":151,"time":1788439926.912153}
+{"args":["NOT","_CMAKE_TOOLCHAIN_PREFIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":161,"time":1788439926.9121661}
+{"args":["CMAKE_C_COMPILER_ID","MATCHES","GNU|Clang|QCC"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":163,"time":1788439926.912178}
+{"args":["COMPILER_BASENAME","/usr/bin/cc","NAME"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":164,"time":1788439926.9121959}
+{"args":["COMPILER_BASENAME","MATCHES","^(.+-)?(clang|g?cc)(-cl)?(-[0-9]+(\\.[0-9]+)*)?(-[^.]+)?(\\.exe)?$"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":165,"time":1788439926.91221}
+{"args":["_CMAKE_TOOLCHAIN_PREFIX",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":166,"time":1788439926.912235}
+{"args":["_CMAKE_TOOLCHAIN_SUFFIX",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":167,"time":1788439926.912246}
+{"args":["_CMAKE_COMPILER_SUFFIX",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":168,"time":1788439926.912257}
+{"args":["","MATCHES","(.+-)?llvm-$"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":181,"time":1788439926.9122701}
+{"args":["_CMAKE_PROCESSING_LANGUAGE","C"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":195,"time":1788439926.912297}
+{"args":["CMakeFindBinUtils"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":196,"time":1788439926.912308}
+{"args":["PUSH"],"cmd":"cmake_policy","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":23,"time":1788439926.9126799}
+{"args":["SET","CMP0057","NEW"],"cmd":"cmake_policy","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":24,"time":1788439926.9126921}
+{"args":["__resolve_tool_path","CMAKE_TOOL","SEARCH_PATH","DOCSTRING"],"cmd":"function","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":27,"time":1788439926.9127059}
+{"args":["CMAKE_LINKER","/usr/bin","Default Linker"],"cmd":"__resolve_tool_path","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":60,"time":1788439926.9127259}
+{"args":["CMAKE_LINKER"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":4,"line":29,"time":1788439926.9127481}
+{"args":["_CMAKE_USER_TOOL_PATH","/usr/bin/ld","DIRECTORY"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":4,"line":34,"time":1788439926.9127641}
+{"args":["NOT","_CMAKE_USER_TOOL_PATH"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":4,"line":36,"time":1788439926.9127779}
+{"args":["CMAKE_MT","/usr/bin","Default Manifest Tool"],"cmd":"__resolve_tool_path","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":61,"time":1788439926.912796}
+{"args":["CMAKE_MT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":4,"line":29,"time":1788439926.9128129}
+{"args":["_CMAKE_TOOL_VARS",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":63,"time":1788439926.912828}
+{"args":["(","x","STREQUAL","xMSVC","AND","(","x","STREQUAL","xMSVC","OR","NOT","xGNU","STREQUAL","xClang",")",")","OR","xGNU","STREQUAL","xMSVC","OR","(","CMAKE_HOST_WIN32","AND","xGNU","STREQUAL","xPGI",")","OR","(","CMAKE_HOST_WIN32","AND","xGNU","STREQUAL","xNVIDIA",")","OR","(","CMAKE_HOST_WIN32","AND","xC","STREQUAL","xISPC",")","OR","(","CMAKE_GENERATOR","MATCHES","Visual Studio","AND","NOT","CMAKE_VS_PLATFORM_NAME","STREQUAL","Tegra-Android",")"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":66,"time":1788439926.9128699}
+{"args":["xGNU","MATCHES","^x(Open)?Watcom$"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":2,"line":95,"time":1788439926.9129529}
+{"args":["xGNU","MATCHES","^xIAR$"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":2,"line":100,"time":1788439926.9129701}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":2,"line":148,"time":1788439926.9129829}
+{"args":["CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":149,"time":1788439926.912993}
+{"args":["CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":152,"time":1788439926.9130051}
+{"args":["_CMAKE_AR_NAMES","ar"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":157,"time":1788439926.913017}
+{"args":["_CMAKE_RANLIB_NAMES","ranlib"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":158,"time":1788439926.913029}
+{"args":["_CMAKE_STRIP_NAMES","strip"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":159,"time":1788439926.9130399}
+{"args":["_CMAKE_LINKER_NAMES","ld"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":160,"time":1788439926.9130521}
+{"args":["_CMAKE_NM_NAMES","nm"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":161,"time":1788439926.9130621}
+{"args":["_CMAKE_OBJDUMP_NAMES","objdump"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":162,"time":1788439926.9130731}
+{"args":["_CMAKE_OBJCOPY_NAMES","objcopy"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":163,"time":1788439926.913084}
+{"args":["_CMAKE_READELF_NAMES","readelf"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":164,"time":1788439926.913095}
+{"args":["_CMAKE_DLLTOOL_NAMES","dlltool"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":165,"time":1788439926.913106}
+{"args":["_CMAKE_ADDR2LINE_NAMES","addr2line"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":166,"time":1788439926.9131179}
+{"args":["GNU","STREQUAL","Clang"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":169,"time":1788439926.91313}
+{"args":["GNU","STREQUAL","ARMClang"],"cmd":"elseif","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":2,"line":190,"time":1788439926.9131551}
+{"args":["APPEND","_CMAKE_TOOL_VARS","AR","RANLIB","STRIP","LINKER","NM","OBJDUMP","OBJCOPY","READELF","DLLTOOL","ADDR2LINE"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":195,"time":1788439926.913173}
+{"args":["_CMAKE_TOOL","IN","LISTS","_CMAKE_TOOL_VARS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":198,"time":1788439926.913193}
+{"args":["_CMAKE_AR_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.913209}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_AR_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.913223}
+{"args":["APPEND","_CMAKE_AR_FIND_NAMES","ar","ar","ar","ar"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9132421}
+{"args":["REMOVE_DUPLICATES","_CMAKE_AR_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.91326}
+{"args":["CMAKE_AR","NAMES","ar","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.9132831}
+{"args":["_CMAKE_AR_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9133339}
+{"args":["_CMAKE_RANLIB_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9133451}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_RANLIB_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.913358}
+{"args":["APPEND","_CMAKE_RANLIB_FIND_NAMES","ranlib","ranlib","ranlib","ranlib"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9133749}
+{"args":["REMOVE_DUPLICATES","_CMAKE_RANLIB_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9133921}
+{"args":["CMAKE_RANLIB","NAMES","ranlib","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.913408}
+{"args":["_CMAKE_RANLIB_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.91343}
+{"args":["_CMAKE_STRIP_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9134409}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_STRIP_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.9134531}
+{"args":["APPEND","_CMAKE_STRIP_FIND_NAMES","strip","strip","strip","strip"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.91347}
+{"args":["REMOVE_DUPLICATES","_CMAKE_STRIP_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9134851}
+{"args":["CMAKE_STRIP","NAMES","strip","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.913501}
+{"args":["_CMAKE_STRIP_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.913559}
+{"args":["_CMAKE_LINKER_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9135721}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_LINKER_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.9135849}
+{"args":["APPEND","_CMAKE_LINKER_FIND_NAMES","ld","ld","ld","ld"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9136031}
+{"args":["REMOVE_DUPLICATES","_CMAKE_LINKER_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.91362}
+{"args":["CMAKE_LINKER","NAMES","ld","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.913636}
+{"args":["_CMAKE_LINKER_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9136569}
+{"args":["_CMAKE_NM_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9136679}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_NM_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.9136801}
+{"args":["APPEND","_CMAKE_NM_FIND_NAMES","nm","nm","nm","nm"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.913697}
+{"args":["REMOVE_DUPLICATES","_CMAKE_NM_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.913713}
+{"args":["CMAKE_NM","NAMES","nm","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.913727}
+{"args":["_CMAKE_NM_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9137659}
+{"args":["_CMAKE_OBJDUMP_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9137781}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_OBJDUMP_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.91379}
+{"args":["APPEND","_CMAKE_OBJDUMP_FIND_NAMES","objdump","objdump","objdump","objdump"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9138069}
+{"args":["REMOVE_DUPLICATES","_CMAKE_OBJDUMP_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9138229}
+{"args":["CMAKE_OBJDUMP","NAMES","objdump","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.9138391}
+{"args":["_CMAKE_OBJDUMP_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9138751}
+{"args":["_CMAKE_OBJCOPY_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9138851}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_OBJCOPY_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.913897}
+{"args":["APPEND","_CMAKE_OBJCOPY_FIND_NAMES","objcopy","objcopy","objcopy","objcopy"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.913914}
+{"args":["REMOVE_DUPLICATES","_CMAKE_OBJCOPY_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.913929}
+{"args":["CMAKE_OBJCOPY","NAMES","objcopy","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.913944}
+{"args":["_CMAKE_OBJCOPY_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9139841}
+{"args":["_CMAKE_READELF_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.9139941}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_READELF_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.914006}
+{"args":["APPEND","_CMAKE_READELF_FIND_NAMES","readelf","readelf","readelf","readelf"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.914022}
+{"args":["REMOVE_DUPLICATES","_CMAKE_READELF_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9140379}
+{"args":["CMAKE_READELF","NAMES","readelf","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.914052}
+{"args":["_CMAKE_READELF_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.914083}
+{"args":["_CMAKE_DLLTOOL_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.914093}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_DLLTOOL_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.9141049}
+{"args":["APPEND","_CMAKE_DLLTOOL_FIND_NAMES","dlltool","dlltool","dlltool","dlltool"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9141209}
+{"args":["REMOVE_DUPLICATES","_CMAKE_DLLTOOL_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9141359}
+{"args":["CMAKE_DLLTOOL","NAMES","dlltool","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.91415}
+{"args":["_CMAKE_DLLTOOL_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.914201}
+{"args":["_CMAKE_ADDR2LINE_FIND_NAMES",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":200,"time":1788439926.914212}
+{"args":["_CMAKE_TOOL_NAME","IN","LISTS","_CMAKE_ADDR2LINE_NAMES"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":201,"time":1788439926.9142239}
+{"args":["APPEND","_CMAKE_ADDR2LINE_FIND_NAMES","addr2line","addr2line","addr2line","addr2line"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":202,"time":1788439926.9142399}
+{"args":["REMOVE_DUPLICATES","_CMAKE_ADDR2LINE_FIND_NAMES"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":209,"time":1788439926.9142561}
+{"args":["CMAKE_ADDR2LINE","NAMES","addr2line","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":211,"time":1788439926.9142721}
+{"args":["_CMAKE_ADDR2LINE_FIND_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":212,"time":1788439926.9143071}
+{"args":["NOT","CMAKE_RANLIB"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":215,"time":1788439926.914319}
+{"args":["CMAKE_PLATFORM_HAS_INSTALLNAME"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":220,"time":1788439926.9143319}
+{"args":["_CMAKE_TOOL","IN","LISTS","_CMAKE_TOOL_VARS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":231,"time":1788439926.914346}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_AR","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914362}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.914376}
+{"args":["_CMAKE_AR_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.914387}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_RANLIB","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.9143989}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.9144111}
+{"args":["_CMAKE_RANLIB_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9144211}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_STRIP","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914433}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.9144449}
+{"args":["CMAKE_STRIP"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.9144549}
+{"args":["_CMAKE_STRIP_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9144671}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_LINKER","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914479}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.91449}
+{"args":["_CMAKE_LINKER_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.914501}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_NM","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.9145119}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.9145229}
+{"args":["CMAKE_NM"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.9145329}
+{"args":["_CMAKE_NM_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9145441}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_OBJDUMP","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914556}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.914567}
+{"args":["CMAKE_OBJDUMP"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.914578}
+{"args":["_CMAKE_OBJDUMP_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9145889}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_OBJCOPY","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.9145999}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.914614}
+{"args":["CMAKE_OBJCOPY"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.914624}
+{"args":["_CMAKE_OBJCOPY_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9146349}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_READELF","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914654}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.9146669}
+{"args":["CMAKE_READELF"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.9146769}
+{"args":["_CMAKE_READELF_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9146881}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_DLLTOOL","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.9147}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.9147129}
+{"args":["CMAKE_DLLTOOL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.9147229}
+{"args":["_CMAKE_DLLTOOL_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9147339}
+{"args":["_CMAKE_TOOL_CACHED","CACHE","CMAKE_ADDR2LINE","PROPERTY","TYPE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":232,"time":1788439926.914746}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":233,"time":1788439926.914758}
+{"args":["CMAKE_ADDR2LINE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":234,"time":1788439926.9147689}
+{"args":["_CMAKE_ADDR2LINE_NAMES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":236,"time":1788439926.9147799}
+{"args":["_CMAKE_TOOL_VARS"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":238,"time":1788439926.9147899}
+{"args":["_CMAKE_TOOL_CACHED"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":239,"time":1788439926.9147999}
+{"args":["_CMAKE_TOOL_NAME"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":240,"time":1788439926.9148099}
+{"args":["_CMAKE_TOOL"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":241,"time":1788439926.91482}
+{"args":["xGNU","MATCHES","^xIAR$"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":243,"time":1788439926.9148331}
+{"args":["POP"],"cmd":"cmake_policy","file":"/usr/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake","frame":3,"line":250,"time":1788439926.914849}
+{"args":["Compiler/GNU-FindBinUtils","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":197,"time":1788439926.9148791}
+{"args":["NOT","DEFINED","_CMAKE_PROCESSING_LANGUAGE","OR","_CMAKE_PROCESSING_LANGUAGE","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":1,"time":1788439926.914979}
+{"args":["REGEX","MATCH","^([0-9]+)","__version_x","11.4.0"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":8,"time":1788439926.9150031}
+{"args":["REGEX","MATCH","^([0-9]+\\.[0-9]+)","__version_x_y","11.4.0"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":11,"time":1788439926.915024}
+{"args":["__gcc_hints","/usr/bin/cc","DIRECTORY"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":15,"time":1788439926.9150431}
+{"args":["CMAKE_C_COMPILER_AR","NAMES","gcc-ar-11.4","gcc-ar-11","gcc-ar","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH","DOC","A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":18,"time":1788439926.9150651}
+{"args":["CMAKE_C_COMPILER_AR"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":26,"time":1788439926.915098}
+{"args":["CMAKE_C_COMPILER_RANLIB","NAMES","gcc-ranlib-11.4","gcc-ranlib-11","gcc-ranlib","HINTS","/usr/bin","NO_CMAKE_PATH","NO_CMAKE_ENVIRONMENT_PATH","DOC","A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"],"cmd":"find_program","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":29,"time":1788439926.9151161}
+{"args":["CMAKE_C_COMPILER_RANLIB"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-FindBinUtils.cmake","frame":3,"line":37,"time":1788439926.9151421}
+{"args":["_CMAKE_PROCESSING_LANGUAGE"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":198,"time":1788439926.915158}
+{"args":["CMAKE_C_COMPILER_SYSROOT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":200,"time":1788439926.915169}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":204,"time":1788439926.91518}
+{"args":["_SET_CMAKE_C_COMPILER_SYSROOT",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":205,"time":1788439926.9151909}
+{"args":["CMAKE_C_COMPILER_ARCHITECTURE_ID"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":208,"time":1788439926.915211}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":1,"line":211,"time":1788439926.9152219}
+{"args":["_SET_CMAKE_C_COMPILER_ARCHITECTURE_ID",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":212,"time":1788439926.9152319}
+{"args":["MSVC_C_ARCHITECTURE_ID"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":215,"time":1788439926.9152441}
+{"args":["CMAKE_C_XCODE_ARCHS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":220,"time":1788439926.9152541}
+{"args":["/usr/share/cmake-3.22/Modules/CMakeCCompiler.cmake.in","/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","@ONLY"],"cmd":"configure_file","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":226,"time":1788439926.9152689}
+{"args":["CMAKE_C_COMPILER_ENV_VAR","CC"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake","frame":2,"line":230,"time":1788439926.9155021}
+{"args":["CMAKE_C_COMPILER","/usr/bin/cc"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":1,"time":1788439926.9156361}
+{"args":["CMAKE_C_COMPILER_ARG1","-m64"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":2,"time":1788439926.9156499}
+{"args":["CMAKE_C_COMPILER_ID","GNU"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":3,"time":1788439926.915663}
+{"args":["CMAKE_C_COMPILER_VERSION","11.4.0"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":4,"time":1788439926.9156749}
+{"args":["CMAKE_C_COMPILER_VERSION_INTERNAL",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":5,"time":1788439926.9156871}
+{"args":["CMAKE_C_COMPILER_WRAPPER",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":6,"time":1788439926.9156981}
+{"args":["CMAKE_C_STANDARD_COMPUTED_DEFAULT","17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":7,"time":1788439926.915709}
+{"args":["CMAKE_C_EXTENSIONS_COMPUTED_DEFAULT","ON"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":8,"time":1788439926.9157269}
+{"args":["CMAKE_C_COMPILE_FEATURES","c_std_90;c_function_prototypes;c_std_99;c_restrict;c_variadic_macros;c_std_11;c_static_assert;c_std_17;c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":9,"time":1788439926.91574}
+{"args":["CMAKE_C90_COMPILE_FEATURES","c_std_90;c_function_prototypes"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":10,"time":1788439926.9157529}
+{"args":["CMAKE_C99_COMPILE_FEATURES","c_std_99;c_restrict;c_variadic_macros"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":11,"time":1788439926.915765}
+{"args":["CMAKE_C11_COMPILE_FEATURES","c_std_11;c_static_assert"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":12,"time":1788439926.915777}
+{"args":["CMAKE_C17_COMPILE_FEATURES","c_std_17"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":13,"time":1788439926.9157889}
+{"args":["CMAKE_C23_COMPILE_FEATURES","c_std_23"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":14,"time":1788439926.9158001}
+{"args":["CMAKE_C_PLATFORM_ID","Linux"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":16,"time":1788439926.9158111}
+{"args":["CMAKE_C_SIMULATE_ID",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":17,"time":1788439926.915822}
+{"args":["CMAKE_C_COMPILER_FRONTEND_VARIANT",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":18,"time":1788439926.915833}
+{"args":["CMAKE_C_SIMULATE_VERSION",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":19,"time":1788439926.915844}
+{"args":["CMAKE_AR","/usr/bin/ar"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":24,"time":1788439926.9158549}
+{"args":["CMAKE_C_COMPILER_AR","/usr/bin/gcc-ar-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":25,"time":1788439926.9158671}
+{"args":["CMAKE_RANLIB","/usr/bin/ranlib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":26,"time":1788439926.915879}
+{"args":["CMAKE_C_COMPILER_RANLIB","/usr/bin/gcc-ranlib-11"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":27,"time":1788439926.9158909}
+{"args":["CMAKE_LINKER","/usr/bin/ld"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":28,"time":1788439926.9159019}
+{"args":["CMAKE_MT",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":29,"time":1788439926.9159119}
+{"args":["CMAKE_COMPILER_IS_GNUCC","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":30,"time":1788439926.9159241}
+{"args":["CMAKE_C_COMPILER_LOADED","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":31,"time":1788439926.915935}
+{"args":["CMAKE_C_COMPILER_WORKS","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":32,"time":1788439926.915946}
+{"args":["CMAKE_C_ABI_COMPILED","TRUE"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":33,"time":1788439926.915957}
+{"args":["CMAKE_C_COMPILER_ENV_VAR","CC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":35,"time":1788439926.9159679}
+{"args":["CMAKE_C_COMPILER_ID_RUN","1"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":37,"time":1788439926.9159789}
+{"args":["CMAKE_C_SOURCE_FILE_EXTENSIONS","c;m"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":38,"time":1788439926.9159901}
+{"args":["CMAKE_C_IGNORE_EXTENSIONS","h;H;o;O;obj;OBJ;def;DEF;rc;RC"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":39,"time":1788439926.916002}
+{"args":["CMAKE_C_LINKER_PREFERENCE","10"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":40,"time":1788439926.9160171}
+{"args":["CMAKE_C_SIZEOF_DATA_PTR","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":43,"time":1788439926.916028}
+{"args":["CMAKE_C_COMPILER_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":44,"time":1788439926.916039}
+{"args":["CMAKE_C_BYTE_ORDER","LITTLE_ENDIAN"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":45,"time":1788439926.91605}
+{"args":["CMAKE_C_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":46,"time":1788439926.9160621}
+{"args":["CMAKE_C_SIZEOF_DATA_PTR"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":48,"time":1788439926.9160731}
+{"args":["CMAKE_SIZEOF_VOID_P","8"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":49,"time":1788439926.916086}
+{"args":["CMAKE_C_COMPILER_ABI"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":52,"time":1788439926.9160981}
+{"args":["CMAKE_INTERNAL_PLATFORM_ABI","ELF"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":53,"time":1788439926.91611}
+{"args":["CMAKE_C_LIBRARY_ARCHITECTURE"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":56,"time":1788439926.916122}
+{"args":["CMAKE_LIBRARY_ARCHITECTURE","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":57,"time":1788439926.9161329}
+{"args":["CMAKE_C_CL_SHOWINCLUDES_PREFIX",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":60,"time":1788439926.9161451}
+{"args":["CMAKE_C_CL_SHOWINCLUDES_PREFIX"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":61,"time":1788439926.9161551}
+{"args":["CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":69,"time":1788439926.916168}
+{"args":["CMAKE_C_IMPLICIT_LINK_LIBRARIES","gcc;gcc_s;c;gcc;gcc_s"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":70,"time":1788439926.9161811}
+{"args":["CMAKE_C_IMPLICIT_LINK_DIRECTORIES","/usr/lib/gcc/x86_64-linux-gnu/11;/usr/lib/x86_64-linux-gnu;/usr/lib;/lib/x86_64-linux-gnu;/lib"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":71,"time":1788439926.916199}
+{"args":["CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeFiles/3.22.1/CMakeCCompiler.cmake","frame":2,"line":72,"time":1788439926.9162099}
+{"args":["APPLE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":14,"time":1788439926.9163151}
+{"args":["UNIX"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":15,"time":1788439926.916327}
+{"args":["CYGWIN"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":16,"time":1788439926.916337}
+{"args":["MSYS"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":17,"time":1788439926.916348}
+{"args":["WIN32"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":18,"time":1788439926.916358}
+{"args":["CMakeGenericSystem"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":22,"time":1788439926.916368}
+{"args":["CMakeInitializeConfigs"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":4,"time":1788439926.9165771}
+{"args":["GLOBAL"],"cmd":"include_guard","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":4,"time":1788439926.916656}
+{"args":["cmake_initialize_per_config_variable","_PREFIX","_DOCSTRING"],"cmd":"function","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":8,"time":1788439926.9168539}
+{"args":["CMAKE_SHARED_LIBRARY_C_FLAGS",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":6,"time":1788439926.916877}
+{"args":["CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS","-shared"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":7,"time":1788439926.916889}
+{"args":["CMAKE_SHARED_LIBRARY_LINK_C_FLAGS",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":8,"time":1788439926.9169011}
+{"args":["CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":9,"time":1788439926.9169121}
+{"args":["CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":10,"time":1788439926.9169221}
+{"args":["CMAKE_INCLUDE_FLAG_C","-I"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":11,"time":1788439926.9169331}
+{"args":["CMAKE_LIBRARY_PATH_FLAG","-L"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":12,"time":1788439926.916945}
+{"args":["CMAKE_LIBRARY_PATH_TERMINATOR",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":13,"time":1788439926.916955}
+{"args":["CMAKE_LINK_LIBRARY_FLAG","-l"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":14,"time":1788439926.916966}
+{"args":["CMAKE_LINK_LIBRARY_SUFFIX",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":16,"time":1788439926.916976}
+{"args":["CMAKE_STATIC_LIBRARY_PREFIX","lib"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":17,"time":1788439926.9169869}
+{"args":["CMAKE_STATIC_LIBRARY_SUFFIX",".a"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":18,"time":1788439926.916997}
+{"args":["CMAKE_SHARED_LIBRARY_PREFIX","lib"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":19,"time":1788439926.9170079}
+{"args":["CMAKE_SHARED_LIBRARY_SUFFIX",".so"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":20,"time":1788439926.9170189}
+{"args":["CMAKE_EXECUTABLE_SUFFIX",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":21,"time":1788439926.9170289}
+{"args":["CMAKE_DL_LIBS","dl"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":22,"time":1788439926.9170401}
+{"args":["CMAKE_FIND_LIBRARY_PREFIXES","lib"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":24,"time":1788439926.9170511}
+{"args":["CMAKE_FIND_LIBRARY_SUFFIXES",".so",".a"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":25,"time":1788439926.917062}
+{"args":["CMAKE_AUTOGEN_ORIGIN_DEPENDS","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":27,"time":1788439926.917074}
+{"args":["CMAKE_AUTOMOC_COMPILER_PREDEFINES","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":28,"time":1788439926.9170849}
+{"args":["NOT","DEFINED","CMAKE_AUTOMOC_PATH_PREFIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":29,"time":1788439926.9170959}
+{"args":["CMAKE_AUTOMOC_PATH_PREFIX","OFF"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":30,"time":1788439926.9171121}
+{"args":["CMAKE_AUTOMOC_MACRO_NAMES","Q_OBJECT","Q_GADGET","Q_NAMESPACE","Q_NAMESPACE_EXPORT"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":32,"time":1788439926.917125}
+{"args":["GLOBAL","PROPERTY","TARGET_SUPPORTS_SHARED_LIBS","TRUE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":35,"time":1788439926.91714}
+{"args":["CMAKE_SKIP_RPATH","NO","CACHE","BOOL","If set, runtime paths are not added when using shared libraries."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":37,"time":1788439926.917156}
+{"args":["CMAKE_SKIP_INSTALL_RPATH","NO","CACHE","BOOL","If set, runtime paths are not added when installing shared libraries, but are added when building."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":39,"time":1788439926.9171751}
+{"args":["CMAKE_VERBOSE_MAKEFILE","FALSE","CACHE","BOOL","If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":42,"time":1788439926.917192}
+{"args":["CMAKE_GENERATOR","MATCHES","Make"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":44,"time":1788439926.917208}
+{"args":["CMAKE_COLOR_MAKEFILE","ON","CACHE","BOOL","Enable/Disable color output during build."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":45,"time":1788439926.9172261}
+{"args":["CMAKE_COLOR_MAKEFILE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":48,"time":1788439926.917239}
+{"args":["DEFINED","CMAKE_RULE_MESSAGES"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":49,"time":1788439926.9172511}
+{"args":["DEFINED","CMAKE_TARGET_MESSAGES"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":52,"time":1788439926.917264}
+{"args":["NOT","DEFINED","CMAKE_EXPORT_COMPILE_COMMANDS","AND","CMAKE_GENERATOR","MATCHES","Ninja|Unix Makefiles"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":57,"time":1788439926.9172809}
+{"args":["CMAKE_EXPORT_COMPILE_COMMANDS","","CACHE","BOOL","Enable/Disable output of compile commands during generation."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":58,"time":1788439926.917305}
+{"args":["CMAKE_EXPORT_COMPILE_COMMANDS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":61,"time":1788439926.9173269}
+{"args":["GetDefaultWindowsPrefixBase","var"],"cmd":"function","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":71,"time":1788439926.9173391}
+{"args":["NOT","DEFINED","CMAKE_INSTALL_PREFIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":163,"time":1788439926.9173551}
+{"args":["CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":164,"time":1788439926.9173679}
+{"args":["CMAKE_HOST_UNIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":168,"time":1788439926.9173779}
+{"args":["CMAKE_INSTALL_PREFIX","/usr/local","CACHE","PATH","Install path prefix, prepended onto install directories."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":169,"time":1788439926.9173911}
+{"args":["CMAKE_INSTALL_DEFAULT_COMPONENT_NAME","Unspecified"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":181,"time":1788439926.9174049}
+{"args":["CMAKE_SKIP_RPATH","CMAKE_SKIP_INSTALL_RPATH","CMAKE_VERBOSE_MAKEFILE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeGenericSystem.cmake","frame":3,"line":183,"time":1788439926.9174161}
+{"args":["CMAKE_SYSTEM_INFO_FILE","Platform/Linux"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":25,"time":1788439926.9174399}
+{"args":["Platform/Linux","OPTIONAL","RESULT_VARIABLE","_INCLUDED_SYSTEM_INFO_FILE"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":27,"time":1788439926.9174531}
+{"args":["CMAKE_DL_LIBS","dl"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":1,"time":1788439926.917558}
+{"args":["CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG","-Wl,-rpath,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":2,"time":1788439926.9175701}
+{"args":["CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP",":"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":3,"time":1788439926.9175811}
+{"args":["CMAKE_SHARED_LIBRARY_RPATH_ORIGIN_TOKEN","$ORIGIN"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":4,"time":1788439926.9175911}
+{"args":["CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG","-Wl,-rpath-link,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":5,"time":1788439926.9176021}
+{"args":["CMAKE_SHARED_LIBRARY_SONAME_C_FLAG","-Wl,-soname,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":6,"time":1788439926.917613}
+{"args":["CMAKE_EXE_EXPORTS_C_FLAG","-Wl,--export-dynamic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":7,"time":1788439926.917624}
+{"args":["CMAKE_PLATFORM_USES_PATH_WHEN_NO_SONAME","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":11,"time":1788439926.917634}
+{"args":["type","SHARED_LIBRARY","SHARED_MODULE","EXE"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":17,"time":1788439926.917645}
+{"args":["CMAKE_SHARED_LIBRARY_LINK_STATIC_C_FLAGS","-Wl,-Bstatic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":18,"time":1788439926.91766}
+{"args":["CMAKE_SHARED_LIBRARY_LINK_DYNAMIC_C_FLAGS","-Wl,-Bdynamic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":19,"time":1788439926.9176719}
+{"args":["CMAKE_SHARED_MODULE_LINK_STATIC_C_FLAGS","-Wl,-Bstatic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":18,"time":1788439926.9176841}
+{"args":["CMAKE_SHARED_MODULE_LINK_DYNAMIC_C_FLAGS","-Wl,-Bdynamic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":19,"time":1788439926.917695}
+{"args":["CMAKE_EXE_LINK_STATIC_C_FLAGS","-Wl,-Bstatic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":18,"time":1788439926.917706}
+{"args":["CMAKE_EXE_LINK_DYNAMIC_C_FLAGS","-Wl,-Bdynamic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":19,"time":1788439926.917717}
+{"args":["DEFINED","CMAKE_INSTALL_SO_NO_EXE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":30,"time":1788439926.9177279}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":2,"line":35,"time":1788439926.9177401}
+{"args":["EXISTS","/etc/debian_version"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":40,"time":1788439926.9177499}
+{"args":["CMAKE_INSTALL_SO_NO_EXE","1","CACHE","INTERNAL","Install .so files without execute permission."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":41,"time":1788439926.9177639}
+{"args":["CMAKE_LIBRARY_ARCHITECTURE_REGEX","[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":50,"time":1788439926.917779}
+{"args":["Platform/UnixPaths"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":52,"time":1788439926.9177899}
+{"args":["__UNIX_PATHS_INCLUDED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":10,"time":1788439926.9178951}
+{"args":["__UNIX_PATHS_INCLUDED","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":13,"time":1788439926.917907}
+{"args":["UNIX","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":15,"time":1788439926.917918}
+{"args":["_CMAKE_INSTALL_DIR","/usr/share/cmake-3.22","PATH"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":19,"time":1788439926.9179311}
+{"args":["_CMAKE_INSTALL_DIR","/usr/share","PATH"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":20,"time":1788439926.9179461}
+{"args":["APPEND","CMAKE_SYSTEM_PREFIX_PATH","/usr/local","/usr","/","/usr"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":28,"time":1788439926.9179599}
+{"args":["NOT","CMAKE_FIND_NO_INSTALL_PREFIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":35,"time":1788439926.9179759}
+{"args":["APPEND","CMAKE_SYSTEM_PREFIX_PATH","/usr/local"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":36,"time":1788439926.917989}
+{"args":["CMAKE_STAGING_PREFIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":40,"time":1788439926.9180019}
+{"args":["APPEND","CMAKE_SYSTEM_PREFIX_PATH","/usr/X11R6","/usr/pkg","/opt"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":49,"time":1788439926.918015}
+{"args":["APPEND","CMAKE_SYSTEM_INCLUDE_PATH","/usr/include/X11"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":56,"time":1788439926.9180281}
+{"args":["APPEND","CMAKE_SYSTEM_LIBRARY_PATH","/usr/lib/X11"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":61,"time":1788439926.91804}
+{"args":["APPEND","CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES","/lib","/lib32","/lib64","/usr/lib","/usr/lib32","/usr/lib64"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":66,"time":1788439926.9180541}
+{"args":["CMAKE_SYSROOT_COMPILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":70,"time":1788439926.9180689}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":3,"line":72,"time":1788439926.9180789}
+{"args":["_cmake_sysroot_compile",""],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":73,"time":1788439926.918128}
+{"args":["_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT","/usr/lib/gcc/x86_64-linux-gnu/11/include;/usr/local/include;/usr/include/x86_64-linux-gnu;/usr/include","/usr/include"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":78,"time":1788439926.918143}
+{"args":["_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT","","/usr/include"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":82,"time":1788439926.9181609}
+{"args":["_CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES_INIT","","/usr/include"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":86,"time":1788439926.9181759}
+{"args":["_cmake_sysroot_compile"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":91,"time":1788439926.9181881}
+{"args":["CMAKE_COMPILER_SYSROOT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":96,"time":1788439926.9181981}
+{"args":["GLOBAL","PROPERTY","FIND_LIBRARY_USE_LIB32_PATHS","TRUE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":105,"time":1788439926.918211}
+{"args":["GLOBAL","PROPERTY","FIND_LIBRARY_USE_LIB64_PATHS","TRUE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":106,"time":1788439926.918225}
+{"args":["GLOBAL","PROPERTY","FIND_LIBRARY_USE_LIBX32_PATHS","TRUE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/Platform/UnixPaths.cmake","frame":4,"line":107,"time":1788439926.918237}
+{"args":["NOT","CMAKE_CROSSCOMPILING","AND","EXISTS","/etc/debian_version"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":56,"time":1788439926.918257}
+{"args":["GLOBAL","PROPERTY","FIND_LIBRARY_USE_LIB32_PATHS","FALSE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":57,"time":1788439926.9182739}
+{"args":["GLOBAL","PROPERTY","FIND_LIBRARY_USE_LIB64_PATHS","FALSE"],"cmd":"set_property","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":58,"time":1788439926.9182899}
+{"args":["CMAKE_SYSTEM_PROCESSOR","STREQUAL","riscv64"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/Linux.cmake","frame":3,"line":68,"time":1788439926.9183021}
+{"args":["NOT","_INCLUDED_SYSTEM_INFO_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":29,"time":1788439926.9183221}
+{"args":["CMAKE_EXTRA_GENERATOR"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":43,"time":1788439926.918335}
+{"args":["NOT","CMAKE_MODULE_EXISTS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":53,"time":1788439926.9183459}
+{"args":["CMAKE_SHARED_MODULE_PREFIX","lib"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":54,"time":1788439926.918359}
+{"args":["CMAKE_SHARED_MODULE_SUFFIX",".so"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":55,"time":1788439926.918371}
+{"args":["CMAKE_SYSTEM_SPECIFIC_INFORMATION_LOADED","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake","frame":2,"line":59,"time":1788439926.9183829}
+{"args":["CMakeLanguageInformation"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":11,"time":1788439926.918586}
+{"args":["__cmake_include_compiler_wrapper","lang"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake","frame":3,"line":9,"time":1788439926.918649}
+{"args":["UNIX"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":15,"time":1788439926.918668}
+{"args":["CMAKE_C_OUTPUT_EXTENSION",".o"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":16,"time":1788439926.91868}
+{"args":["_INCLUDED_FILE","0"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":21,"time":1788439926.9186921}
+{"args":["CMAKE_C_COMPILER_ID"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":24,"time":1788439926.9187031}
+{"args":["Compiler/GNU-C","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":25,"time":1788439926.918715}
+{"args":["Compiler/GNU"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":1,"time":1788439926.918797}
+{"args":["__COMPILER_GNU"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":6,"time":1788439926.9189601}
+{"args":["__COMPILER_GNU","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":9,"time":1788439926.918972}
+{"args":["Compiler/CMakeCommonCompilerMacros"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":11,"time":1788439926.918983}
+{"args":["__COMPILER_CMAKE_COMMON_COMPILER_MACROS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":5,"time":1788439926.9192221}
+{"args":["__COMPILER_CMAKE_COMMON_COMPILER_MACROS","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":8,"time":1788439926.9192369}
+{"args":["__compiler_check_default_language_standard","lang","stdver1","std1"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":32,"time":1788439926.9192491}
+{"args":["cmake_record_c_compile_features"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":71,"time":1788439926.9192669}
+{"args":["cmake_record_cxx_compile_features"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":106,"time":1788439926.919286}
+{"args":["cmake_record_cuda_compile_features"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":143,"time":1788439926.919302}
+{"args":["cmake_record_hip_compile_features"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":5,"line":180,"time":1788439926.919318}
+{"args":["__pch_header_C","c-header"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":13,"time":1788439926.9193361}
+{"args":["__pch_header_CXX","c++-header"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":14,"time":1788439926.919347}
+{"args":["__pch_header_OBJC","objective-c-header"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":15,"time":1788439926.919359}
+{"args":["__pch_header_OBJCXX","objective-c++-header"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":16,"time":1788439926.9193709}
+{"args":["__compiler_gnu","lang"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":18,"time":1788439926.9193821}
+{"args":["C"],"cmd":"__compiler_gnu","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":2,"time":1788439926.919404}
+{"args":["CMAKE_C_VERBOSE_FLAG","-v"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":20,"time":1788439926.9194181}
+{"args":["CMAKE_C_COMPILE_OPTIONS_PIC","-fPIC"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":21,"time":1788439926.919431}
+{"args":["_CMAKE_C_PIE_MAY_BE_SUPPORTED_BY_LINKER","NO"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":22,"time":1788439926.9194429}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","3.4"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":23,"time":1788439926.919456}
+{"args":["CMAKE_C_COMPILE_OPTIONS_PIE","-fPIE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":24,"time":1788439926.919481}
+{"args":["_CMAKE_C_PIE_MAY_BE_SUPPORTED_BY_LINKER","YES"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":27,"time":1788439926.919493}
+{"args":["CMAKE_C_LINK_OPTIONS_PIE","-fPIE","-pie"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":28,"time":1788439926.9195049}
+{"args":["CMAKE_C_LINK_OPTIONS_NO_PIE","-no-pie"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":29,"time":1788439926.919517}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4.0"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":31,"time":1788439926.9195299}
+{"args":["CMAKE_C_COMPILE_OPTIONS_VISIBILITY","-fvisibility="],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":32,"time":1788439926.9195449}
+{"args":["CMAKE_SHARED_LIBRARY_C_FLAGS","-fPIC"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":34,"time":1788439926.9195571}
+{"args":["CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS","-shared"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":35,"time":1788439926.9195681}
+{"args":["CMAKE_C_COMPILE_OPTIONS_SYSROOT","--sysroot="],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":36,"time":1788439926.919579}
+{"args":["CMAKE_C_LINKER_WRAPPER_FLAG","-Wl,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":38,"time":1788439926.91959}
+{"args":["CMAKE_C_LINKER_WRAPPER_FLAG_SEP",","],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":39,"time":1788439926.919601}
+{"args":["_IN_TC","GLOBAL","PROPERTY","IN_TRY_COMPILE"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":45,"time":1788439926.9196129}
+{"args":["CMAKE_C_COMPILER_ID","STREQUAL","GNU","AND","_IN_TC","AND","NOT","CMAKE_FORCE_DEPFILES"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":46,"time":1788439926.919632}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":47,"time":1788439926.919651}
+{"args":["CMAKE_DEPFILE_FLAGS_C","-MD -MT <DEP_TARGET> -MF <DEP_FILE>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":51,"time":1788439926.919661}
+{"args":["APPEND","CMAKE_C_FLAGS_INIT"," "],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":55,"time":1788439926.9196739}
+{"args":["APPEND","CMAKE_C_FLAGS_DEBUG_INIT"," -g"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":56,"time":1788439926.919688}
+{"args":["APPEND","CMAKE_C_FLAGS_MINSIZEREL_INIT"," -Os -DNDEBUG"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":57,"time":1788439926.9197011}
+{"args":["APPEND","CMAKE_C_FLAGS_RELEASE_INIT"," -O3 -DNDEBUG"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":58,"time":1788439926.919713}
+{"args":["APPEND","CMAKE_C_FLAGS_RELWITHDEBINFO_INIT"," -O2 -g -DNDEBUG"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":59,"time":1788439926.9197249}
+{"args":["CMAKE_C_CREATE_PREPROCESSED_SOURCE","<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -E <SOURCE> > <PREPROCESSED_SOURCE>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":60,"time":1788439926.91974}
+{"args":["CMAKE_C_CREATE_ASSEMBLY_SOURCE","<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -S <SOURCE> -o <ASSEMBLY_SOURCE>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":61,"time":1788439926.9197531}
+{"args":["NOT","APPLE","OR","NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":62,"time":1788439926.9197681}
+{"args":["CMAKE_INCLUDE_SYSTEM_FLAG_C","-isystem "],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":63,"time":1788439926.919786}
+{"args":["_CMAKE_C_IPO_SUPPORTED_BY_CMAKE","YES"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":66,"time":1788439926.9197979}
+{"args":["_CMAKE_C_IPO_MAY_BE_SUPPORTED_BY_COMPILER","NO"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":67,"time":1788439926.9198091}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4.5"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":72,"time":1788439926.919822}
+{"args":["_CMAKE_C_IPO_MAY_BE_SUPPORTED_BY_COMPILER","YES"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":73,"time":1788439926.9198411}
+{"args":["__lto_flags","-flto"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":74,"time":1788439926.919852}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4.7"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":76,"time":1788439926.919863}
+{"args":["APPEND","__lto_flags","-fno-fat-lto-objects"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":80,"time":1788439926.9198771}
+{"args":["CMAKE_C_COMPILE_OPTIONS_IPO","-flto;-fno-fat-lto-objects"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":83,"time":1788439926.9198899}
+{"args":["CMAKE_C_ARCHIVE_CREATE_IPO","\"/usr/bin/gcc-ar-11\" cr <TARGET> <LINK_FLAGS> <OBJECTS>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":92,"time":1788439926.919904}
+{"args":["CMAKE_C_ARCHIVE_APPEND_IPO","\"/usr/bin/gcc-ar-11\" r <TARGET> <LINK_FLAGS> <OBJECTS>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":96,"time":1788439926.9199159}
+{"args":["CMAKE_C_ARCHIVE_FINISH_IPO","\"/usr/bin/gcc-ranlib-11\" <TARGET>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":100,"time":1788439926.919929}
+{"args":["CMAKE_C_COMPILER_PREDEFINES_COMMAND","/usr/bin/cc"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":105,"time":1788439926.9199431}
+{"args":["CMAKE_C_COMPILER_ARG1"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":106,"time":1788439926.9199541}
+{"args":["_COMPILER_ARGS","NATIVE_COMMAND","-m64"],"cmd":"separate_arguments","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":107,"time":1788439926.9199679}
+{"args":["APPEND","CMAKE_C_COMPILER_PREDEFINES_COMMAND","-m64"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":108,"time":1788439926.919986}
+{"args":["_COMPILER_ARGS"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":109,"time":1788439926.9199989}
+{"args":["APPEND","CMAKE_C_COMPILER_PREDEFINES_COMMAND","-dM","-E","-c","/usr/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":111,"time":1788439926.9200139}
+{"args":["NOT","xC","STREQUAL","xFortran"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":113,"time":1788439926.9200311}
+{"args":["CMAKE_PCH_EXTENSION",".gch"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":114,"time":1788439926.920048}
+{"args":["NOT","CMAKE_GENERATOR","MATCHES","Xcode"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":115,"time":1788439926.9200599}
+{"args":["CMAKE_PCH_PROLOGUE","#pragma GCC system_header"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":116,"time":1788439926.9200759}
+{"args":["CMAKE_C_COMPILE_OPTIONS_INVALID_PCH","-Winvalid-pch"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":118,"time":1788439926.9200881}
+{"args":["CMAKE_C_COMPILE_OPTIONS_USE_PCH","-include","<PCH_HEADER>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":119,"time":1788439926.9201081}
+{"args":["CMAKE_C_COMPILE_OPTIONS_CREATE_PCH","-x","c-header","-include","<PCH_HEADER>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU.cmake","frame":4,"line":120,"time":1788439926.920121}
+{"args":["(","NOT","DEFINED","CMAKE_DEPENDS_USE_COMPILER","OR","CMAKE_DEPENDS_USE_COMPILER",")","AND","CMAKE_GENERATOR","MATCHES","Makefiles|WMake","AND","CMAKE_DEPFILE_FLAGS_C"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":5,"time":1788439926.9201419}
+{"args":["CMAKE_C_DEPFILE_FORMAT","gcc"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":9,"time":1788439926.9201729}
+{"args":["CMAKE_C_DEPENDS_USE_COMPILER","TRUE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":10,"time":1788439926.9201839}
+{"args":["CMAKE_C_COMPILE_OPTIONS_EXPLICIT_LANGUAGE","-x","c"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":13,"time":1788439926.920197}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4.5"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":15,"time":1788439926.9202089}
+{"args":["CMAKE_C90_STANDARD_COMPILE_OPTION","-std=c90"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":16,"time":1788439926.920224}
+{"args":["CMAKE_C90_EXTENSION_COMPILE_OPTION","-std=gnu90"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":17,"time":1788439926.9202349}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","3.4"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":23,"time":1788439926.9202471}
+{"args":["CMAKE_C90_STANDARD__HAS_FULL_SUPPORT","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":24,"time":1788439926.9202609}
+{"args":["CMAKE_C99_STANDARD_COMPILE_OPTION","-std=c99"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":25,"time":1788439926.920274}
+{"args":["CMAKE_C99_EXTENSION_COMPILE_OPTION","-std=gnu99"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":26,"time":1788439926.9202881}
+{"args":["CMAKE_C99_STANDARD__HAS_FULL_SUPPORT","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":27,"time":1788439926.9202991}
+{"args":["NOT","CMAKE_C_COMPILER_VERSION","VERSION_LESS","4.7"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":30,"time":1788439926.9203091}
+{"args":["CMAKE_C11_STANDARD_COMPILE_OPTION","-std=c11"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":31,"time":1788439926.9203219}
+{"args":["CMAKE_C11_EXTENSION_COMPILE_OPTION","-std=gnu11"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":32,"time":1788439926.920332}
+{"args":["CMAKE_C11_STANDARD__HAS_FULL_SUPPORT","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":33,"time":1788439926.920342}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","8.1"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":39,"time":1788439926.9203529}
+{"args":["CMAKE_C17_STANDARD_COMPILE_OPTION","-std=c17"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":40,"time":1788439926.9203651}
+{"args":["CMAKE_C17_EXTENSION_COMPILE_OPTION","-std=gnu17"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":41,"time":1788439926.9203751}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","9.1"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":44,"time":1788439926.9203849}
+{"args":["CMAKE_C23_STANDARD_COMPILE_OPTION","-std=c2x"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":45,"time":1788439926.920397}
+{"args":["CMAKE_C23_EXTENSION_COMPILE_OPTION","-std=gnu2x"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":46,"time":1788439926.9204071}
+{"args":["C","3.4","90","5.0","11","8.1","17"],"cmd":"__compiler_check_default_language_standard","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":49,"time":1788439926.9204209}
+{"args":["__std_ver_pairs","3.4;90;5.0;11;8.1;17"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":33,"time":1788439926.9204381}
+{"args":["REGEX","REPLACE"," *; *"," ","__std_ver_pairs","3.4;90;5.0;11;8.1;17"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":34,"time":1788439926.9204531}
+{"args":["REGEX","MATCHALL","[^ ]+ [^ ]+","__std_ver_pairs","3.4 90 5.0 11 8.1 17"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":35,"time":1788439926.9204791}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","3.4"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":39,"time":1788439926.9204979}
+{"args":["NOT","CMAKE_C_COMPILER_FORCED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":40,"time":1788439926.9205239}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/Compiler/GNU-C.cmake","frame":3,"line":46,"time":1788439926.9205379}
+{"args":["REVERSE","__std_ver_pairs"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":47,"time":1788439926.920547}
+{"args":["__std_ver_pair","IN","LISTS","__std_ver_pairs"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":48,"time":1788439926.920562}
+{"args":["REGEX","MATCH","([^ ]+) (.+)","__std_ver_pair","8.1 17"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":49,"time":1788439926.920578}
+{"args":["__stdver","8.1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":50,"time":1788439926.920594}
+{"args":["__std","17"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":51,"time":1788439926.9206049}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","__stdver"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":53,"time":1788439926.9206159}
+{"args":["NOT","DEFINED","CMAKE_C_EXTENSIONS_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":54,"time":1788439926.92063}
+{"args":["CMAKE_C_EXTENSIONS_DEFAULT","ON"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":56,"time":1788439926.9206431}
+{"args":["NOT","DEFINED","CMAKE_C_STANDARD_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":58,"time":1788439926.9206541}
+{"args":["CMAKE_C_STANDARD_DEFAULT","17"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":59,"time":1788439926.920666}
+{"args":["__std"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":62,"time":1788439926.9206769}
+{"args":["__stdver"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":63,"time":1788439926.920686}
+{"args":["REGEX","MATCH","([^ ]+) (.+)","__std_ver_pair","5.0 11"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":49,"time":1788439926.9206979}
+{"args":["__stdver","5.0"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":50,"time":1788439926.920712}
+{"args":["__std","11"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":51,"time":1788439926.9207289}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","__stdver"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":53,"time":1788439926.9207389}
+{"args":["NOT","DEFINED","CMAKE_C_EXTENSIONS_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":54,"time":1788439926.9207511}
+{"args":["NOT","DEFINED","CMAKE_C_STANDARD_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":58,"time":1788439926.920763}
+{"args":["__std"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":62,"time":1788439926.920774}
+{"args":["__stdver"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":63,"time":1788439926.920783}
+{"args":["REGEX","MATCH","([^ ]+) (.+)","__std_ver_pair","3.4 90"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":49,"time":1788439926.9207931}
+{"args":["__stdver","3.4"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":50,"time":1788439926.9208059}
+{"args":["__std","90"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":51,"time":1788439926.9208169}
+{"args":["CMAKE_C_COMPILER_VERSION","VERSION_GREATER_EQUAL","__stdver"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":53,"time":1788439926.9208269}
+{"args":["NOT","DEFINED","CMAKE_C_EXTENSIONS_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":54,"time":1788439926.9208381}
+{"args":["NOT","DEFINED","CMAKE_C_STANDARD_DEFAULT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":58,"time":1788439926.9208491}
+{"args":["__std"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":62,"time":1788439926.9208601}
+{"args":["__stdver"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":63,"time":1788439926.9208691}
+{"args":["__std_ver_pairs"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake","frame":4,"line":67,"time":1788439926.920881}
+{"args":["CMAKE_BASE_NAME"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":28,"time":1788439926.920898}
+{"args":["CMAKE_BASE_NAME","/usr/bin/cc","NAME_WE"],"cmd":"get_filename_component","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":29,"time":1788439926.9209089}
+{"args":["CMAKE_COMPILER_IS_GNUCC"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":30,"time":1788439926.9209211}
+{"args":["CMAKE_BASE_NAME","gcc"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":31,"time":1788439926.9209311}
+{"args":["CMAKE_SYSTEM_PROCESSOR"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":36,"time":1788439926.9209421}
+{"args":["CMAKE_C_COMPILER_ID"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":37,"time":1788439926.9209521}
+{"args":["Platform/Linux-GNU-C-x86_64","OPTIONAL","RESULT_VARIABLE","_INCLUDED_FILE"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":38,"time":1788439926.920965}
+{"args":["NOT","_INCLUDED_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":40,"time":1788439926.9209869}
+{"args":["Platform/Linux-gcc-x86_64","OPTIONAL"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":41,"time":1788439926.921}
+{"args":["CMAKE_C_COMPILER_ID"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":47,"time":1788439926.9210169}
+{"args":["Platform/Linux-GNU-C","OPTIONAL","RESULT_VARIABLE","_INCLUDED_FILE"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":48,"time":1788439926.9210291}
+{"args":["Platform/Linux-GNU"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake","frame":3,"line":1,"time":1788439926.921082}
+{"args":["__LINUX_COMPILER_GNU"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake","frame":4,"line":6,"time":1788439926.921124}
+{"args":["__LINUX_COMPILER_GNU","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake","frame":4,"line":9,"time":1788439926.9211359}
+{"args":["__linux_compiler_gnu","lang"],"cmd":"macro","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake","frame":4,"line":11,"time":1788439926.92116}
+{"args":["C"],"cmd":"__linux_compiler_gnu","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake","frame":3,"line":2,"time":1788439926.9211791}
+{"args":["CMAKE_SHARED_LIBRARY_LINK_C_FLAGS","-rdynamic"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake","frame":4,"line":14,"time":1788439926.921191}
+{"args":["NOT","_INCLUDED_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":51,"time":1788439926.921206}
+{"args":["CMAKE_C_COMPILER_WRAPPER"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":57,"time":1788439926.921217}
+{"args":["NOT","_INCLUDED_FILE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":65,"time":1788439926.921227}
+{"args":["CMAKE_C_SIZEOF_DATA_PTR"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":69,"time":1788439926.921237}
+{"args":["f",""],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":70,"time":1788439926.921248}
+{"args":["CMAKE_C_ABI_FILES"],"cmd":"unset","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":73,"time":1788439926.9212601}
+{"args":["CMAKE_USER_MAKE_RULES_OVERRIDE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":82,"time":1788439926.9212689}
+{"args":["CMAKE_USER_MAKE_RULES_OVERRIDE_C"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":88,"time":1788439926.921283}
+{"args":["CMAKE_EXECUTABLE_FORMAT","STREQUAL","ELF"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":94,"time":1788439926.921294}
+{"args":["NOT","CMAKE_MODULE_EXISTS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":106,"time":1788439926.9213071}
+{"args":["CMAKE_SHARED_MODULE_C_FLAGS","-fPIC"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":107,"time":1788439926.921319}
+{"args":["CMAKE_SHARED_MODULE_CREATE_C_FLAGS","-shared"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":108,"time":1788439926.9213309}
+{"args":["CMAKE_C_FLAGS_INIT","  "],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":111,"time":1788439926.9213431}
+{"args":["CMAKE_C_FLAGS","Flags used by the C compiler"],"cmd":"cmake_initialize_per_config_variable","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":113,"time":1788439926.921356}
+{"args":["STRIP","  ","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":9,"time":1788439926.921375}
+{"args":["CMAKE_C_FLAGS","","CACHE","STRING","Flags used by the C compiler during all build types."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":10,"time":1788439926.921391}
+{"args":["CMAKE_C_FLAGS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":12,"time":1788439926.9214139}
+{"args":["NOT","CMAKE_NOT_USING_CONFIG_FLAGS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":14,"time":1788439926.9214251}
+{"args":["_CONFIGS","Debug","Release","MinSizeRel","RelWithDebInfo"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":15,"time":1788439926.921438}
+{"args":["_GENERATOR_IS_MULTI_CONFIG","GLOBAL","PROPERTY","GENERATOR_IS_MULTI_CONFIG"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":17,"time":1788439926.9214511}
+{"args":["_GENERATOR_IS_MULTI_CONFIG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":18,"time":1788439926.9214661}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":20,"time":1788439926.9214759}
+{"args":["NOT","CMAKE_NO_BUILD_TYPE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":21,"time":1788439926.9214849}
+{"args":["CMAKE_BUILD_TYPE","","CACHE","STRING","Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":22,"time":1788439926.921499}
+{"args":["APPEND","_CONFIGS",""],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":25,"time":1788439926.9215159}
+{"args":["REMOVE_DUPLICATES","_CONFIGS"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":28,"time":1788439926.9215269}
+{"args":["_BUILD_TYPE","IN","LISTS","_CONFIGS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":29,"time":1788439926.9215419}
+{"args":["NOT","Debug","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":30,"time":1788439926.921556}
+{"args":["TOUPPER","Debug","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":31,"time":1788439926.9215701}
+{"args":["STRIP"," -g","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":32,"time":1788439926.9215829}
+{"args":["CMAKE_C_FLAGS_DEBUG","-g","CACHE","STRING","Flags used by the C compiler during DEBUG builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":33,"time":1788439926.921597}
+{"args":["CMAKE_C_FLAGS_DEBUG"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":35,"time":1788439926.921613}
+{"args":["NOT","Release","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":30,"time":1788439926.921627}
+{"args":["TOUPPER","Release","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":31,"time":1788439926.9216399}
+{"args":["STRIP"," -O3 -DNDEBUG","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":32,"time":1788439926.9216509}
+{"args":["CMAKE_C_FLAGS_RELEASE","-O3 -DNDEBUG","CACHE","STRING","Flags used by the C compiler during RELEASE builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":33,"time":1788439926.921665}
+{"args":["CMAKE_C_FLAGS_RELEASE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":35,"time":1788439926.92168}
+{"args":["NOT","MinSizeRel","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":30,"time":1788439926.9216931}
+{"args":["TOUPPER","MinSizeRel","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":31,"time":1788439926.921705}
+{"args":["STRIP"," -Os -DNDEBUG","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":32,"time":1788439926.921716}
+{"args":["CMAKE_C_FLAGS_MINSIZEREL","-Os -DNDEBUG","CACHE","STRING","Flags used by the C compiler during MINSIZEREL builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":33,"time":1788439926.9217291}
+{"args":["CMAKE_C_FLAGS_MINSIZEREL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":35,"time":1788439926.9217429}
+{"args":["NOT","RelWithDebInfo","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":30,"time":1788439926.9217539}
+{"args":["TOUPPER","RelWithDebInfo","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":31,"time":1788439926.921767}
+{"args":["STRIP"," -O2 -g -DNDEBUG","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":32,"time":1788439926.921778}
+{"args":["CMAKE_C_FLAGS_RELWITHDEBINFO","-O2 -g -DNDEBUG","CACHE","STRING","Flags used by the C compiler during RELWITHDEBINFO builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":33,"time":1788439926.9217911}
+{"args":["CMAKE_C_FLAGS_RELWITHDEBINFO"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":3,"line":35,"time":1788439926.9218049}
+{"args":["CMAKE_C_STANDARD_LIBRARIES_INIT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":115,"time":1788439926.921819}
+{"args":["NOT","CMAKE_C_COMPILER_LAUNCHER","AND","DEFINED","ENV{CMAKE_C_COMPILER_LAUNCHER}"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":121,"time":1788439926.9218321}
+{"args":["NOT","CMAKE_C_LINKER_LAUNCHER","AND","DEFINED","ENV{CMAKE_C_LINKER_LAUNCHER}"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":126,"time":1788439926.9218481}
+{"args":["CMakeCommonLanguageInclude"],"cmd":"include","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":131,"time":1788439926.9218609}
+{"args":["APPEND","CMAKE_EXE_LINKER_FLAGS_INIT"," "],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":9,"time":1788439926.921922}
+{"args":["APPEND","CMAKE_SHARED_LINKER_FLAGS_INIT"," "],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":10,"time":1788439926.921936}
+{"args":["APPEND","CMAKE_MODULE_LINKER_FLAGS_INIT"," "],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":11,"time":1788439926.921948}
+{"args":["CMAKE_EXE_LINKER_FLAGS","Flags used by the linker"],"cmd":"cmake_initialize_per_config_variable","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":13,"time":1788439926.9219611}
+{"args":["STRIP"," ","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":9,"time":1788439926.9219799}
+{"args":["CMAKE_EXE_LINKER_FLAGS","","CACHE","STRING","Flags used by the linker during all build types."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":10,"time":1788439926.921994}
+{"args":["CMAKE_EXE_LINKER_FLAGS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":12,"time":1788439926.922008}
+{"args":["NOT","CMAKE_NOT_USING_CONFIG_FLAGS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":14,"time":1788439926.922019}
+{"args":["_CONFIGS","Debug","Release","MinSizeRel","RelWithDebInfo"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":15,"time":1788439926.9220321}
+{"args":["_GENERATOR_IS_MULTI_CONFIG","GLOBAL","PROPERTY","GENERATOR_IS_MULTI_CONFIG"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":17,"time":1788439926.9220519}
+{"args":["_GENERATOR_IS_MULTI_CONFIG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":18,"time":1788439926.922066}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":20,"time":1788439926.922076}
+{"args":["NOT","CMAKE_NO_BUILD_TYPE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":21,"time":1788439926.922086}
+{"args":["CMAKE_BUILD_TYPE","","CACHE","STRING","Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":22,"time":1788439926.9221001}
+{"args":["APPEND","_CONFIGS",""],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":25,"time":1788439926.9221151}
+{"args":["REMOVE_DUPLICATES","_CONFIGS"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":28,"time":1788439926.922127}
+{"args":["_BUILD_TYPE","IN","LISTS","_CONFIGS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":29,"time":1788439926.9221399}
+{"args":["NOT","Debug","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9221539}
+{"args":["TOUPPER","Debug","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9221671}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9221799}
+{"args":["CMAKE_EXE_LINKER_FLAGS_DEBUG","","CACHE","STRING","Flags used by the linker during DEBUG builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.922194}
+{"args":["CMAKE_EXE_LINKER_FLAGS_DEBUG"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9222081}
+{"args":["NOT","Release","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9222209}
+{"args":["TOUPPER","Release","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9222331}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9222441}
+{"args":["CMAKE_EXE_LINKER_FLAGS_RELEASE","","CACHE","STRING","Flags used by the linker during RELEASE builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9222569}
+{"args":["CMAKE_EXE_LINKER_FLAGS_RELEASE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9222701}
+{"args":["NOT","MinSizeRel","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9222851}
+{"args":["TOUPPER","MinSizeRel","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.922297}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9223089}
+{"args":["CMAKE_EXE_LINKER_FLAGS_MINSIZEREL","","CACHE","STRING","Flags used by the linker during MINSIZEREL builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.922322}
+{"args":["CMAKE_EXE_LINKER_FLAGS_MINSIZEREL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9223361}
+{"args":["NOT","RelWithDebInfo","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9223471}
+{"args":["TOUPPER","RelWithDebInfo","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.922359}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9223709}
+{"args":["CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO","","CACHE","STRING","Flags used by the linker during RELWITHDEBINFO builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9223831}
+{"args":["CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9223959}
+{"args":["CMAKE_SHARED_LINKER_FLAGS","Flags used by the linker during the creation of shared libraries"],"cmd":"cmake_initialize_per_config_variable","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":14,"time":1788439926.9224119}
+{"args":["STRIP"," ","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":9,"time":1788439926.9224291}
+{"args":["CMAKE_SHARED_LINKER_FLAGS","","CACHE","STRING","Flags used by the linker during the creation of shared libraries during all build types."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":10,"time":1788439926.922442}
+{"args":["CMAKE_SHARED_LINKER_FLAGS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":12,"time":1788439926.922456}
+{"args":["NOT","CMAKE_NOT_USING_CONFIG_FLAGS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":14,"time":1788439926.922467}
+{"args":["_CONFIGS","Debug","Release","MinSizeRel","RelWithDebInfo"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":15,"time":1788439926.9224801}
+{"args":["_GENERATOR_IS_MULTI_CONFIG","GLOBAL","PROPERTY","GENERATOR_IS_MULTI_CONFIG"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":17,"time":1788439926.922492}
+{"args":["_GENERATOR_IS_MULTI_CONFIG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":18,"time":1788439926.9225039}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":20,"time":1788439926.922514}
+{"args":["NOT","CMAKE_NO_BUILD_TYPE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":21,"time":1788439926.922523}
+{"args":["CMAKE_BUILD_TYPE","","CACHE","STRING","Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":22,"time":1788439926.9225359}
+{"args":["APPEND","_CONFIGS",""],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":25,"time":1788439926.92255}
+{"args":["REMOVE_DUPLICATES","_CONFIGS"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":28,"time":1788439926.9225609}
+{"args":["_BUILD_TYPE","IN","LISTS","_CONFIGS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":29,"time":1788439926.9225731}
+{"args":["NOT","Debug","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.922586}
+{"args":["TOUPPER","Debug","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9225979}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.922617}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_DEBUG","","CACHE","STRING","Flags used by the linker during the creation of shared libraries during DEBUG builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9226301}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_DEBUG"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9226439}
+{"args":["NOT","Release","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9226561}
+{"args":["TOUPPER","Release","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.922668}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9226789}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_RELEASE","","CACHE","STRING","Flags used by the linker during the creation of shared libraries during RELEASE builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9226911}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_RELEASE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.922704}
+{"args":["NOT","MinSizeRel","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9227149}
+{"args":["TOUPPER","MinSizeRel","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9227271}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9227381}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL","","CACHE","STRING","Flags used by the linker during the creation of shared libraries during MINSIZEREL builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.92275}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.922766}
+{"args":["NOT","RelWithDebInfo","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9227769}
+{"args":["TOUPPER","RelWithDebInfo","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9227891}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9228001}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO","","CACHE","STRING","Flags used by the linker during the creation of shared libraries during RELWITHDEBINFO builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.922812}
+{"args":["CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9228251}
+{"args":["CMAKE_MODULE_LINKER_FLAGS","Flags used by the linker during the creation of modules"],"cmd":"cmake_initialize_per_config_variable","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":15,"time":1788439926.9228389}
+{"args":["STRIP"," ","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":9,"time":1788439926.9228549}
+{"args":["CMAKE_MODULE_LINKER_FLAGS","","CACHE","STRING","Flags used by the linker during the creation of modules during all build types."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":10,"time":1788439926.922868}
+{"args":["CMAKE_MODULE_LINKER_FLAGS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":12,"time":1788439926.9228809}
+{"args":["NOT","CMAKE_NOT_USING_CONFIG_FLAGS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":14,"time":1788439926.9228921}
+{"args":["_CONFIGS","Debug","Release","MinSizeRel","RelWithDebInfo"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":15,"time":1788439926.922904}
+{"args":["_GENERATOR_IS_MULTI_CONFIG","GLOBAL","PROPERTY","GENERATOR_IS_MULTI_CONFIG"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":17,"time":1788439926.9229169}
+{"args":["_GENERATOR_IS_MULTI_CONFIG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":18,"time":1788439926.922929}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":20,"time":1788439926.9229391}
+{"args":["NOT","CMAKE_NO_BUILD_TYPE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":21,"time":1788439926.9229479}
+{"args":["CMAKE_BUILD_TYPE","","CACHE","STRING","Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":22,"time":1788439926.922961}
+{"args":["APPEND","_CONFIGS",""],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":25,"time":1788439926.9229741}
+{"args":["REMOVE_DUPLICATES","_CONFIGS"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":28,"time":1788439926.9229851}
+{"args":["_BUILD_TYPE","IN","LISTS","_CONFIGS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":29,"time":1788439926.922997}
+{"args":["NOT","Debug","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9230089}
+{"args":["TOUPPER","Debug","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9230211}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.923033}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_DEBUG","","CACHE","STRING","Flags used by the linker during the creation of modules during DEBUG builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9230449}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_DEBUG"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.923059}
+{"args":["NOT","Release","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9230709}
+{"args":["TOUPPER","Release","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9230831}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.923094}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_RELEASE","","CACHE","STRING","Flags used by the linker during the creation of modules during RELEASE builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9231069}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_RELEASE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.92312}
+{"args":["NOT","MinSizeRel","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.923131}
+{"args":["TOUPPER","MinSizeRel","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.923147}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9231589}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL","","CACHE","STRING","Flags used by the linker during the creation of modules during MINSIZEREL builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.923171}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9231851}
+{"args":["NOT","RelWithDebInfo","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9231961}
+{"args":["TOUPPER","RelWithDebInfo","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.923208}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.923219}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO","","CACHE","STRING","Flags used by the linker during the creation of modules during RELWITHDEBINFO builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9232309}
+{"args":["CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.923244}
+{"args":["CMAKE_STATIC_LINKER_FLAGS","Flags used by the linker during the creation of static libraries"],"cmd":"cmake_initialize_per_config_variable","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":16,"time":1788439926.9232571}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":9,"time":1788439926.923274}
+{"args":["CMAKE_STATIC_LINKER_FLAGS","","CACHE","STRING","Flags used by the linker during the creation of static libraries during all build types."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":10,"time":1788439926.92329}
+{"args":["CMAKE_STATIC_LINKER_FLAGS"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":12,"time":1788439926.9233029}
+{"args":["NOT","CMAKE_NOT_USING_CONFIG_FLAGS"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":14,"time":1788439926.9233129}
+{"args":["_CONFIGS","Debug","Release","MinSizeRel","RelWithDebInfo"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":15,"time":1788439926.923326}
+{"args":["_GENERATOR_IS_MULTI_CONFIG","GLOBAL","PROPERTY","GENERATOR_IS_MULTI_CONFIG"],"cmd":"get_property","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":17,"time":1788439926.923337}
+{"args":["_GENERATOR_IS_MULTI_CONFIG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":18,"time":1788439926.9233489}
+{"args":[],"cmd":"else","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":20,"time":1788439926.9233589}
+{"args":["NOT","CMAKE_NO_BUILD_TYPE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":21,"time":1788439926.923367}
+{"args":["CMAKE_BUILD_TYPE","","CACHE","STRING","Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel ..."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":22,"time":1788439926.9233799}
+{"args":["APPEND","_CONFIGS",""],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":25,"time":1788439926.923393}
+{"args":["REMOVE_DUPLICATES","_CONFIGS"],"cmd":"list","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":28,"time":1788439926.923403}
+{"args":["_BUILD_TYPE","IN","LISTS","_CONFIGS"],"cmd":"foreach","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":29,"time":1788439926.9234149}
+{"args":["NOT","Debug","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9234271}
+{"args":["TOUPPER","Debug","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.923439}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.92345}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_DEBUG","","CACHE","STRING","Flags used by the linker during the creation of static libraries during DEBUG builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9234631}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_DEBUG"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.923476}
+{"args":["NOT","Release","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9234879}
+{"args":["TOUPPER","Release","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9234991}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9235101}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_RELEASE","","CACHE","STRING","Flags used by the linker during the creation of static libraries during RELEASE builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.923522}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_RELEASE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9235351}
+{"args":["NOT","MinSizeRel","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9235461}
+{"args":["TOUPPER","MinSizeRel","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.923558}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.923569}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL","","CACHE","STRING","Flags used by the linker during the creation of static libraries during MINSIZEREL builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.9235809}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_MINSIZEREL"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.923594}
+{"args":["NOT","RelWithDebInfo","STREQUAL",""],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":30,"time":1788439926.9236059}
+{"args":["TOUPPER","RelWithDebInfo","_BUILD_TYPE"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":31,"time":1788439926.9236169}
+{"args":["STRIP","","_INIT"],"cmd":"string","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":32,"time":1788439926.9236281}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO","","CACHE","STRING","Flags used by the linker during the creation of static libraries during RELWITHDEBINFO builds."],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":33,"time":1788439926.92364}
+{"args":["CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake","frame":4,"line":35,"time":1788439926.9236591}
+{"args":["CMAKE_BUILD_TOOL","/usr/bin/gmake"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":19,"time":1788439926.9236729}
+{"args":["CMAKE_VERBOSE_MAKEFILE"],"cmd":"mark_as_advanced","file":"/usr/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake","frame":3,"line":21,"time":1788439926.9236839}
+{"args":["NOT","CMAKE_C_CREATE_SHARED_LIBRARY"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":161,"time":1788439926.9236989}
+{"args":["CMAKE_C_CREATE_SHARED_LIBRARY","<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":162,"time":1788439926.9237111}
+{"args":["NOT","CMAKE_C_CREATE_SHARED_MODULE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":167,"time":1788439926.923723}
+{"args":["CMAKE_C_CREATE_SHARED_MODULE","<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <SONAME_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> <LINK_LIBRARIES>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":168,"time":1788439926.9237349}
+{"args":["NOT","DEFINED","CMAKE_C_ARCHIVE_CREATE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":173,"time":1788439926.9237471}
+{"args":["CMAKE_C_ARCHIVE_CREATE","<CMAKE_AR> qc <TARGET> <LINK_FLAGS> <OBJECTS>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":174,"time":1788439926.9237599}
+{"args":["NOT","DEFINED","CMAKE_C_ARCHIVE_APPEND"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":176,"time":1788439926.9237709}
+{"args":["CMAKE_C_ARCHIVE_APPEND","<CMAKE_AR> q <TARGET> <LINK_FLAGS> <OBJECTS>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":177,"time":1788439926.9237821}
+{"args":["NOT","DEFINED","CMAKE_C_ARCHIVE_FINISH"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":179,"time":1788439926.9237931}
+{"args":["CMAKE_C_ARCHIVE_FINISH","<CMAKE_RANLIB> <TARGET>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":180,"time":1788439926.923804}
+{"args":["NOT","CMAKE_C_COMPILE_OBJECT"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":184,"time":1788439926.9238141}
+{"args":["CMAKE_C_COMPILE_OBJECT","<CMAKE_C_COMPILER> <DEFINES> <INCLUDES> <FLAGS> -o <OBJECT> -c <SOURCE>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":185,"time":1788439926.923826}
+{"args":["NOT","CMAKE_C_LINK_EXECUTABLE"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":189,"time":1788439926.923836}
+{"args":["CMAKE_C_LINK_EXECUTABLE","<CMAKE_C_COMPILER> <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":190,"time":1788439926.923847}
+{"args":["NOT","CMAKE_EXECUTABLE_RUNTIME_C_FLAG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":194,"time":1788439926.9238579}
+{"args":["CMAKE_EXECUTABLE_RUNTIME_C_FLAG","-Wl,-rpath,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":195,"time":1788439926.9238689}
+{"args":["NOT","CMAKE_EXECUTABLE_RUNTIME_C_FLAG_SEP"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":198,"time":1788439926.9238811}
+{"args":["CMAKE_EXECUTABLE_RUNTIME_C_FLAG_SEP",":"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":199,"time":1788439926.923893}
+{"args":["NOT","CMAKE_EXECUTABLE_RPATH_LINK_C_FLAG"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":202,"time":1788439926.9239039}
+{"args":["CMAKE_EXECUTABLE_RPATH_LINK_C_FLAG","-Wl,-rpath-link,"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":203,"time":1788439926.9239161}
+{"args":["CMAKE_C_INFORMATION_LOADED","1"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake","frame":2,"line":206,"time":1788439926.9239271}
+{"args":["CMAKE_C_COMPILER_FORCED"],"cmd":"if","file":"/usr/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake","frame":2,"line":5,"time":1788439926.9240839}
+{"args":["CMAKE_C_COMPILER_WORKS","TRUE"],"cmd":"set","file":"/usr/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake","frame":2,"line":8,"time":1788439926.9240971}
+{"args":[],"cmd":"return","file":"/usr/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake","frame":2,"line":9,"time":1788439926.924109}
+{"args":["VERSION","3.22.1"],"cmd":"cmake_minimum_required","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":4,"time":1788439926.9241509}
+{"args":["TMP_PATHS_LIST"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":6,"time":1788439926.924171}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":7,"time":1788439926.9241819}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":8,"time":1788439926.9241941}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":9,"time":1788439926.9242051}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":10,"time":1788439926.924216}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":11,"time":1788439926.924227}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":12,"time":1788439926.924237}
+{"args":["APPEND","TMP_PATHS_LIST","/usr/local;/usr;/;/usr;/usr/local;/usr/X11R6;/usr/pkg;/opt"],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":13,"time":1788439926.924248}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":14,"time":1788439926.924263}
+{"args":["APPEND","TMP_PATHS_LIST",""],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":15,"time":1788439926.924274}
+{"args":["LIB_ARCH_LIST"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":17,"time":1788439926.9242859}
+{"args":["CMAKE_LIBRARY_ARCHITECTURE_REGEX"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":18,"time":1788439926.9242959}
+{"args":["GLOB","implicit_dirs","RELATIVE","/lib","/lib/*-linux-gnu*"],"cmd":"file","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":19,"time":1788439926.9243109}
+{"args":["dir","x86_64-linux-gnu"],"cmd":"foreach","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":20,"time":1788439926.9244599}
+{"args":["x86_64-linux-gnu","MATCHES","[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*"],"cmd":"if","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":21,"time":1788439926.9244759}
+{"args":["APPEND","LIB_ARCH_LIST","x86_64-linux-gnu"],"cmd":"list","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":22,"time":1788439926.924499}
+{"args":["MESON_ARCH_LIST","x86_64-linux-gnu"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":28,"time":1788439926.9245219}
+{"args":["MESON_PATHS_LIST","/usr/local;/usr;/;/usr;/usr/local;/usr/X11R6;/usr/pkg;/opt"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":29,"time":1788439926.9245341}
+{"args":["MESON_CMAKE_ROOT","/usr/share/cmake-3.22"],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":30,"time":1788439926.9245479}
+{"args":["MESON_CMAKE_SYSROOT",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":31,"time":1788439926.924561}
+{"args":["MESON_FIND_ROOT_PATH",""],"cmd":"set","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":32,"time":1788439926.9245729}
+{"args":["STATUS","/usr/local;/usr;/;/usr;/usr/local;/usr/X11R6;/usr/pkg;/opt"],"cmd":"message","file":"/root/qosmo-dsp/build/meson-private/cmake_SDL2/CMakeLists.txt","frame":1,"line":34,"time":1788439926.9245851}

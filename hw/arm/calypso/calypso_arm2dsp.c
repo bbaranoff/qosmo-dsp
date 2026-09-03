@@ -32,7 +32,6 @@
  */
 #include "qemu/osdep.h"
 #include "hw/arm/calypso/calypso_debug.h"
-#include "hw/arm/calypso/calypso_dsp_shunt.h"
 #include "calypso_arm2dsp.h"
 
 #include <stdlib.h>
@@ -218,7 +217,9 @@ void calypso_arm2dsp_on_arm_write(uint16_t offset, uint16_t value)
      * -> le DSP re-produit FBSB/SI apres la relance mobile (sinon rien ne revient). */
     if (offset == A2D_DSP_PAGE_OFF && value == 0) {
         a2d_bgen_done = 0;
-        calypso_dsp_shunt_l1_reset();   /* clear IMM-ASSIGN/SDCCH latches (SMS) -> SI revient */
+        /* [2026-09-03] calypso_dsp_shunt_l1_reset() retire avec le shunt : il ne
+         * remettait a zero que des latches d'injection (IMM-ASSIGN / SDCCH), qui
+         * n'existent plus. Le DSP, lui, n'a rien a reinitialiser ici. */
     }
 }
 

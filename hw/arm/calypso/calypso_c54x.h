@@ -204,20 +204,19 @@
 #define C54X_IT_DMA_VEC        30   /* INT10n DMA               (0x78) */
 #define C54X_IT_DMA_BIT        14
 
-/* SAS — CALYPSO_IT_TABLE_DOC=1 : bascule les émetteurs d'IT encore câblés sur
- * l'ancienne table SPRU131 vers la table §5.1 ci-dessus. Défaut 0 : comportement
- * strictement inchangé, parce que ces émetteurs-là sont sur le chemin du shunt qui
- * campe. Protocole : tester SOUS CHARGE (camp + LU + SMS), puis effacer LA
- * CONDITION — pas le correctif. */
-
-/* ⚠ LEGACY — valeur MAL MAPPÉE, conservée le temps du sas ci-dessus.
- * L'ancien commentaire disait « bit 3 = INT3 = la ligne frame-sync du TPU » :
- * FAUX deux fois. Le bit 3 est TINT (le timer du DSP), et l'IT trame du TPU est
- * INT8n = bit 11 = vec 27 (C54X_IT_TPU_FRAME_*). L'IMR 0xFF88 citée à l'appui
- * n'est plus celle qu'on mesure (0x52ed). Utiliser C54X_IT_TPU_FRAME_* pour tout
- * nouveau câblage. */
-#define C54X_INT_FRAME_VEC   19  /* LEGACY : en réalité TINT, pas l'IT trame  */
-#define C54X_INT_FRAME_BIT   3   /* LEGACY : voir C54X_IT_TPU_FRAME_BIT = 11 */
+/* [2026-09-03] SAS VIDÉ. `C54X_INT_FRAME_VEC/BIT` (19/3) est SUPPRIMÉ, et avec
+ * lui le sas `CALYPSO_IT_TABLE_DOC` et le remap d'exécution 19/3 -> 28/12 qui
+ * vivait dans `c54x_interrupt_ex()` sous les gates `CALYPSO_DSP_FRAME_VEC28` /
+ * `CALYPSO_FRAME_IT_NATIVE`. Les émetteurs d'IT trame utilisent désormais
+ * `C54X_IT_TPU_FRAME_VEC/BIT` (28/12) À LA SOURCE — ce que demandait
+ * l'annotation @BEQUILLE du remap : « retirer quand la ligne frame est câblée
+ * sur le bon vecteur à la source ».
+ *
+ * Pourquoi 19/3 était faux : c'est TINT, le timer du DSP, dont le ROM n'a qu'un
+ * stub `RETE`. L'IT trame du TPU est INT8n = bit 12 / vec 28 (CAL207 §15.1,
+ * `vec = Location/4`), recoupée par l'IMR mesurée `0x52ed` qui n'a de sens que
+ * sous cette table. (Le commentaire legacy retiré ici disait « bit 11 = vec 27 » :
+ * il était lui-même faux, la table ci-dessus fait foi.) */
 #define C54X_NUM_INTS        16
 
 typedef struct C54xState {
@@ -392,5 +391,24 @@ int  c54x_load_section(C54xState *s, const char *path,
  * Used by the `-M calypso,dsp-registers=<path>` machine property.
  * Returns number of words loaded, or -1 on error. */
 int  c54x_load_registers(C54xState *s, const char *path);
+
+/* [c54x-earlyboot] Boot du c54x a machine-init, AVANT que le vCPU ARM tourne.
+ * L'ARM poste sa commande bootloader (data[0x0fff] = cmd, data[0x0ffe] = entry)
+ * des fn=0 ; si le DSP ne boote qu'apres, son init-IDLE a 0xb419 (ST #1,*0xfff)
+ * ecrase cette commande et le DSP spin eternellement a 0xb41c. En bootant ici,
+ * il pose son IDLE et se parke AVANT l'ecriture ARM : la commande survit.
+ * Aucune valeur de mailbox n'est forcee — seul le QUAND du boot est impose.
+ * Gate : CALYPSO_DSP_RUN_C54X=1. */
+void c54x_early_boot(C54xState *s);
+
+/* Vrai si c54x_early_boot() a effectivement parke le DSP. Gate le re-reset du
+ * c54x cote calypso_trx.c, qui re-jouerait la copie PROM->DARAM et ecraserait
+ * la commande bootloader preservee ci-dessus. */
+bool c54x_early_booted(void);
+
+/* Mission courante du DSP (d_task_md) lue dans l'API RAM : FB=5 SB=6 TCH_FB=8
+ * TCH_SB=9, 0 = aucune. Page 0 = data[0x0804], page 1 = data[0x0818].
+ * Sert a gater les wires inter-blocs (BSP BRINT0) sur la mission FB/SB. */
+uint16_t c54x_task_md(C54xState *s);
 
 #endif /* CALYPSO_C54X_H */

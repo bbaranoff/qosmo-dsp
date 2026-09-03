@@ -72,4 +72,18 @@ void calypso_bsp_send_ul(uint8_t tn, uint32_t fn, const uint8_t bits[148]);
  * future bursts (fn > current_fn) are kept for later frames. */
 void calypso_bsp_deliver_buffered(uint32_t current_fn);
 
+/* ---- Chaine I/Q du DSP (rapatriee du shunt le 2026-09-03) ---------------- */
+
+/* FB-STREAM : sort la paire (I,Q) suivante de l'anneau d'echantillons FCCH
+ * decimes alimente par les bursts DL. Consommee par l'intercept de lecture
+ * data[0x9213]/[0x9215] de calypso_c54x.c, qui est l'ENTREE du correlateur
+ * natif (gate CALYPSO_FB_STREAM). Rend false si l'anneau est vide. */
+bool calypso_bsp_fb_stream_next(uint16_t *outI, uint16_t *outQ);
+
+/* Modele integrateur RSSI : a_pm derive de la magnitude moyenne (MAV) reellement
+ * mesuree sur le DL, calibre par le modele trf6151 —
+ * a_pm = calib_RF(20*log10(MAV/MAV_REF) + RF_REF). Modelise le registre HW de
+ * puissance cote ABB que le DSP lit et que l'ADC emule ne fournit pas. */
+uint16_t calypso_bsp_rssi_apm(void);
+
 #endif /* HW_ARM_CALYPSO_BSP_H */

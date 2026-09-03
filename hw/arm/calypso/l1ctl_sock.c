@@ -93,96 +93,12 @@ typedef struct L1CTLSock {
 
 static L1CTLSock g_l1ctl;
 
-/* FN-FIX : le FN que le firmware envoie au mobile dans L1CTL_RACH_CONF (msg type
- * 0x0c), capture ICI au moment EXACT ou le mobile le recoit (= ce qu'il memorise
- * pour matcher la req-ref de l'IMM ASSIGN, gsm48_rr.c:3372). Lu par le shunt
- * (calypso_dsp_shunt.c) pour reecrire la req-ref. Source race-free : pas de lecture
- * paresseuse de last_rach.fn @0x836500 (qui est asynchrone vs l'IMM ASS du BTS). */
-volatile uint32_t g_last_rach_conf_fn = 0;
-volatile uint32_t g_rach_conf_fn[256] = {0};  /* per-ra FN-FIX : RACH_CONF fn keye par g_last_recorded_ra */
-extern volatile uint8_t g_last_recorded_ra;   /* defini dans calypso_dsp_shunt.c (record_rach) */
-extern void calypso_dsp_shunt_set_dcch(int kind, int ss);  /* fenetre SDCCH du shunt */
-extern void calypso_dsp_shunt_set_dcch_tch(int on);        /* dedie = TCH ? */
-extern void calypso_dsp_shunt_set_dcch_active(int on);     /* garde SI pendant le dedie */
-extern int calypso_dsp_shunt_tch_dl_written(const uint8_t *fr33); /* sonde TCH-DL */
 
-/* ---- SONDE CALYPSO_TCH_DL_PROBE : les octets FR qui partent VRAIMENT ---------
- *
- * Confronte les 33 octets de voix d'un TRAFFIC_IND a l'anneau des trames que le
- * shunt a reellement ecrites dans a_dd_0 (cf. le commentaire de la sonde dans
- * calypso_dsp_shunt.c). Repond a UNE question : le firmware relaie-t-il ce qu'on
- * lui donne, ou autre chose ?
- *
- * Cadrage : TRAFFIC_IND = l1ctl_hdr(4) + l1ctl_info_dl(12) + data(33) = 49, ce
- * que confirme le `len=49` deja journalise. On ne touche a rien si la taille
- * n'est pas celle-la — une sonde qui devine son cadrage ne prouve rien.
- *
- * Compteurs CUMULATIFS (jamais un taux : cf. les deux chiffres faux annonces le
- * 09/08 en divisant des `grep -c` sur un journal bufferise). */
-static void l1ctl_tch_dl_probe(const uint8_t *payload, int plen)
-{
-    static int on = -1;
-    if (on < 0) {
-        const char *e = getenv("CALYPSO_TCH_DL_PROBE");
-        on = (e && *e == '1') ? 1 : 0;
-        /* Une sonde muette est indecidable : elle s'annonce, dans les deux sens. */
-        L1CTL_LOG("SONDE TCH-DL-PROBE %s (CALYPSO_TCH_DL_PROBE)",
-                  on ? "ACTIVE" : "inactive");
-    }
-    if (!on || payload[0] != 0x1e /* L1CTL_TRAFFIC_IND */)
-        return;
-
-    static unsigned long long n = 0, ok = 0, bad = 0, mauvais_cadrage = 0;
-    /* [2026-08-10] L'EN-TETE DECIDE DU SORT DE LA TRAME, PAS SEULEMENT SON CONTENU.
-     * La chaine de lecture du mobile est 'source/tch_fb -> ... -> ecu/fr -> codec/fr
-     * -> sink/alsa' : l'ECU remplace toute trame marquee ERRONEE par du confort,
-     * c'est-a-dire du silence -- sans une ligne de journal. On observe justement
-     * 50 TRAFFIC_IND/s dont les 33 octets sont IDENTIQUES a a_dd_0 (donc de la
-     * vraie parole, 250/250 trames distinctes mesurees dans l'anneau) et un sink
-     * PulseAudio a crete 0. Il faut donc lire fire_crc et num_biterr, qui portent
-     * ce verdict. Cadrage l1ctl_info_dl (offset relatif a payload+4) :
-     *   chan_nr(0) link_id(1) band_arfcn(2..3) frame_nr(4..7)
-     *   rx_level(8) snr(9) num_biterr(10) fire_crc(11) */
-    static unsigned long long fire_crc_nz = 0, biterr_nz = 0;
-    n++;
-    if (plen != 49) {
-        mauvais_cadrage++;
-        if (mauvais_cadrage <= 3)
-            L1CTL_LOG("TCH-DL-PROBE : TRAFFIC_IND de %d o, attendu 49 "
-                      "(4 hdr + 12 info_dl + 33 FR) -- cadrage a reverifier "
-                      "avant toute conclusion", plen);
-    } else {
-        const uint8_t *fr = payload + 16;
-        uint8_t nbiterr = payload[14], fcrc = payload[15];
-        if (fcrc)    fire_crc_nz++;
-        if (nbiterr) biterr_nz++;
-        if ((fcrc || nbiterr) && (fire_crc_nz + biterr_nz) <= 3)
-            L1CTL_LOG("TCH-DL-PROBE : trame MARQUEE ERRONEE -- fire_crc=%u "
-                      "num_biterr=%u rx_level=%u snr=%u : l'ECU du mobile la "
-                      "remplacera par du silence", fcrc, nbiterr,
-                      payload[12], payload[13]);
-        int seq = calypso_dsp_shunt_tch_dl_written(fr);
-        if (seq >= 0) {
-            ok++;
-        } else {
-            bad++;
-            if (bad <= 5) {
-                char h[64];
-                int p = 0;
-                for (int i = 0; i < 12; i++)
-                    p += snprintf(h + p, sizeof(h) - p, "%02x ", fr[i]);
-                L1CTL_LOG("TCH-DL-PROBE ECART #%llu : sortant sig=0x%x [%s...] ne "
-                          "correspond a AUCUNE des 8 dernieres trames ecrites "
-                          "dans a_dd_0", bad, fr[0] >> 4, h);
-            }
-        }
-    }
-    if ((n % 250) == 0)
-        L1CTL_LOG("TCH-DL-PROBE : %llu TRAFFIC_IND -- identiques a a_dd_0 : %llu, "
-                  "differentes : %llu, cadrage inattendu : %llu, "
-                  "MARQUEES ERRONEES : fire_crc!=0 %llu, num_biterr!=0 %llu",
-                  n, ok, bad, mauvais_cadrage, fire_crc_nz, biterr_nz);
-}
+/* [2026-09-03] SONDE CALYPSO_TCH_DL_PROBE SUPPRIMEE avec le shunt : elle
+ * confrontait les 33 octets de voix d'un TRAFFIC_IND a l'anneau des trames que
+ * le SHUNT avait ecrites dans a_dd_0. Sans shunt, il n'y a plus d'anneau de
+ * reference — la question qu'elle posait (« le firmware relaie-t-il ce qu'on lui
+ * donne ? ») ne se pose que quand quelqu'un d'autre que le DSP ecrit a_dd_0. */
 
 /* ---- Sercomm helpers ---- */
 
@@ -245,26 +161,10 @@ static void l1ctl_send_to_mobile(L1CTLSock *s, const uint8_t *payload, int len)
     }
 }
 
-/* Hop 5 : injection directe DL SI -> mobile en L1CTL DATA_IND (court-circuite
- * a_cd->ARM->UART qui perd des octets). Appele par le shunt GSMTAP listener. */
-void l1ctl_inject_dl_si(const uint8_t *l2, int l2len, uint32_t fn)
-{
-    if (g_l1ctl.cli_fd < 0 || !l2 || l2len <= 0) return;
-    if (l2len > 23) l2len = 23;
-    uint8_t pl[16 + 23];
-    memset(pl, 0, sizeof(pl));
-    pl[0] = 0x03;                                  /* L1CTL_DATA_IND */
-    pl[4] = 0x80;                                  /* chan_nr = BCCH */
-    pl[6] = (uint8_t)(514 >> 8); pl[7] = (uint8_t)(514 & 0xFF);  /* band_arfcn 514 */
-    pl[8]=(uint8_t)(fn>>24); pl[9]=(uint8_t)(fn>>16);
-    pl[10]=(uint8_t)(fn>>8);  pl[11]=(uint8_t)fn;  /* frame_nr (BE) */
-    pl[12] = 40;                                   /* rx_level */
-    pl[13] = 30;                                   /* snr */
-    /* pl[14]=num_biterr=0, pl[15]=fire_crc=0 (CRC OK) */
-    memcpy(pl + 16, l2, l2len);
-    l1ctl_send_to_mobile(&g_l1ctl, pl, 16 + l2len);
-    L1CTL_LOG("INJECT DL DATA_IND BCCH fn=%u l2len=%d -> mobile", fn, l2len);
-}
+/* [2026-09-03] l1ctl_inject_dl_si() SUPPRIMEE : elle poussait un SI directement
+ * au mobile en L1CTL DATA_IND, court-circuitant a_cd -> ARM -> UART. Son unique
+ * appelant etait le listener GSMTAP du shunt (les SI decodes par gr-gsm). Le SI
+ * doit maintenant remonter par le chemin du firmware, comme sur le silicium. */
 
 /* ---- Process a complete sercomm frame from firmware TX ---- */
 
@@ -278,64 +178,19 @@ static void sercomm_frame_complete(L1CTLSock *s)
     int plen = s->sc_len - 2;
 
     if (dlci == SERCOMM_DLCI_L1CTL && plen > 0) {
-        /* ===== GATES de déblocage (oracle FORCE_TOA, gate-par-gate) =====
-         * Le mobile reçoit par CE socket (mobile.cfg: layer2-socket
-         * /tmp/osmocom_l2). Deux gates bridgent les trous du demod DSP, pour
-         * prouver que tout l'aval (camp/SI/IMM-ASS) marche quand le DSP fournit
-         * son résultat. Purement oracle — à retirer quand le DSP demod marche.
-         *   CALYPSO_FORCE_FBSB=1 : bridge blocker #1 (Channel sync error) =
-         *                          FBSB_CONF(0x02) result@[18] → 0=SUCCESS.
-         *   CALYPSO_FORCE_AGCH=1 : bridge blocker #2 (pas de sysinfo) sur les
-         *                          DATA_IND(0x03) : BCCH(chan 0x80) rote le type
-         *                          SI ; AGCH/PCH(chan 0x90) injecte IMM ASS.
-         *                          Port exact du GDB mutate_agch.
-         * Layout payload : l1ctl_hdr(4) + l1ctl_info_dl(12) + corps ;
-         * → FBSB result @18 ; DATA_IND chan_nr @4, L3 @16. */
-        /* @BEQUILLE — FORCE_FBSB / FORCE_AGCH  (CALYPSO_FORCE_FBSB, CALYPSO_FORCE_AGCH,
-         *              EQ1, defaut 0 ; VERROUILLES a 0 par run.sh en mode full-grgsm)
-         *   masque  : le resultat du demod DSP vu par le mobile. FBSB : force le resultat
-         *             de FBSB_CONF a SUCCESS. AGCH : rote le type SI du BCCH et ECRASE le
-         *             L3 du PCH par un IMM ASSIGNMENT en dur.
-         *   retirer : quand le demod DSP publie un a_cd valide (SI reels decodes).
-         *   NB      : assignation dure ("=0" puis export) en full-grgsm -> les poser en
-         *             ligne de commande n'a AUCUN effet dans le mode par defaut.
-         */
-        static int g_fbsb = -1, g_agch = -1;
-        if (g_fbsb < 0) {
-            const char *a = getenv("CALYPSO_FORCE_FBSB");
-            const char *b = getenv("CALYPSO_FORCE_AGCH");
-            g_fbsb = (a && *a == '1') ? 1 : 0;
-            g_agch = (b && *b == '1') ? 1 : 0;
-        }
-        if (g_fbsb && payload[0] == 0x02 && plen >= 19 && payload[18] != 0) {
-            L1CTL_LOG("GATE-FBSB #1: FBSB_CONF result 0x%02x → 0", payload[18]);
-            payload[18] = 0;
-        }
-        if (g_agch && payload[0] == 0x03 && plen >= 16 + 3) {
-            uint8_t chan_nr = payload[4];
-            uint8_t *l3 = &payload[16];
-            if (chan_nr == 0x80) {
-                static const uint8_t si[4] = { 0x19, 0x1a, 0x1b, 0x1c };
-                static int r = 0;
-                l3[2] = si[r]; r = (r + 1) & 3;
-                L1CTL_LOG("GATE-AGCH #2 bcch: SI type → 0x%02x", l3[2]);
-            } else if (chan_nr == 0x90 && plen >= 16 + 23) {
-                static const uint8_t imm[23] = {
-                    0x2d, 0x06, 0x3f, 0x00, 0x20, 0x00, 0x01, 0x00, 0x00, 0x00,
-                    0x00, 0x00, 0x2b, 0x2b, 0x2b, 0x2b, 0x2b, 0x2b, 0x2b, 0x2b,
-                    0x2b, 0x2b, 0x2b };
-                memcpy(l3, imm, sizeof(imm));
-                L1CTL_LOG("GATE-AGCH #2 pch: IMM ASSIGNMENT injecté");
-            }
-        }
-        /* FN-FIX : capture le FN du RACH_CONF (0x0c) = le FN que le mobile memorise.
-         * Layout : l1ctl_hdr(4) + l1ctl_info_dl ; frame_nr (BE) @ payload[8..11]. */
-        if (payload[0] == 0x0c && plen >= 12) {
-            g_last_rach_conf_fn = ((uint32_t)payload[8] << 24) | ((uint32_t)payload[9] << 16) |
-                                  ((uint32_t)payload[10] << 8) | (uint32_t)payload[11];
-            g_rach_conf_fn[g_last_recorded_ra] = g_last_rach_conf_fn;   /* per-ra : keye par le ra de la derniere RACH */
-            L1CTL_LOG("FN-FIX: RACH_CONF fn=%u capture (memo mobile, ra=0x%02x)", g_last_rach_conf_fn, g_last_recorded_ra);
-        }
+        /* [2026-09-03] TROIS BEQUILLES SUPPRIMEES ICI.
+         *
+         * CALYPSO_FORCE_FBSB=1 forcait le resultat de FBSB_CONF a SUCCESS, et
+         * CALYPSO_FORCE_AGCH=1 rotait le type SI des DATA_IND BCCH puis ECRASAIT
+         * le L3 du PCH par un IMM ASSIGNMENT code en dur. Les deux maquillaient,
+         * dans le socket qui va au mobile, le resultat que le demod DSP n'avait
+         * pas produit. Leur annotation disait « retirer quand le demod DSP publie
+         * un a_cd valide » — et de toute facon run.sh les verrouillait a 0.
+         *
+         * FN-FIX capturait le FN du RACH_CONF, global et par-RA, pour que le shunt
+         * puisse reecrire la req-ref de l'IMM ASSIGN qu'il injectait. Plus
+         * d'injection, plus de req-ref a recoller : g_last_rach_conf_fn et
+         * g_rach_conf_fn[] n'avaient aucun autre lecteur. */
         /* ═══════════════════════════════════════════════════════════════════
          * CANAL DEDIE COURANT -> /dev/shm/calypso_dcch_cfg  (2026-08-08)
          *
@@ -382,30 +237,14 @@ static void sercomm_frame_complete(L1CTLSock *s)
              * sans arret. La garde clignotait et le camp reprenait la main entre
              * deux blocs. On rafraichit donc sur chaque bloc DEDIE et on laisse
              * la peremption faire la fermeture. */
-            /* [2026-08-09] LE DEDIE NE SE RESUME PAS AU SDCCH.
-             * `kind` ne vaut >= 0 que pour SDCCH/4 et SDCCH/8 : il sert a
-             * calculer la fenetre de presentation a_cd, qui n a de sens que la.
-             * Mais la GARDE, elle, doit tenir sur tout canal dedie -- TCH/F et
-             * TCH/H compris, dont le SACCH passe aussi par a_cd.
-             * Sans ca, pendant un appel voix kind restait -1 en permanence, la
-             * garde n etait jamais rafraichie, elle perimait au bout de 2 s et le
-             * camp reecrivait son SI dans a_cd. Mesure du 09/08 : 0 armement
-             * journalise, 121 peremptions, et 8 « Short header message type 0x07
-             * unsupported » en rafale reguliere PENDANT la communication.
-             * Codage GSM 08.58 du chan_nr (bits 7..3) :
-             *   00001TTT TCH/F | 0001xTTT TCH/H | 001..... SDCCH/4 | 01...... SDCCH/8 */
-            bool dedie = ((chan_nr & 0xF8) == 0x08)      /* TCH/F   */
-                      || ((chan_nr & 0xF0) == 0x10)      /* TCH/H   */
-                      || ((chan_nr & 0xE0) == 0x20)      /* SDCCH/4 */
-                      || ((chan_nr & 0xC0) == 0x40);     /* SDCCH/8 */
-            if (dedie) calypso_dsp_shunt_set_dcch_active(1);   /* rafraichit */
-            /* [2026-08-10] et on dit AU SHUNT de quel type de dedie il s'agit :
-             * la fenetre de presentation a_cd n'a de sens que sur SDCCH. */
-            if (dedie) {
-                bool tch = ((chan_nr & 0xF8) == 0x08)      /* TCH/F */
-                        || ((chan_nr & 0xF0) == 0x10);     /* TCH/H */
-                calypso_dsp_shunt_set_dcch_tch(tch ? 1 : 0);
-            }
+            /* [2026-09-03] Les trois setters de fenetre DCCH du shunt
+             * (set_dcch_active / set_dcch_tch / set_dcch) sont retires : ils ne
+             * pilotaient que la fenetre de PRESENTATION a_cd des injections
+             * GSMTAP. Le predicat `dedie` qui les alimentait (TCH/F, TCH/H,
+             * SDCCH/4, SDCCH/8 -- codage GSM 08.58 du chan_nr, bits 7..3) part
+             * avec eux : il n'avait plus aucun lecteur. La publication de
+             * /dev/shm/calypso_dcch_cfg ci-dessous, elle, ne dependait que de
+             * `kind` et continue a l'identique pour les outils externes. */
             if (kind >= 0 && chan_nr != last_chan_nr) {
                 static uint32_t dcch_seq;
                 last_chan_nr = chan_nr;
@@ -424,14 +263,10 @@ static void sercomm_frame_complete(L1CTLSock *s)
                 L1CTL_LOG("DCCH #%u : chan_nr=0x%02x -> SDCCH/%d SS=%d TN=%u "
                           "(vu sur %s)", dcch_seq, chan_nr, kind ? 8 : 4, ss,
                           chan_nr & 0x07, l1ctl_tname(payload[0]));
-                /* La MEME verite pilote la fenetre de presentation a_cd du shunt,
-                 * qui suivait jusqu'ici les IMM ASSIGN des autres abonnes. */
-                calypso_dsp_shunt_set_dcch(kind, ss);
             }
         }
         L1CTL_LOG("TX→mobile: dlci=%d len=%d type=0x%02x %s", dlci, plen, payload[0],
                   l1ctl_tname(payload[0]));
-        l1ctl_tch_dl_probe(payload, plen);
         l1ctl_send_to_mobile(s, payload, plen);
     }
     /* Ignore other DLCIs (debug console, loader, etc.) */

@@ -58,8 +58,23 @@ MOD_PROFILES[pipeline]="calypso hybrid faketrx"
 MOD_PURE[pipeline]=1
 MOD_TIMEOUT[pipeline]=5
 
-: "${CALYPSO_PIPELINE_DEFAULT:=full-grgsm}"   # pipeline validé 2026-06-03 (legacy L1108)
-_PIPELINE_VALUES="full full-grgsm shunt shunt-ipc bridge bare free"
+# [2026-09-03] Le défaut passe de `full-grgsm` à `dsp`. Sur CE fork le shunt
+# gr-gsm a été retiré du modèle C : lancer la chaîne de décodage gr-gsm n'a plus
+# de destinataire — feed_si / feed_sb n'existent plus, le décodeur écrirait dans
+# le vide sur GSMTAP 4730/4731. C'est le DSP C54x qui décode.
+: "${CALYPSO_PIPELINE_DEFAULT:=dsp}"
+_PIPELINE_VALUES="dsp full full-grgsm shunt shunt-ipc bridge bare free"
+
+# Les pipelines qui font DÉCODER PAR gr-gsm. Sert de gate unique aux modules
+# 62/65/66 (pont de démod, draineur I/Q, décodeur SI+SCH), au lieu que chacun
+# teste `= full-grgsm` de son côté avec son propre défaut de repli.
+_PIPELINE_GRGSM_VALUES="full-grgsm shunt-ipc"
+calypso_pipeline_is_grgsm() {
+    case " $_PIPELINE_GRGSM_VALUES " in
+        *" ${CALYPSO_PIPELINE:-$CALYPSO_PIPELINE_DEFAULT} "*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
 
 mod_pipeline_check() {
     # Lecture seule : on ne valide QUE la valeur demandée. La récupération
@@ -111,6 +126,12 @@ mod_pipeline_start() {
     # `:=` partout : une surcharge posée en préfixe gagne toujours sur le preset.
     local shunt_hint=0
     case "$CALYPSO_PIPELINE" in
+      dsp)          # chaîne radio complète -> DSP C54x natif ; AUCUN décodage gr-gsm
+        shunt_hint=0
+        : "${CALYPSO_SKIP_IPC_DEVICE:=0}"; : "${CALYPSO_SKIP_TRX_IPC:=0}"
+        : "${CALYPSO_SKIP_BTS:=0}";        : "${CALYPSO_SKIP_L2:=0}"
+        : "${CALYPSO_SKIP_GSMTAP:=0}";     : "${CALYPSO_SKIP_BRIDGE_PY:=1}"
+        : "${CALYPSO_SKIP_DEMOD_BRIDGE:=1}" ;;
       full)         # chaîne radio complète, DSP natif
         shunt_hint=0
         : "${CALYPSO_SKIP_IPC_DEVICE:=0}"; : "${CALYPSO_SKIP_TRX_IPC:=0}"
