@@ -11,7 +11,7 @@
 #      5 shell
 # -----------------------------------------------------------------------------
 TMUX_FENETRE_PREMIERE=radio
-TMUX_RESUME="7 fenêtres : radio · coeur · dsp · asm · ms1 · voix · shell"
+TMUX_RESUME="6 fenêtres : radio · coeur · dsp · ms1 · voix · shell"
 
 tmux_layout_premiere() {   # commande de la fenêtre créée avec la session
     printf "tail -n 200 -F '%s/qemu.log' 2>/dev/null | stdbuf -oL tr -d '\\\\007' || sleep infinity" \
@@ -34,7 +34,10 @@ tmux_layout() {
 
     _fenetre_coeur
     _fenetre_dsp
-    _fenetre_asm
+    # [2026-09-03] _fenetre_asm RETIREE : elle montrait la meme chose que « dsp »
+    # (meme mail_dissam.log en haut, et mailbox.log porte deja l'instruction
+    # c54x de chaque acces en bas). Deux fenetres pour une vue, dont une
+    # enregistree « asm » qui laissait croire a une trace TCG de l'ARM.
 
     # ── 3 · ms1 — ce que le téléphone comprend du signal ─────────────────────
     _w     ms1 "MS | pile L2/L3 du telephone emule - camp, LU, appels" \

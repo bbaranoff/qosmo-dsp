@@ -89,12 +89,24 @@ _fenetre_dsp() {
     #
     # Fenêtre séparée à dessein : ces deux vues méritent de la place, et les
     # écraser dans `radio` rendrait les quatre panes existants illisibles.
+    #
+    # [2026-09-03] TROIS panes, empiles : la fenetre « asm » est retiree (elle
+    # montrait le meme tableau en haut) et son flux ANNOTE — chaque acces suivi
+    # de l'instruction c54x qui le produit (tools/mailbox-annote.py --flux) —
+    # descend ici, en troisieme. Le desassemblage est mis en cache par PC cote
+    # outil : une boucle serree ne coute qu'une recherche.
     local L="${LOG_DIR:-/root/calypso/logs}"
+    local T="${QEMU_TREE:-/opt/GSM/osmo-qemu-calypso}"
     _w     dsp "mailbox x desassemblage | quelle instruction touche quelle cellule" \
         "while :; do clear; cat '$L/mail_dissam.log' 2>/dev/null || echo 'en attente du premier cycle...'; sleep 2; done" \
         "${C_RADIO:-}"
     _split dsp "mailbox | flux ARM<->DSP brut, replie au changement" \
         "$(_tail "'$L/mailbox.log'")" "${C_RADIO:-}"
+    _split dsp "mailbox ASM | chaque acces suivi de son instruction c54x" \
+        "tail -n 40 -F '$L/mailbox.log' 2>/dev/null | stdbuf -oL python3 '$T/tools/mailbox-annote.py' --flux 2>/dev/null || sleep infinity" \
+        "${C_RADIO:-}"
+    # trois vues pleine largeur, l'une sous l'autre (tiled en mettrait deux cote a cote)
+    tmux select-layout -t "$TMUX_SESSION:dsp" even-vertical 2>/dev/null || true
 }
 
 _fenetre_asm() {

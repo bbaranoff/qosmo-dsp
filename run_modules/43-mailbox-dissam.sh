@@ -88,7 +88,13 @@ while :; do
 done
 EOS
     chmod +x "$boucle"
-    setsid "$boucle" </dev/null >>"$log" 2>&1 &
+    # [2026-09-03] `sh "$boucle"` et non "$boucle" : RUN_DIR vit sous /run/user/0,
+    # un tmpfs monte NOEXEC. Executer le script directement rendait
+    # « setsid: failed to execute ... Permission denied » (mod/mailbox-dissam.log),
+    # la boucle ne demarrait jamais et mail_dissam.log restait fige sur le
+    # premier passage synchrone — le pane « croisement » montrait un tableau
+    # d'amorcage (poll du bootloader 0xb41c) pendant tout le run.
+    setsid sh "$boucle" </dev/null >>"$log" 2>&1 &
     mod_say "boucle       : $boucle (PID $!)"
 
     mod_ok

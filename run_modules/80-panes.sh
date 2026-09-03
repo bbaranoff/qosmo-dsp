@@ -83,9 +83,15 @@ mod_panes_start() {
     specs+=("qemu|${LOG_DIR}/qemu.log")
     if [ "${CALYPSO_SKIP_DECODE_PANES:-0}" != 1 ] && [ -r "$CALYPSO_GSM_SNIFF" ]; then
         specs+=("burst|__BURST__")
-        # En mode pont (CALYPSO_BRIDGE=pont) le decodeur SI (si_bridge/grgsm)
-        # est eteint : le pane afficherait un flux vide. On le retire.
-        [ "${CALYPSO_BRIDGE:-}" = pont ] || specs+=("si|__SI__")
+        # Le decodeur SI (si_bridge/grgsm) n'existe que dans les pipelines
+        # gr-gsm (06-pipeline : full-grgsm, shunt-ipc), et il est eteint en
+        # mode pont. Partout ailleurs — le pipeline `dsp` en tete, ou c'est le
+        # C54x qui decode et ou RIEN n'emet de GSMTAP sur 4729/4730 (verifie
+        # 2026-09-03 : 0 paquet en 6 s de capture) — le pane resterait vide
+        # sur « [gsm-sniff:si] ... passif, aucune fifo ». On ne le cree pas.
+        if calypso_pipeline_is_grgsm && [ "${CALYPSO_BRIDGE:-}" != pont ]; then
+            specs+=("si|__SI__")
+        fi
     fi
     [ "${CALYPSO_SKIP_BRIDGE_PY:-1}" != 1 ] && specs+=("bridge-py|${LOG_DIR}/bridge.py.log")
     [ "${CALYPSO_SKIP_L2:-0}"        != 1 ] && specs+=("${CALYPSO_L2_CLIENT:-mobile}|$l2log")
