@@ -1350,23 +1350,25 @@ static void calypso_dsp_done(void *opaque) {
     CalypsoTRX *s = opaque;
     s->tpu_regs[TPU_CTRL/2] &= ~TPU_CTRL_EN;
 
-    /* Hardware DMA: copy API write page → DSP DARAM 0x0586.
-     * Triggered by firmware writing TPU_CTRL with EN bit (dsp_end_scenario).
-     * This is the ONLY place DMA happens — same as real Calypso.
-     *
-     * [2026-09-03] GATE SHUNT SUPPRIME. Cette DMA etait fermee des que le shunt
-     * etait arme — donc en natif aussi, `calypso_dsp_shunt_active()` valant VRAI
-     * sous CALYPSO_DSP=c54x. Consequence : la commande de tache (task_md=5 FB)
-     * n'atteignait jamais la DARAM 0x0586 et le correlateur entrait SANS MISSION,
-     * sauf a poser CALYPSO_TPU_RX_WIRE. L'annotation disait « retirer quand le
-     * shunt ne substitue plus le DSP : la DMA redevient legitime ». C'est le cas :
-     * elle est le chemin normal, elle n'est plus conditionnee. */
+    /* [2026-09-03] SUPPRIME : la recopie de la page W dans la DARAM du DSP
+     * (0x0584 = page, 0x0585 = fn, 0x0586..0x0599 = les 20 mots) faite ici a
+     * chaque dsp_end_scenario de l'ARM. Elle datait du shunt : c'est le code C
+     * du modele qui lisait les taches la. Le ROM C54x copie la page W lui-meme
+     * a 0xb001 par ses propres pointeurs (mvdm *(0x3fc1),AR1 ; mvdm
+     * *(0x3fc2),AR2) et AUCUNE de ses instructions ne reference 0x0584..0x0599
+     * (dump : les seuls mots 0586/058a sont des coefficients en DROM). Sur
+     * silicium le MCU n'ecrit jamais dans la DARAM du DSP : ici 22 mots y
+     * etaient ecrases a chaque trame ARM, potentiellement au milieu d'une
+     * tache. Mesure qui a conduit ici : resultats SB publies en alternance sur
+     * les deux pages R alors que r_page ARM reste a 0, mots a_sch > 25 bits.
+     * Il ne reste que la trace « DMA proof » (lecture seule) : ce que l'ARM a
+     * programme au moment ou il arme le TPU. Le miroir ARM->api_ram de
+     * d_dsp_page n'a pas a etre refait ici : calypso_dsp_write le fait pour
+     * chaque ecriture de la fenetre API. */
     if (s->dsp && s->dsp_ram[0x01A8/2] != 0) {
         uint16_t page = s->dsp_ram[0x01A8/2] & 1;
-        uint16_t *wp = page ?
+        const uint16_t *wp = page ?
             &s->dsp_ram[DSP_API_W_PAGE1/2] : &s->dsp_ram[DSP_API_W_PAGE0/2];
-
-        /* Log proof that ARM wrote tasks before DMA */
         uint16_t task_d  = wp[DB_W_D_TASK_D];
         uint16_t task_u  = wp[DB_W_D_TASK_U];
         uint16_t task_md = wp[DB_W_D_TASK_MD];
@@ -1376,26 +1378,6 @@ static void calypso_dsp_done(void *opaque) {
                 TRX_LOG("DMA proof: ARM wrote task_d=%u task_u=%u task_md=%u page=%u fn=%u",
                         task_d, task_u, task_md, page, s->fn);
         }
-
-        /* Ordre canonique daram < api_ram. Section critique unique pour
-         * la mirror DMA write page → DSP DARAM. */
-        calypso_pcb_daram_lock_acquire();
-        qemu_mutex_lock(&calypso_pcb_api_ram_lock);
-        s->dsp->data[0x0584] = s->dsp_ram[0x01A8/2];
-        s->dsp->data[0x0585] = s->fn & 0xFFFF;
-        for (int i = 0; i < 20; i++)
-            s->dsp->data[0x0586 + i] = wp[i];
-        if (s->dsp->api_ram)
-            s->dsp->api_ram[0x08D4 - C54X_API_BASE] = s->dsp_ram[0x01A8/2];
-        /* [2026-09-03] WIRE d[0x3f92] SUPPRIME (etait sous CALYPSO_TPU_RX_WIRE,
-         * defaut OFF). Il posait a la main le bit tache FB du task-word du
-         * scheduler DSP (d[0x3f92] |= 0x0800) parce que le setter natif — l'ORM en
-         * 0xa539 — est skippe tant que d[0x5a00] vaut 0x88. Substituer le resultat
-         * d'une instruction que le DSP n'execute pas, c'est masquer le probleme :
-         * la question « pourquoi 0xa539 ne s'execute-t-il pas » reste ouverte, et
-         * elle se pose maintenant a decouvert. */
-        qemu_mutex_unlock(&calypso_pcb_api_ram_lock);
-        calypso_pcb_daram_lock_release();
     }
 
     /* TPU sequencer scenario interpretation lives in calypso_tpu.c (full
